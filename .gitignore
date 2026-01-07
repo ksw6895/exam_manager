@@ -26,3 +26,10 @@ app/static/uploads/*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Frontend/build artifacts
+**/node_modules/
+**/dist/
+**/.next/
+**/.turbo/
+**/*.log
