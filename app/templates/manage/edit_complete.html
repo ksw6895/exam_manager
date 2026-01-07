@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수정 완료</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        .message-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 3rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="message-box">
+        <div class="icon">✅</div>
+        <h1>수정이 완료되었습니다</h1>
+        <p>잠시 후 창이 닫힙니다...</p>
+    </div>
+
+    <script>
+        // 여러 방법으로 부모 창 새로고침 시도
+        try {
+            // 방법 1: window.opener 사용
+            if (window.opener && !window.opener.closed) {
+                window.opener.location.reload();
+            }
+        } catch (e) {
+            console.log('window.opener 접근 실패:', e);
+        }
+
+        // 방법 2: localStorage 시그널 (부모 창에서 감지)
+        localStorage.setItem('practice_edit_complete', Date.now().toString());
+
+        // 0.5초 후 창 닫기
+        setTimeout(function () {
+            window.close();
+            // 창이 안 닫히면 안내 메시지
+            setTimeout(function () {
+                document.querySelector('p').textContent = '이 탭을 닫고 원래 페이지를 새로고침 해주세요.';
+            }, 500);
+        }, 500);
+    </script>
+</body>
+
+</html>

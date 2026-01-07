@@ -41,12 +41,17 @@ class Lecture(db.Model):
     professor = db.Column(db.String(100))  # 교수명
     order = db.Column(db.Integer, default=0)  # 강의 순서 (1강, 2강...)
     description = db.Column(db.Text)
+    # 강의 키워드 (AI 분류 정확도 향상용)
+    keywords = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     
-    # 관계: 강의 → 분류된 문제들
-    questions = db.relationship('Question', backref='lecture', lazy='dynamic')
+    # 관계: 강의 → 분류된 문제들 (lecture_id FK 사용)
+    questions = db.relationship('Question', 
+                               foreign_keys='Question.lecture_id',
+                               backref='lecture', 
+                               lazy='dynamic')
     
     def __repr__(self):
         return f'<Lecture {self.order}. {self.title}>'
@@ -115,6 +120,16 @@ class Question(db.Model):
     # 강의 분류 (선택적 - 분류 전에는 null)
     lecture_id = db.Column(db.Integer, db.ForeignKey('lectures.id'), nullable=True)
     is_classified = db.Column(db.Boolean, default=False)  # 분류 완료 여부
+    
+    # AI 분류 결과 및 이력
+    ai_suggested_lecture_id = db.Column(db.Integer, db.ForeignKey('lectures.id'))
+    ai_suggested_lecture_title_snapshot = db.Column(db.String(300))  # 강의 삭제/변경 대비 스냅샷
+    ai_confidence = db.Column(db.Float)  # 0.0 ~ 1.0 신뢰도
+    ai_reason = db.Column(db.Text)  # AI 분류 근거
+    ai_model_name = db.Column(db.String(100))  # 사용된 모델명
+    ai_classified_at = db.Column(db.DateTime)  # AI 분류 시점
+    # 상태: 'manual'(기본), 'ai_suggested'(AI제안), 'ai_confirmed'(사용자승인), 'ai_rejected'(거절)
+    classification_status = db.Column(db.String(20), default='manual')
     
     # 문제 유형
     q_type = db.Column(db.String(50), default=TYPE_MULTIPLE_CHOICE)
@@ -268,3 +283,40 @@ class StudyHistory(db.Model):
     
     def __repr__(self):
         return f'<StudyHistory Q{self.question_id} {"O" if self.is_correct else "X"}>'
+
+
+class ClassificationJob(db.Model):
+    """AI 분류 작업 모델 - 비동기 배치 처리 추적"""
+    __tablename__ = 'classification_jobs'
+    
+    # 상태 상수
+    STATUS_PENDING = 'pending'
+    STATUS_PROCESSING = 'processing'
+    STATUS_COMPLETED = 'completed'
+    STATUS_FAILED = 'failed'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    status = db.Column(db.String(20), default=STATUS_PENDING)
+    total_count = db.Column(db.Integer, default=0)  # 총 문제 수
+    processed_count = db.Column(db.Integer, default=0)  # 처리된 문제 수
+    success_count = db.Column(db.Integer, default=0)  # 성공한 분류 수
+    failed_count = db.Column(db.Integer, default=0)  # 실패한 분류 수
+    error_message = db.Column(db.Text)  # 전체 작업 실패 시 에러 메시지
+    result_json = db.Column(db.Text)  # 분류 결과 JSON (미리보기용)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    completed_at = db.Column(db.DateTime)  # 완료 시점
+    
+    def __repr__(self):
+        return f'<ClassificationJob {self.id} ({self.status}: {self.processed_count}/{self.total_count})>'
+    
+    @property
+    def progress_percent(self):
+        """진행률 (0-100)"""
+        if self.total_count == 0:
+            return 0
+        return int((self.processed_count / self.total_count) * 100)
+    
+    @property
+    def is_complete(self):
+        return self.status in (self.STATUS_COMPLETED, self.STATUS_FAILED)

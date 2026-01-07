@@ -278,6 +278,98 @@
         .toolbar button {
             font-size: 0.9rem;
         }
+
+        /* 키워드 관리 섹션 */
+        .keyword-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px dashed rgba(102, 126, 234, 0.3);
+        }
+
+        .keyword-section h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .current-keywords {
+            margin-bottom: 1rem;
+        }
+
+        .keyword-badge {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.2);
+            color: #ccc;
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            margin-right: 0.4rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .pdf-upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .pdf-upload-area:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .pdf-upload-area.dragover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .pdf-upload-area input[type="file"] {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-text {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .extraction-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(46, 204, 113, 0.1);
+            border-radius: 10px;
+            border-left: 3px solid #2ecc71;
+        }
+
+        .extraction-result.error {
+            background: rgba(231, 76, 60, 0.1);
+            border-left-color: #e74c3c;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
@@ -316,9 +408,60 @@
             </div>
         </div>
 
-        <div class="toolbar">
-            <button class="btn btn-secondary" onclick="showAllAnswers()">📖 전체 정답 보기</button>
-            <button class="btn btn-secondary" onclick="hideAllAnswers()">🙈 전체 정답 숨기기</button>
+        <!-- 키워드 관리 섹션 -->
+        <div class="keyword-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="margin: 0;">🔑 강의 키워드</h3>
+                <button class="btn btn-secondary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;"
+                    onclick="toggleKeywordEdit()">
+                    ✏️ 편집
+                </button>
+            </div>
+
+            <!-- 키워드 표시 모드 -->
+            <div class="current-keywords" id="currentKeywords">
+                {% if lecture.keywords %}
+                {% for keyword in lecture.keywords.split(',') %}
+                <span class="keyword-badge">{{ keyword.strip() }}</span>
+                {% endfor %}
+                {% else %}
+                <span style="color: #666;">등록된 키워드가 없습니다.</span>
+                {% endif %}
+            </div>
+
+            <!-- 키워드 편집 모드 (초기엔 숨김) -->
+            <div id="keywordEditArea" style="display: none; margin-top: 1rem;">
+                <textarea id="keywordEditInput" rows="3" placeholder="쉼표(,)로 구분하여 입력하세요. 예: 활동전위, Na+ Channel, 탈분극"
+                    style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; resize: vertical; font-size: 0.9rem;">{{ lecture.keywords or '' }}</textarea>
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                    <button class="btn btn-primary" style="padding: 0.4rem 1rem; font-size: 0.85rem;"
+                        onclick="saveEditedKeywords()">저장</button>
+                    <button class="btn btn-secondary" style="padding: 0.4rem 1rem; font-size: 0.85rem;"
+                        onclick="cancelKeywordEdit()">취소</button>
+                </div>
+            </div>
+
+            <div class="pdf-upload-area" id="pdfUploadArea" onclick="document.getElementById('pdfInput').click()">
+                <div class="upload-icon">📄</div>
+                <div class="upload-text">강의 노트(PDF)를 업로드하면 AI가 키워드를 자동 추출합니다</div>
+                <div class="upload-text" style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;">클릭하거나 파일을 드래그하세요
+                </div>
+                <input type="file" id="pdfInput" accept=".pdf" onchange="uploadPDF(this.files[0])">
+            </div>
+
+            <div id="extractionResult" style="display: none;"></div>
+        </div>
+
+        <div class="toolbar" style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center;">
+                <input type="checkbox" id="selectAll" onchange="toggleSelectAll()"
+                    style="width: 18px; height: 18px; cursor: pointer;">
+                <label for="selectAll" style="margin-left: 0.5rem; cursor: pointer; user-select: none;">전체 선택</label>
+            </div>
+            <div>
+                <button class="btn btn-secondary" onclick="showAllAnswers()">📖 전체 정답 보기</button>
+                <button class="btn btn-secondary" onclick="hideAllAnswers()">🙈 전체 정답 숨기기</button>
+            </div>
         </div>
 
         <div class="questions-container">
@@ -326,9 +469,13 @@
             {% for question in questions %}
             <div class="question-card answer-hidden" id="q-{{ question.id }}">
                 <div class="question-header">
-                    <div>
-                        <span class="question-number">Q{{ question.question_number }}</span>
-                        <span class="question-meta">({{ question.exam.title }})</span>
+                    <div style="display: flex; align-items: center;">
+                        <input type="checkbox" class="q-checkbox" value="{{ question.id }}" onchange="updateActionBar()"
+                            style="width: 18px; height: 18px; cursor: pointer; margin-right: 1rem;">
+                        <div>
+                            <span class="question-number">Q{{ question.question_number }}</span>
+                            <span class="question-meta">({{ question.exam.title }})</span>
+                        </div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.5rem;">
                         <span
@@ -381,6 +528,10 @@
     </div>
 
     <script>
+        // Keywords input cache to avoid breaking JS when keywords contain quotes
+        let initialKeywords = {{ (lecture.keywords or '') | tojson }};
+        const keywordInput = document.getElementById('keywordEditInput');
+
         function toggleAnswer(questionId, btn) {
             const card = document.getElementById('q-' + questionId);
             const isHidden = card.classList.contains('answer-hidden');
@@ -412,6 +563,384 @@
                 btn.textContent = '👁️ 정답';
                 btn.classList.remove('showing');
             });
+        }
+
+        // 키워드 직접 편집
+        function toggleKeywordEdit() {
+            const editArea = document.getElementById('keywordEditArea');
+            const displayArea = document.getElementById('currentKeywords');
+
+            if (editArea.style.display === 'none') {
+                editArea.style.display = 'block';
+                displayArea.style.display = 'none';
+                keywordInput.focus();
+            } else {
+                editArea.style.display = 'none';
+                displayArea.style.display = 'block';
+            }
+        }
+
+        function cancelKeywordEdit() {
+            document.getElementById('keywordEditArea').style.display = 'none';
+            document.getElementById('currentKeywords').style.display = 'block';
+            // 원래 값으로 복원
+            keywordInput.value = initialKeywords;
+        }
+
+        async function saveEditedKeywords() {
+            const keywords = keywordInput.value;
+            await saveKeywords(keywords);
+            document.getElementById('keywordEditArea').style.display = 'none';
+            document.getElementById('currentKeywords').style.display = 'block';
+        }
+
+        // PDF 업로드 및 키워드 추출
+        const uploadArea = document.getElementById('pdfUploadArea');
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type === 'application/pdf') {
+                uploadPDF(file);
+            } else {
+                alert('PDF 파일만 업로드 가능합니다.');
+            }
+        });
+
+        async function uploadPDF(file) {
+            if (!file) return;
+
+            const resultDiv = document.getElementById('extractionResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'extraction-result';
+            resultDiv.innerHTML = '<div class="loading-spinner"></div> AI가 키워드를 추출하는 중... (30초~1분 소요)';
+
+            const formData = new FormData();
+            formData.append('pdf_file', file);
+
+            try {
+                const response = await fetch('/manage/lecture/{{ lecture.id }}/extract-keywords', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const keywords = result.keywords;
+                    const keywordsText = result.keywords_text;
+
+                    resultDiv.innerHTML = `
+                        <div style="margin-bottom: 1rem;">
+                            <strong style="color: #2ecc71;">✅ ${keywords.length}개 키워드 추출 완료!</strong>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            ${keywords.map(k => `<span class="keyword-badge">${k}</span>`).join('')}
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-primary" onclick="applyKeywords('${keywordsText.replace(/'/g, "\\'")}')">
+                                적용하기
+                            </button>
+                            <button class="btn btn-secondary" onclick="appendKeywords('${keywordsText.replace(/'/g, "\\'")}')">
+                                기존에 추가
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.className = 'extraction-result error';
+                    resultDiv.innerHTML = `<strong style="color: #e74c3c;">❌ 오류:</strong> ${result.error}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'extraction-result error';
+                resultDiv.innerHTML = `<strong style="color: #e74c3c;">❌ 요청 실패:</strong> ${error.message}`;
+            }
+        }
+
+        async function applyKeywords(keywords) {
+            await saveKeywords(keywords);
+        }
+
+        async function appendKeywords(newKeywords) {
+            const currentKeywordsDiv = document.getElementById('currentKeywords');
+            const existingBadges = currentKeywordsDiv.querySelectorAll('.keyword-badge');
+            let existing = Array.from(existingBadges).map(b => b.textContent.trim()).join(', ');
+
+            if (existing) {
+                await saveKeywords(existing + ', ' + newKeywords);
+            } else {
+                await saveKeywords(newKeywords);
+            }
+        }
+
+        async function saveKeywords(keywords) {
+            try {
+                const response = await fetch('/manage/lecture/{{ lecture.id }}/keywords', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ keywords: keywords })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // 화면 업데이트
+                    const currentKeywordsDiv = document.getElementById('currentKeywords');
+                    if (keywords.trim()) {
+                        const badges = keywords.split(',').map(k =>
+                            `<span class="keyword-badge">${k.trim()}</span>`
+                        ).join('');
+                        currentKeywordsDiv.innerHTML = badges;
+                    } else {
+                        currentKeywordsDiv.innerHTML = '<span style="color: #666;">등록된 키워드가 없습니다.</span>';
+                    }
+
+                    // 편집 모드 input도 업데이트
+                    keywordInput.value = keywords;
+                    initialKeywords = keywords;
+
+                    // localStorage에 저장 (뒤로가기 시 강의 목록에서 반영)
+                    localStorage.setItem('updatedLectureKeywords', JSON.stringify({
+                        lectureId: {{ lecture.id }},
+                keywords: keywords
+            }));
+
+            document.getElementById('extractionResult').innerHTML =
+                '<strong style="color: #2ecc71;">✅ 키워드가 저장되었습니다!</strong>';
+        } else {
+            alert('저장 실패: ' + result.error);
+        }
+            } catch (error) {
+            alert('오류: ' + error.message);
+        }
+        }
+    </script>
+    <!-- Floating Action Bar -->
+    <div id="floatingActionBar" class="floating-action-bar" style="display: none;">
+        <span style="color:white; font-weight:bold; margin-right:1rem;"><span id="selectedCount">0</span>개 선택됨</span>
+        <button type="button" class="btn btn-primary" onclick="openMoveModal(event)">📦 이동</button>
+        <button type="button" class="btn btn-success" onclick="runReclassification(event, this)">🤖 AI 재분류</button>
+        <button type="button" class="btn btn-danger" onclick="resetQuestions(event)">❌ 미분류로</button>
+    </div>
+
+    <!-- 이동 모달 -->
+    <div id="moveModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMoveModal()">&times;</span>
+            <h2>문제 이동</h2>
+            <p><span id="moveCount">0</span>개 문제를 다음 강의로 이동합니다:</p>
+            <select id="targetLectureSelect"
+                style="width: 100%; padding: 0.8rem; margin: 1rem 0; border-radius: 5px; border: 1px solid #ddd;">
+                <option value="">강의를 선택하세요...</option>
+                {% for b in all_blocks %}
+                <optgroup label="{{ b.name }}">
+                    {% for l in b.lectures %}
+                    {% if l.id != lecture.id %}
+                    <option value="{{ l.id }}">{{ l.title }} ({{ l.professor or '교수 미정' }})</option>
+                    {% endif %}
+                    {% endfor %}
+                </optgroup>
+                {% endfor %}
+            </select>
+            <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                <button type="button" class="btn btn-secondary" onclick="closeMoveModal()">취소</button>
+                <button type="button" class="btn btn-primary" onclick="submitMove(event)">이동</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .floating-action-bar {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3436;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            z-index: 2147483647;
+            /* Max Z-index */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal {
+            z-index: 2147483647;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            accent-color: #667eea;
+        }
+    </style>
+
+    <script>
+        // --- 문제 일괄 관리 스크립트 ---
+        const selectedQuestions = new Set();
+
+        function toggleSelectAll() {
+            const isChecked = document.getElementById('selectAll').checked;
+            const checkboxes = document.querySelectorAll('.q-checkbox');
+            checkboxes.forEach(cb => {
+                cb.checked = isChecked;
+                if (isChecked) selectedQuestions.add(cb.value);
+                else selectedQuestions.delete(cb.value);
+            });
+            updateActionBar();
+        }
+
+        function updateActionBar() {
+            const checkboxes = document.querySelectorAll('.q-checkbox');
+            selectedQuestions.clear();
+            checkboxes.forEach(cb => {
+                if (cb.checked) selectedQuestions.add(cb.value);
+            });
+
+            const count = selectedQuestions.size;
+            document.getElementById('selectedCount').innerText = count;
+            document.getElementById('moveCount').innerText = count;
+
+            const bar = document.getElementById('floatingActionBar');
+            if (count > 0) bar.style.display = 'flex';
+            else bar.style.display = 'none';
+        }
+
+        function openMoveModal(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            console.log('Opening Move Modal');
+            document.getElementById('moveModal').style.display = 'block';
+        }
+
+        function closeMoveModal() {
+            document.getElementById('moveModal').style.display = 'none';
+        }
+
+        async function submitMove(e) {
+            try {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
+                const targetId = document.getElementById('targetLectureSelect').value;
+                if (!targetId) return alert('이동할 강의를 선택해주세요.');
+
+                if (!confirm(selectedQuestions.size + '개 문제를 이동하시겠습니까?')) return;
+
+                const response = await fetch('/manage/questions/move', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        question_ids: Array.from(selectedQuestions),
+                        target_lecture_id: targetId
+                    })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert(`${result.moved_count}개 문제가 이동되었습니다.`);
+                    location.reload();
+                } else {
+                    alert('이동 실패: ' + result.error);
+                }
+            } catch (e) {
+                console.error(e);
+                alert('오류 발생: ' + e.message);
+            }
+        }
+
+        async function resetQuestions(e) {
+            try {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
+                if (!confirm('선택한 문제를 "미분류" 상태로 되돌리시겠습니까? 분류 대기소로 이동됩니다.')) return;
+
+                const response = await fetch('/manage/questions/reset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        question_ids: Array.from(selectedQuestions)
+                    })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert(`${result.reset_count}개 문제가 미분류 처리되었습니다.`);
+                    location.reload();
+                } else {
+                    alert('초기화 실패: ' + result.error);
+                }
+            } catch (e) {
+                console.error(e);
+                alert('오류 발생: ' + e.message);
+            }
+        }
+
+        async function runReclassification(e, btn) {
+            console.log('Reclassification started', btn);
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            if (!confirm('선택한 문제에 대해 AI 분류를 다시 실행하시겠습니까?')) return;
+
+            try {
+                if (btn) {
+                    btn.innerHTML = '⏳ 요청 중...';
+                    btn.disabled = true;
+                }
+
+                const response = await fetch('/ai/classify/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        question_ids: Array.from(selectedQuestions)
+                    })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('AI 재분류가 시작되었습니다. 결과 페이지로 이동합니다.');
+                    window.location.href = `/ai/classify/preview/${result.job_id}`;
+                } else {
+                    alert('재분류 시작 실패: ' + result.error);
+                    if (btn) {
+                        btn.innerHTML = '🤖 AI 재분류';
+                        btn.disabled = false;
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+                alert('오류 발생: ' + e.message);
+                if (btn) {
+                    btn.innerHTML = '🤖 AI 재분류';
+                    btn.disabled = false;
+                }
+            }
+        }
+
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function (event) {
+            const moveModal = document.getElementById('moveModal');
+            if (moveModal && event.target == moveModal) {
+                closeMoveModal();
+            }
         }
     </script>
 </body>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -18,6 +20,7 @@
             justify-content: center;
             align-items: center;
         }
+
         .container {
             text-align: center;
             padding: 3rem;
@@ -26,22 +29,26 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             max-width: 600px;
         }
+
         h1 {
             color: #333;
             margin-bottom: 1rem;
             font-size: 2.5rem;
         }
+
         p {
             color: #666;
             margin-bottom: 2rem;
             font-size: 1.1rem;
         }
+
         .nav-links {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
             justify-content: center;
         }
+
         .nav-links a {
             padding: 1rem 2rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -51,10 +58,12 @@
             font-weight: bold;
             transition: transform 0.2s, box-shadow 0.2s;
         }
+
         .nav-links a:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
         }
+
         .status {
             margin-top: 2rem;
             padding: 1rem;
@@ -64,12 +73,14 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>📚 기출문제 통합 관리 시스템</h1>
         <p>시험 문제를 체계적으로 관리하고 학습하세요</p>
         <div class="nav-links">
             <a href="{{ url_for('exam.list_exams') }}">📋 시험 목록</a>
+            <a href="{{ url_for('practice.list_lectures') }}">📝 연습 모드</a>
             <a href="{{ url_for('manage.dashboard') }}">⚙️ 관리</a>
             <a href="{{ url_for('history.list_history') }}">📊 학습 이력</a>
             <a href="{{ url_for('history.stats') }}">📈 통계</a>
@@ -79,4 +90,5 @@
         </div>
     </div>
 </body>
+
 </html>

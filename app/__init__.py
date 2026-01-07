@@ -42,11 +42,15 @@ def create_app(config_name='default'):
     from app.routes.exam import exam_bp
     from app.routes.manage import manage_bp
     from app.routes.history import history_bp
+    from app.routes.ai import ai_bp
+    from app.routes.practice import practice_bp
     
     app.register_blueprint(main_bp)
     app.register_blueprint(exam_bp, url_prefix='/exam')
     app.register_blueprint(manage_bp, url_prefix='/manage')
     app.register_blueprint(history_bp, url_prefix='/history')
+    app.register_blueprint(ai_bp)
+    app.register_blueprint(practice_bp, url_prefix='/practice')
     
     # 앱 컨텍스트에서 DB 테이블 생성
     with app.app_context():

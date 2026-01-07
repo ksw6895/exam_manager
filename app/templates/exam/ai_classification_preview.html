@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 분류 결과 - 기출문제 관리</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a {
+            color: #667eea;
+            text-decoration: none;
+            margin-left: 1rem;
+        }
+
+        /* 진행 상태 바 */
+        .progress-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .progress-stats span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* 필터 바 */
+        .filter-bar {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar button {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-bar button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: transparent;
+            color: white;
+        }
+
+        .filter-bar button:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* 결과 영역 */
+        .results-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .block-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .block-header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .block-header .icon {
+            transition: transform 0.2s;
+        }
+
+        .block-section.collapsed .block-header .icon {
+            transform: rotate(-90deg);
+        }
+
+        .block-section.collapsed .block-content {
+            display: none;
+        }
+
+        .block-content {
+            padding: 1rem;
+        }
+
+        .lecture-group {
+            margin-bottom: 1rem;
+        }
+
+        .lecture-header {
+            padding: 0.5rem 1rem;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lecture-title {
+            color: #667eea;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lecture-checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: #667eea;
+            cursor: pointer;
+        }
+
+        /* 문제 카드 */
+        .question-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .question-item.selected {
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.5);
+        }
+
+        .question-checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: #667eea;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .question-info {
+            flex: 1;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .exam-name {
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        .confidence-badge {
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .confidence-high {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .confidence-medium {
+            background: rgba(241, 196, 15, 0.2);
+            color: #f1c40f;
+        }
+
+        .confidence-low {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        .question-content {
+            font-size: 0.9rem;
+            color: #ddd;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .ai-reason {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 0.5rem 0.8rem;
+            font-size: 0.85rem;
+            color: #aaa;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .ai-reason .icon {
+            color: #f39c12;
+        }
+
+        .question-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .btn-action {
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            border: none;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-change {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+        }
+
+        .btn-reject {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        /* No Match 섹션 */
+        .no-match-section {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .no-match-section .block-header {
+            background: rgba(231, 76, 60, 0.2);
+        }
+
+        /* 하단 액션 바 */
+        .action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #2d3436 0%, #1a1a2e 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 -5px 30px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .action-bar .selected-count {
+            font-size: 1.1rem;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .btn-apply {
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-apply:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-apply:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-apply-all {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        }
+
+        .btn-cancel {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: transparent;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        /* 로딩 상태 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .loading-overlay.hidden {
+            display: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            margin-top: 1rem;
+            color: #ccc;
+        }
+
+        /* 빈 상태 */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #aaa;
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        /* 반응형 여백 */
+        .results-container {
+            padding-bottom: 100px;
+        }
+
+        /* Custom Confirm Modal */
+        .confirm-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+
+        .confirm-modal-overlay.hidden {
+            display: none;
+        }
+
+        .confirm-modal-content {
+            background: linear-gradient(135deg, #2d3436 0%, #1a1a2e 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .confirm-modal-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .confirm-modal-content p {
+            margin-bottom: 1.5rem;
+            color: #ccc;
+        }
+
+        .confirm-modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .confirm-modal-btn {
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .confirm-modal-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .confirm-modal-btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .confirm-modal-btn-success {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+        }
+
+        .confirm-modal-btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #aaa;
+        }
+
+        .toast-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            z-index: 10000;
+            animation: fadeIn 0.3s;
+        }
+
+        .toast-error {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .toast-success {
+            background: #2ecc71;
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Custom Confirm Modal -->
+    <div class="confirm-modal-overlay hidden" id="confirmModal">
+        <div class="confirm-modal-content">
+            <h3 id="confirmModalTitle">확인</h3>
+            <p id="confirmModalMessage">진행하시겠습니까?</p>
+            <div class="confirm-modal-buttons">
+                <button class="confirm-modal-btn confirm-modal-btn-secondary" onclick="closeConfirmModal()">취소</button>
+                <button class="confirm-modal-btn confirm-modal-btn-primary" id="confirmModalBtn"
+                    onclick="executeConfirmedAction()">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>🤖 AI 분류 결과</h1>
+            <div class="nav-links">
+                <a href="{{ url_for('exam.unclassified_questions') }}">← 분류 대기소</a>
+                <a href="{{ url_for('main.index') }}">홈</a>
+            </div>
+        </header>
+
+        <!-- 진행 상태 -->
+        <section class="progress-section" id="progressSection">
+            <div class="progress-header">
+                <span id="progressTitle">분류 진행 중...</span>
+                <span id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+            </div>
+            <div class="progress-stats">
+                <span>✅ 성공: <strong id="successCount">0</strong></span>
+                <span>❌ 실패: <strong id="failedCount">0</strong></span>
+                <span>📊 전체: <strong id="totalCount">0</strong></span>
+            </div>
+        </section>
+
+        <!-- 필터 바 -->
+        <div class="filter-bar" id="filterBar" style="display: none;">
+            <button class="active" data-filter="all">전체 보기</button>
+            <button data-filter="high">✅ 확실한 제안</button>
+            <button data-filter="low">⚠️ 검토 필요</button>
+            <button data-filter="nomatch">❓ 분류 불가</button>
+            <span style="margin-left: auto; color: #888;" id="filterInfo"></span>
+        </div>
+
+        <!-- 결과 영역 -->
+        <div class="results-container" id="resultsContainer" style="display: none;">
+            <!-- JavaScript로 동적 생성 -->
+        </div>
+
+        <!-- 빈 상태 (처리 전) -->
+        <div class="empty-state" id="emptyState">
+            <div class="icon">⏳</div>
+            <p>AI가 문제를 분석하고 있습니다...</p>
+        </div>
+    </div>
+
+    <!-- 하단 액션 바 -->
+    <div class="action-bar" id="actionBar" style="display: none;">
+        <span class="selected-count"><span id="selectedCount">0</span>개 선택됨</span>
+        <button class="btn-apply btn-apply-all" onclick="applyHighConfidence()">확실한 제안만 적용</button>
+        <button class="btn-apply" onclick="applySelected()" id="applySelectedBtn" disabled>선택 항목 적용</button>
+        <button class="btn-cancel"
+            onclick="window.location.href='{{ url_for('exam.unclassified_questions') }}'">취소</button>
+    </div>
+
+    <!-- 로딩 오버레이 -->
+    <div class="loading-overlay hidden" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p class="loading-text">적용 중...</p>
+    </div>
+
+    <script>
+        const JOB_ID = {{ job.id }};
+        const CONFIDENCE_THRESHOLD = 0.7;
+        let resultsData = null;
+        let selectedIds = new Set();
+        let pollingInterval = null;
+
+        // 페이지 로드 시 상태 확인 시작
+        document.addEventListener('DOMContentLoaded', () => {
+            startPolling();
+        });
+
+        function startPolling() {
+            checkStatus();
+            pollingInterval = setInterval(checkStatus, 1000);
+        }
+
+        async function checkStatus() {
+            try {
+                const response = await fetch(`/ai/classify/status/${JOB_ID}`);
+                const data = await response.json();
+
+                if (!data.success) {
+                    showError(data.error);
+                    stopPolling();
+                    return;
+                }
+
+                updateProgress(data);
+
+                if (data.is_complete) {
+                    stopPolling();
+                    if (data.status === 'completed') {
+                        await loadResults();
+                    } else {
+                        showError(data.error_message || '작업 실패');
+                    }
+                }
+            } catch (error) {
+                console.error('Polling error:', error);
+            }
+        }
+
+        function stopPolling() {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+            }
+        }
+
+        function updateProgress(data) {
+            document.getElementById('progressBar').style.width = `${data.progress_percent}%`;
+            document.getElementById('progressPercent').textContent = `${data.progress_percent}%`;
+            document.getElementById('successCount').textContent = data.success_count;
+            document.getElementById('failedCount').textContent = data.failed_count;
+            document.getElementById('totalCount').textContent = data.total_count;
+
+            if (data.status === 'processing') {
+                document.getElementById('progressTitle').textContent =
+                    `분류 진행 중... (${data.processed_count}/${data.total_count})`;
+            } else if (data.status === 'completed') {
+                document.getElementById('progressTitle').textContent = '분류 완료!';
+            }
+        }
+
+        async function loadResults() {
+            try {
+                const response = await fetch(`/ai/classify/result/${JOB_ID}`);
+                const data = await response.json();
+
+                if (!data.success) {
+                    showError(data.error);
+                    return;
+                }
+
+                resultsData = data;
+                renderResults(data);
+
+                document.getElementById('emptyState').style.display = 'none';
+                document.getElementById('filterBar').style.display = 'flex';
+                document.getElementById('resultsContainer').style.display = 'flex';
+                document.getElementById('actionBar').style.display = 'flex';
+
+            } catch (error) {
+                showError('결과 로드 실패: ' + error.message);
+            }
+        }
+
+        function renderResults(data) {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = '';
+
+            // 그룹화된 결과 렌더링
+            data.grouped_results.forEach(block => {
+                const blockHtml = createBlockSection(block);
+                container.innerHTML += blockHtml;
+            });
+
+            // No Match 섹션
+            if (data.no_match_list.length > 0) {
+                container.innerHTML += createNoMatchSection(data.no_match_list);
+            }
+
+            // 필터 정보 업데이트
+            updateFilterInfo(data);
+        }
+
+        function createBlockSection(block) {
+            let lecturesHtml = '';
+            block.lectures.forEach(lecture => {
+                let questionsHtml = '';
+                lecture.questions.forEach(q => {
+                    questionsHtml += createQuestionItem(q);
+                });
+
+                lecturesHtml += `
+                    <div class="lecture-group" data-lecture-id="${lecture.lecture_id}">
+                        <div class="lecture-header">
+                            <span class="lecture-title">
+                                <input type="checkbox" class="lecture-checkbox" 
+                                       data-lecture-id="${lecture.lecture_id}"
+                                       onchange="toggleLectureSelection(${lecture.lecture_id}, this.checked)">
+                                📖 ${lecture.lecture_title}
+                            </span>
+                            <span style="color: #888; font-size: 0.85rem;">${lecture.questions.length}개 문제</span>
+                        </div>
+                        ${questionsHtml}
+                    </div>
+                `;
+            });
+
+            return `
+                <div class="block-section">
+                    <div class="block-header" onclick="toggleBlock(this.parentElement)">
+                        <span class="icon">▼</span>
+                        📁 ${block.block_name}
+                    </div>
+                    <div class="block-content">
+                        ${lecturesHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        function createQuestionItem(q) {
+            const confidence = q.confidence || 0;
+            const confidenceClass = confidence >= 0.8 ? 'high' : (confidence >= 0.6 ? 'medium' : 'low');
+            const confidenceLabel = confidence >= 0.8 ? '높음' : (confidence >= 0.6 ? '보통' : '낮음');
+            const checked = confidence >= CONFIDENCE_THRESHOLD ? 'checked' : '';
+
+            return `
+                <div class="question-item ${checked ? 'selected' : ''}" 
+                     data-question-id="${q.question_id}"
+                     data-confidence="${confidence}"
+                     data-lecture-id="${q.lecture_id || ''}">
+                    <input type="checkbox" class="question-checkbox" 
+                           data-id="${q.question_id}" 
+                           ${checked}
+                           onchange="updateSelection(this)">
+                    <div class="question-info">
+                        <div class="question-header">
+                            <div>
+                                <span class="question-number">Q${q.question_number}</span>
+                                <span class="exam-name">${q.exam_title || ''}</span>
+                            </div>
+                            <span class="confidence-badge confidence-${confidenceClass}">
+                                ${Math.round(confidence * 100)}% ${confidenceLabel}
+                            </span>
+                        </div>
+                        <div class="ai-reason">
+                            <span class="icon">💡</span>
+                            <span>${q.reason || '근거 없음'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createNoMatchSection(noMatchList) {
+            let questionsHtml = '';
+            noMatchList.forEach(q => {
+                questionsHtml += `
+                    <div class="question-item" data-question-id="${q.question_id}">
+                        <div class="question-info">
+                            <div class="question-header">
+                                <div>
+                                    <span class="question-number">Q${q.question_number}</span>
+                                    <span class="exam-name">${q.exam_title || ''}</span>
+                                </div>
+                            </div>
+                            <div class="ai-reason">
+                                <span class="icon">⚠️</span>
+                                <span>${q.reason || '적합한 강의를 찾지 못했습니다.'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            return `
+                <div class="block-section no-match-section">
+                    <div class="block-header" onclick="toggleBlock(this.parentElement)">
+                        <span class="icon">▼</span>
+                        ⚠️ 분류 불가 (${noMatchList.length}개)
+                    </div>
+                    <div class="block-content">
+                        ${questionsHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleBlock(element) {
+            element.classList.toggle('collapsed');
+        }
+
+        function updateSelection(checkbox) {
+            const qid = parseInt(checkbox.dataset.id);
+            const item = checkbox.closest('.question-item');
+            const lectureId = item.dataset.lectureId;
+
+            if (checkbox.checked) {
+                selectedIds.add(qid);
+                item.classList.add('selected');
+            } else {
+                selectedIds.delete(qid);
+                item.classList.remove('selected');
+            }
+
+            updateSelectedCount();
+
+            // 강의 체크박스 상태도 업데이트
+            if (lectureId) {
+                updateLectureCheckboxState(lectureId);
+            }
+        }
+
+        function updateSelectedCount() {
+            document.getElementById('selectedCount').textContent = selectedIds.size;
+            document.getElementById('applySelectedBtn').disabled = selectedIds.size === 0;
+        }
+
+        // 강의 전체 선택/해제
+        function toggleLectureSelection(lectureId, isSelected) {
+            const lectureGroup = document.querySelector(`.lecture-group[data-lecture-id="${lectureId}"]`);
+            if (!lectureGroup) return;
+
+            const checkboxes = lectureGroup.querySelectorAll('.question-checkbox');
+            checkboxes.forEach(checkbox => {
+                const qid = parseInt(checkbox.dataset.id);
+                const item = checkbox.closest('.question-item');
+
+                checkbox.checked = isSelected;
+                if (isSelected) {
+                    selectedIds.add(qid);
+                    item.classList.add('selected');
+                } else {
+                    selectedIds.delete(qid);
+                    item.classList.remove('selected');
+                }
+            });
+
+            updateSelectedCount();
+        }
+
+        // 문제 체크박스 변경 시 강의 체크박스 상태도 업데이트
+        function updateLectureCheckboxState(lectureId) {
+            const lectureGroup = document.querySelector(`.lecture-group[data-lecture-id="${lectureId}"]`);
+            if (!lectureGroup) return;
+
+            const checkboxes = lectureGroup.querySelectorAll('.question-checkbox');
+            const lectureCheckbox = lectureGroup.querySelector('.lecture-checkbox');
+            if (!lectureCheckbox) return;
+
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            const someChecked = Array.from(checkboxes).some(cb => cb.checked);
+
+            lectureCheckbox.checked = allChecked;
+            lectureCheckbox.indeterminate = someChecked && !allChecked;
+        }
+
+        function updateFilterInfo(data) {
+            const highCount = data.grouped_results.reduce((sum, b) =>
+                sum + b.lectures.reduce((s, l) =>
+                    s + l.questions.filter(q => q.confidence >= 0.7).length, 0), 0);
+            document.getElementById('filterInfo').textContent =
+                `확실한 제안: ${highCount}개`;
+        }
+
+        // 필터 버튼 처리
+        document.querySelectorAll('.filter-bar button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-bar button').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                applyFilter(btn.dataset.filter);
+            });
+        });
+
+        function applyFilter(filter) {
+            document.querySelectorAll('.question-item').forEach(item => {
+                const confidence = parseFloat(item.dataset.confidence) || 0;
+                const lectureId = item.dataset.lectureId;
+                let show = true;
+
+                if (filter === 'high') {
+                    show = confidence >= 0.7 && lectureId;
+                } else if (filter === 'low') {
+                    show = confidence < 0.7 && confidence > 0 && lectureId;
+                } else if (filter === 'nomatch') {
+                    show = !lectureId;
+                }
+
+                item.style.display = show ? '' : 'none';
+            });
+        }
+
+        // 커스텀 모달 관련
+        let pendingAction = null;
+        let pendingIds = [];
+
+        function showConfirmModal(title, message, buttonClass, onConfirm) {
+            document.getElementById('confirmModalTitle').textContent = title;
+            document.getElementById('confirmModalMessage').textContent = message;
+            const btn = document.getElementById('confirmModalBtn');
+            btn.className = 'confirm-modal-btn ' + buttonClass;
+            pendingAction = onConfirm;
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.add('hidden');
+            pendingAction = null;
+            pendingIds = [];
+        }
+
+        async function executeConfirmedAction() {
+            const action = pendingAction;
+            const ids = [...pendingIds];
+            closeConfirmModal();
+            if (action) {
+                await action(ids);
+            }
+        }
+
+        function showToast(message, type = 'error') {
+            const toast = document.createElement('div');
+            toast.className = `toast-message toast-${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        async function applyHighConfidence() {
+            // 높은 신뢰도 문제만 선택
+            const highConfidenceIds = [];
+            document.querySelectorAll('.question-item').forEach(item => {
+                const confidence = parseFloat(item.dataset.confidence) || 0;
+                const lectureId = item.dataset.lectureId;
+                if (confidence >= CONFIDENCE_THRESHOLD && lectureId) {
+                    highConfidenceIds.push(parseInt(item.dataset.questionId));
+                }
+            });
+
+            if (highConfidenceIds.length === 0) {
+                showToast('적용할 확실한 제안이 없습니다.');
+                return;
+            }
+
+            pendingIds = highConfidenceIds;
+            showConfirmModal(
+                '✅ 확실한 제안 적용',
+                `${highConfidenceIds.length}개의 확실한 제안을 적용하시겠습니까?`,
+                'confirm-modal-btn-success',
+                applyClassification
+            );
+        }
+
+        async function applySelected() {
+            if (selectedIds.size === 0) {
+                showToast('선택된 항목이 없습니다.');
+                return;
+            }
+
+            pendingIds = Array.from(selectedIds);
+            showConfirmModal(
+                '📋 선택 항목 적용',
+                `${selectedIds.size}개 항목을 적용하시겠습니까?`,
+                'confirm-modal-btn-primary',
+                applyClassification
+            );
+        }
+
+        async function applyClassification(questionIds) {
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+
+            try {
+                const response = await fetch('/ai/classify/apply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        job_id: JOB_ID,
+                        question_ids: questionIds
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(`${data.applied_count}개 문제가 분류되었습니다.`);
+                    window.location.href = '{{ url_for("exam.unclassified_questions") }}';
+                } else {
+                    alert('적용 실패: ' + data.error);
+                }
+            } catch (error) {
+                alert('오류 발생: ' + error.message);
+            } finally {
+                document.getElementById('loadingOverlay').classList.add('hidden');
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('emptyState').innerHTML = `
+                <div class="icon">❌</div>
+                <p>${message}</p>
+                <a href="{{ url_for('exam.unclassified_questions') }}" style="color: #667eea; margin-top: 1rem; display: inline-block;">← 돌아가기</a>
+            `;
+        }
+
+        // 초기 선택 상태 업데이트
+        setTimeout(() => {
+            document.querySelectorAll('.question-checkbox:checked').forEach(cb => {
+                selectedIds.add(parseInt(cb.dataset.id));
+            });
+            updateSelectedCount();
+        }, 100);
+    </script>
+</body>
+
+</html>

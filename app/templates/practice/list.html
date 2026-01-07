@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>연습 모드 - 강의 선택</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .block-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .block-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .lecture-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .lecture-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1rem;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .lecture-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+        }
+
+        .lecture-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .lecture-meta {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .question-count {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="{{ url_for('main.index') }}" class="back-link">← 메인으로</a>
+
+        <div class="header">
+            <h1>📝 연습 모드</h1>
+            <p>풀어볼 강의를 선택하세요</p>
+        </div>
+
+        {% if blocks %}
+        {% for block in blocks %}
+        <div class="block-card">
+            <h2 class="block-title">{{ block.name }}</h2>
+
+            {% if block.lectures.count() > 0 %}
+            <div class="lecture-list">
+                {% for lecture in block.lectures %}
+                {% if lecture.question_count > 0 %}
+                <a href="{{ url_for('practice.dashboard', lecture_id=lecture.id) }}" class="lecture-card">
+                    <div class="lecture-title">{{ lecture.order }}. {{ lecture.title }}</div>
+                    {% if lecture.professor %}
+                    <div class="lecture-meta">{{ lecture.professor }} 교수</div>
+                    {% endif %}
+                    <span class="question-count">{{ lecture.question_count }}문제</span>
+                </a>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="lecture-meta">등록된 강의가 없습니다.</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="block-card">
+            <div class="empty-state">
+                <div class="icon">📚</div>
+                <h3>등록된 블록이 없습니다</h3>
+                <p>먼저 관리 페이지에서 블록과 강의를 등록해주세요.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>

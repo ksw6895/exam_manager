@@ -400,10 +400,152 @@
             font-size: 4rem;
             margin-bottom: 1rem;
         }
+
+        /* Custom Confirm Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .modal-overlay.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #2d3436 0%, #1a1a2e 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .modal-content p {
+            margin-bottom: 1.5rem;
+            color: #ccc;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .modal-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .modal-btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .modal-btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #aaa;
+        }
+
+        .recent-jobs-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 1rem 0;
+        }
+
+        .recent-job-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .recent-job-item:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateX(5px);
+        }
+
+        .job-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .job-time {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .job-status {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .job-status.processing {
+            color: #f39c12;
+        }
+
+        .job-status.completed {
+            color: #2ecc71;
+        }
+
+        .job-count {
+            color: #aaa;
+        }
     </style>
 </head>
 
 <body>
+    <!-- Custom Confirm Modal -->
+    <div class="modal-overlay hidden" id="aiConfirmModal">
+        <div class="modal-content">
+            <h3>🤖 AI 자동 분류</h3>
+            <p id="aiConfirmMessage">0개 문제를 AI로 분류하시겠습니까?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="closeAIModal()">취소</button>
+                <button class="modal-btn modal-btn-primary" onclick="confirmAIClassification()">분류 시작</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Jobs Modal -->
+    <div class="modal-overlay hidden" id="recentJobsModal">
+        <div class="modal-content" style="max-width: 500px;">
+            <h3>📋 이전 AI 분류 결과</h3>
+            <div class="recent-jobs-list" id="recentJobsList">
+                <p style="color: #888; text-align: center;">로딩 중...</p>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="closeRecentJobsModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container-fluid">
         <header>
             <h1>🏷️ 분류 대기소</h1>
@@ -471,6 +613,14 @@
                         전체 선택
                     </label>
                     <span id="selectedInfo" style="color: #667eea;"></span>
+                    <button onclick="startAIClassification()"
+                        style="margin-left: auto; padding: 0.6rem 1.2rem; border-radius: 8px; border: none; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+                        🤖 AI 자동 분류
+                    </button>
+                    <button onclick="showRecentJobs()"
+                        style="padding: 0.6rem 1.2rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: transparent; color: #aaa; cursor: pointer;">
+                        📋 이전 결과
+                    </button>
                 </div>
 
                 <div class="questions-grid" id="questionsGrid">
@@ -726,6 +876,115 @@
         }
 
         filterQuestions();
+
+        // AI 자동 분류 - 모달 관련 변수
+        let pendingQuestionIds = [];
+
+        function startAIClassification() {
+            // 선택된 문제가 없으면 미분류 문제 전체 선택
+            let questionIds = Array.from(selectedIds);
+
+            if (questionIds.length === 0) {
+                // 미분류 문제만 선택
+                questionIds = Array.from(document.querySelectorAll('.question-card[data-classified="false"]'))
+                    .map(card => parseInt(card.dataset.questionId));
+            }
+
+            if (questionIds.length === 0) {
+                showAlert('분류할 문제가 없습니다.');
+                return;
+            }
+
+            // 모달 표시
+            pendingQuestionIds = questionIds;
+            document.getElementById('aiConfirmMessage').textContent =
+                `${questionIds.length}개 문제를 AI로 분류하시겠습니까?`;
+            document.getElementById('aiConfirmModal').classList.remove('hidden');
+        }
+
+        function closeAIModal() {
+            document.getElementById('aiConfirmModal').classList.add('hidden');
+            pendingQuestionIds = [];
+        }
+
+        async function confirmAIClassification() {
+            // 중요: closeAIModal이 pendingQuestionIds를 초기화하므로 먼저 복사
+            const questionIds = [...pendingQuestionIds];
+            closeAIModal();
+
+            if (questionIds.length === 0) return;
+
+            try {
+                const response = await fetch('/ai/classify/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question_ids: questionIds })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Preview 페이지로 이동
+                    window.location.href = `/ai/classify/preview/${result.job_id}`;
+                } else {
+                    showAlert('AI 분류 시작 실패: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('오류가 발생했습니다: ' + error.message);
+            }
+        }
+
+        function showAlert(message) {
+            // 간단한 알림 표시 (alert 대신)
+            const alertDiv = document.createElement('div');
+            alertDiv.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#e74c3c;color:white;padding:1rem 2rem;border-radius:8px;z-index:10000;animation:fadeIn 0.3s;';
+            alertDiv.textContent = message;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => alertDiv.remove(), 3000);
+        }
+
+        // 이전 AI 분류 결과 관련
+        async function showRecentJobs() {
+            document.getElementById('recentJobsModal').classList.remove('hidden');
+            document.getElementById('recentJobsList').innerHTML = '<p style="color: #888; text-align: center;">로딩 중...</p>';
+
+            try {
+                const response = await fetch('/ai/classify/recent');
+                const data = await response.json();
+
+                if (!data.success) {
+                    document.getElementById('recentJobsList').innerHTML = '<p style="color: #e74c3c; text-align: center;">로드 실패</p>';
+                    return;
+                }
+
+                if (data.jobs.length === 0) {
+                    document.getElementById('recentJobsList').innerHTML = '<p style="color: #888; text-align: center;">최근 7일 이내 AI 분류 기록이 없습니다.</p>';
+                    return;
+                }
+
+                let html = '';
+                data.jobs.forEach(job => {
+                    html += `
+                        <div class="recent-job-item" onclick="window.location.href='/ai/classify/preview/${job.id}'">
+                            <div class="job-info">
+                                <span class="job-time">${job.created_at}</span>
+                                <span class="job-status ${job.status}">${job.status_label}</span>
+                            </div>
+                            <span class="job-count">${job.total_count}문제</span>
+                        </div>
+                    `;
+                });
+                document.getElementById('recentJobsList').innerHTML = html;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('recentJobsList').innerHTML = '<p style="color: #e74c3c; text-align: center;">오류 발생</p>';
+            }
+        }
+
+        function closeRecentJobsModal() {
+            document.getElementById('recentJobsModal').classList.add('hidden');
+        }
     </script>
 </body>
 

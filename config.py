@@ -18,8 +18,14 @@ class Config:
     
     # 업로드 설정
     UPLOAD_FOLDER = BASE_DIR / 'app' / 'static' / 'uploads'
-    MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB 최대 업로드 크기
+    MAX_CONTENT_LENGTH = 100 * 1024 * 1024  # 100MB 최대 업로드 크기
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+    # AI 분류 설정 (Google Gemini)
+    GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
+    GEMINI_MODEL_NAME = os.environ.get('GEMINI_MODEL_NAME', 'gemini-2.0-flash-lite')
+    AI_CONFIDENCE_THRESHOLD = 0.7
+    AI_AUTO_APPLY_MARGIN = 0.2
 
 
 class DevelopmentConfig(Config):

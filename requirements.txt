@@ -4,3 +4,7 @@ pandas
 python-dotenv
 Pillow
 pdfplumber
+google-genai
+tenacity
+scikit-learn
+numpy

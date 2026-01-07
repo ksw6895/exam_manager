@@ -20,7 +20,7 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
             padding: 2rem;
         }
@@ -93,7 +93,7 @@
 
         .form-group textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 60px;
         }
 
         .btn {
@@ -119,10 +119,85 @@
             margin-left: 0.5rem;
         }
 
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
         .form-actions {
             display: flex;
             justify-content: flex-end;
             margin-top: 1rem;
+        }
+
+        .keyword-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .pdf-upload-mini {
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 0.8rem;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .pdf-upload-mini:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .pdf-upload-mini input[type="file"] {
+            display: none;
+        }
+
+        .keyword-badge {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.2);
+            color: #ccc;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 0.3rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .extraction-status {
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        .extraction-status.success {
+            background: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+        }
+
+        .extraction-status.error {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
         }
     </style>
 </head>
@@ -138,7 +213,7 @@
         </header>
 
         <div class="form-card">
-            <form method="POST">
+            <form method="POST" id="lectureForm">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="order">강의 번호 *</label>
@@ -156,11 +231,21 @@
                     <input type="text" id="title" name="title" value="{{ lecture.title if lecture else '' }}"
                         placeholder="예: 심전도의 원리, 부정맥의 이해" required>
                 </div>
+
                 <div class="form-group full">
-                    <label for="description">설명 (선택)</label>
-                    <textarea id="description" name="description"
-                        placeholder="강의에 대한 설명을 입력하세요">{{ lecture.description if lecture else '' }}</textarea>
+                    <label for="keywords">🔑 키워드 (AI 분류 정확도 향상용)</label>
+                    <div class="keyword-section">
+                        <div class="pdf-upload-mini" onclick="document.getElementById('pdfInput').click()">
+                            📄 강의 노트(PDF) 업로드로 키워드 자동 추출
+                            <input type="file" id="pdfInput" accept=".pdf"
+                                onchange="extractKeywordsFromPDF(this.files[0])">
+                        </div>
+                        <div id="extractionStatus"></div>
+                        <textarea id="keywords" name="keywords" rows="2"
+                            placeholder="쉼표(,)로 구분하여 입력. 예: 활동전위, Na+ Channel, 탈분극">{{ lecture.keywords if lecture else '' }}</textarea>
+                    </div>
                 </div>
+
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
                         {{ '수정 완료' if lecture else '강의 생성' }}
@@ -170,6 +255,81 @@
             </form>
         </div>
     </div>
+
+    <script>
+        async function extractKeywordsFromPDF(file) {
+            if (!file) return;
+
+            // 파일 크기 체크 (100MB)
+            const MAX_SIZE = 100 * 1024 * 1024;
+            if (file.size > MAX_SIZE) {
+                const statusDiv = document.getElementById('extractionStatus');
+                statusDiv.className = 'extraction-status error';
+                statusDiv.innerHTML = `❌ 오류: 파일 크기가 너무 큽니다. (최대 100MB)`;
+                return;
+            }
+
+            const statusDiv = document.getElementById('extractionStatus');
+            statusDiv.className = 'extraction-status';
+            statusDiv.innerHTML = '<span class="loading-spinner"></span> AI가 키워드를 추출하는 중... (약 30초 소요)';
+
+            const formData = new FormData();
+            formData.append('pdf_file', file);
+
+            try {
+                // 새 강의의 경우 직접 키워드 추출 API 호출
+                const response = await fetch('/manage/extract-keywords-only', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // 먼저 텍스트로 응답 받기 (HTML 에러 페이지일 수 있으므로)
+                const responseText = await response.text();
+                let result;
+
+                try {
+                    result = JSON.parse(responseText);
+                } catch (e) {
+                    console.error('JSON 파싱 에러:', e);
+                    // HTML 응답인 경우 에러 메시지 추출 시도
+                    let errorMessage = `서버 오류 (${response.status})`;
+                    if (responseText.includes('<!DOCTYPE html>')) {
+                        const div = document.createElement('div');
+                        div.innerHTML = responseText;
+                        const title = div.querySelector('title')?.innerText;
+                        const h1 = div.querySelector('h1')?.innerText;
+                        if (title) errorMessage += `: ${title}`;
+                        if (h1) errorMessage += ` - ${h1}`;
+                    } else if (responseText.length < 200) {
+                        errorMessage += `: ${responseText}`;
+                    }
+                    throw new Error(errorMessage);
+                }
+
+                if (response.ok && result.success) {
+                    const keywords = result.keywords;
+                    const keywordsText = result.keywords_text;
+
+                    // 텍스트 영역에 키워드 채우기
+                    const keywordInput = document.getElementById('keywords');
+                    if (keywordInput.value.trim()) {
+                        keywordInput.value = keywordInput.value + ', ' + keywordsText;
+                    } else {
+                        keywordInput.value = keywordsText;
+                    }
+
+                    statusDiv.className = 'extraction-status success';
+                    statusDiv.innerHTML = `✅ ${keywords.length}개 키워드 추출 완료!`;
+                } else {
+                    statusDiv.className = 'extraction-status error';
+                    statusDiv.innerHTML = `❌ 오류: ${result.error || '알 수 없는 오류'}`;
+                }
+            } catch (error) {
+                statusDiv.className = 'extraction-status error';
+                statusDiv.innerHTML = `❌ 요청 실패: ${error.message}`;
+            }
+        }
+    </script>
 </body>
 
 </html>

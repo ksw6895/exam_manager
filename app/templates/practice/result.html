@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결과 - {{ lecture.title }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 1rem 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 0.8rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* 종합 결과 섹션 - 컴팩트하게 */
+        .summary-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            margin-bottom: 1rem;
+        }
+
+        .summary-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .summary-toggle h2 {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #667eea;
+            padding: 0.3rem;
+        }
+
+        .summary-content {
+            display: none;
+            padding-top: 1rem;
+        }
+
+        .summary-content.open {
+            display: block;
+        }
+
+        .score-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .score-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .score-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .score-label {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            min-width: 70px;
+        }
+
+        .stat-box.correct {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .stat-box.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .stat-box.unanswered {
+            background: #e9ecef;
+            color: #666;
+        }
+
+        .stat-box .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .stat-box .label {
+            font-size: 0.75rem;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #dee2e6;
+        }
+
+        /* 틀린 문제 섹션 - 페이지 넘김 방식 */
+        .wrong-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .wrong-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .wrong-header h2 {
+            font-size: 1.2rem;
+            color: #c53030;
+        }
+
+        .wrong-pagination {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .page-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .page-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            font-size: 0.9rem;
+            color: #666;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        /* 문제 카드 */
+        .question-card {
+            background: #fff5f5;
+            border: 1px solid #feb2b2;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .question-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid #feb2b2;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #c53030;
+            font-size: 1.1rem;
+        }
+
+        .answer-badge {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .answer-badge .user {
+            color: #c53030;
+        }
+
+        .answer-badge .correct {
+            color: #2f855a;
+            font-weight: bold;
+        }
+
+        .question-content {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #333;
+            margin-bottom: 1.2rem;
+            white-space: pre-line;
+        }
+
+        /* 선지 목록 */
+        .choices-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .choice-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 0.8rem 1rem;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .choice-item.is-correct {
+            background: #c6f6d5;
+            border-color: #68d391;
+        }
+
+        .choice-item.user-selected {
+            border: 2px solid #c53030;
+        }
+
+        .choice-item.user-selected.is-correct {
+            border-color: #2f855a;
+        }
+
+        .choice-number {
+            font-weight: bold;
+            color: #667eea;
+            margin-right: 0.8rem;
+            min-width: 24px;
+        }
+
+        .choice-content {
+            flex: 1;
+        }
+
+        .choice-tag {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+        }
+
+        .tag-correct {
+            background: #2f855a;
+            color: white;
+        }
+
+        .tag-user {
+            background: #c53030;
+            color: white;
+        }
+
+        .explanation {
+            padding: 1rem;
+            background: #f0fff4;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #276749;
+        }
+
+        .question-source {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-left: 0.8rem;
+        }
+
+        .edit-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-left: 0.8rem;
+        }
+
+        .edit-btn:hover {
+            background: #5a67d8;
+        }
+
+        .question-title-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .no-wrong {
+            text-align: center;
+            padding: 2rem;
+            color: #2f855a;
+            font-size: 1.2rem;
+        }
+
+        /* 메모 입력 */
+        .memo-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed #e2e8f0;
+        }
+
+        .memo-label {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+
+        .memo-textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 0.8rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            resize: vertical;
+        }
+
+        .memo-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .memo-saved {
+            font-size: 0.8rem;
+            color: #2f855a;
+            margin-top: 0.3rem;
+        }
+
+        /* 유형별 점수 카드 */
+        .type-scores {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .type-score-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            min-width: 140px;
+        }
+
+        .objective-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 2px solid #667eea;
+        }
+
+        .subjective-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+            border: 2px solid #10b981;
+        }
+
+        .type-header {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .type-stats {
+            display: flex;
+            align-items: baseline;
+            gap: 0.3rem;
+        }
+
+        .type-correct {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2f855a;
+        }
+
+        .type-separator {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .type-total {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .type-percent {
+            font-size: 0.85rem;
+            color: #888;
+            margin-left: 0.3rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="{{ url_for('practice.list_lectures') }}" class="back-link">← 강의 선택으로</a>
+
+        <div class="header">
+            <h1>📊 결과</h1>
+            <p>{{ lecture.block.name }} > {{ lecture.title }}</p>
+        </div>
+
+        <!-- 종합 결과 (토글 가능) -->
+        <div class="summary-card" id="summaryCard">
+            <div class="summary-toggle" onclick="toggleSummary()">
+                <h2>📈 종합 결과</h2>
+                <button class="toggle-btn" id="toggleBtn">▼</button>
+            </div>
+            <div class="summary-content open" id="summaryContent">
+                <div class="loading" id="loadingState">결과를 불러오는 중...</div>
+                <div id="resultContent" style="display: none;">
+                    <!-- 전체 점수 -->
+                    <div class="score-row">
+                        <div class="score-circle">
+                            <span class="score-value" id="scorePercent">0%</span>
+                            <span class="score-label">전체 정답률</span>
+                        </div>
+                        <div class="stats-row">
+                            <div class="stat-box correct">
+                                <div class="value" id="correctCount">0</div>
+                                <div class="label">정답</div>
+                            </div>
+                            <div class="stat-box incorrect">
+                                <div class="value" id="incorrectCount">0</div>
+                                <div class="label">오답</div>
+                            </div>
+                            <div class="stat-box unanswered">
+                                <div class="value" id="unansweredCount">0</div>
+                                <div class="label">미응답</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 유형별 점수 -->
+                    <div class="type-scores" id="typeScores">
+                        <div class="type-score-card objective-card">
+                            <div class="type-header">📝 객관식</div>
+                            <div class="type-stats">
+                                <span class="type-correct" id="objectiveCorrect">0</span>
+                                <span class="type-separator">/</span>
+                                <span class="type-total" id="objectiveAnswered">0</span>
+                                <span class="type-percent" id="objectivePercent">(0%)</span>
+                            </div>
+                        </div>
+                        <div class="type-score-card subjective-card">
+                            <div class="type-header">✍️ 주관식</div>
+                            <div class="type-stats">
+                                <span class="type-correct" id="subjectiveCorrect">0</span>
+                                <span class="type-separator">/</span>
+                                <span class="type-total" id="subjectiveAnswered">0</span>
+                                <span class="type-percent" id="subjectivePercent">(0%)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <a href="{{ url_for('practice.dashboard', lecture_id=lecture.id) }}" class="btn btn-secondary"
+                            onclick="clearSession()">다시 풀기</a>
+                        <a href="{{ url_for('practice.list_lectures') }}" class="btn btn-primary">다른 강의</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 틀린 문제 섹션 -->
+        <div class="wrong-section" id="wrongSection" style="display: none;">
+            <div class="wrong-header">
+                <h2>❌ 틀린 문제 복습</h2>
+                <div class="wrong-pagination">
+                    <button class="page-btn" id="prevBtn" onclick="prevQuestion()">◀ 이전</button>
+                    <span class="page-info" id="pageInfo">1 / 1</span>
+                    <button class="page-btn" id="nextBtn" onclick="nextQuestion()">다음 ▶</button>
+                </div>
+            </div>
+            <div id="questionContainer"></div>
+            <div class="no-wrong" id="noWrong" style="display: none;">
+                🎉 모든 문제를 맞혔습니다!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const lectureId = {{ lecture.id }};
+        const storageKey = `practice_${lectureId}`;
+        const resultKey = `${storageKey}_result`;
+        const questions = {{ questions | tojson }};
+
+        let wrongQuestions = [];
+        let currentIndex = 0;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            loadResults();
+        });
+
+        // 문제 수정 후 자동 새로고침
+        window.addEventListener('storage', function (e) {
+            if (e.key === 'practice_edit_complete') {
+                localStorage.removeItem('practice_edit_complete');
+                // 결과 데이터 삭제하여 재채점 유도
+                localStorage.removeItem(resultKey);
+                // 현재 인덱스 초기화
+                localStorage.removeItem(`${resultKey}_currentIndex`);
+                // 대시보드로 이동하여 다시 제출하도록 안내
+                alert('문제가 수정되었습니다. 다시 제출해 주세요.');
+                window.location.href = `/practice/lecture/${lectureId}`;
+            }
+        });
+
+        function toggleSummary() {
+            const content = document.getElementById('summaryContent');
+            const btn = document.getElementById('toggleBtn');
+            content.classList.toggle('open');
+            btn.textContent = content.classList.contains('open') ? '▼' : '▶';
+        }
+
+        function loadResults() {
+            const resultData = localStorage.getItem(resultKey);
+
+            if (!resultData) {
+                document.getElementById('loadingState').textContent = '결과 데이터가 없습니다. 먼저 문제를 풀어주세요.';
+                return;
+            }
+
+            const data = JSON.parse(resultData);
+            displayResults(data);
+        }
+
+        function displayResults(data) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('resultContent').style.display = 'block';
+
+            const answeredCount = data.answered_count || 0;
+            const correctCount = data.correct_count || 0;
+            const incorrectCount = data.incorrect_count || 0;
+            const totalCount = data.total_count || 0;
+            const unansweredCount = totalCount - answeredCount;
+
+            const percent = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
+
+            document.getElementById('scorePercent').textContent = percent + '%';
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('incorrectCount').textContent = incorrectCount;
+            document.getElementById('unansweredCount').textContent = unansweredCount;
+
+            // 유형별 점수 표시
+            const objectiveTotal = data.objective_total || 0;
+            const objectiveAnswered = data.objective_answered || 0;
+            const objectiveCorrect = data.objective_correct || 0;
+            const subjectiveTotal = data.subjective_total || 0;
+            const subjectiveAnswered = data.subjective_answered || 0;
+            const subjectiveCorrect = data.subjective_correct || 0;
+
+            // 객관식 점수
+            if (objectiveTotal > 0) {
+                const objectivePercent = objectiveAnswered > 0 ? Math.round((objectiveCorrect / objectiveAnswered) * 100) : 0;
+                document.getElementById('objectiveCorrect').textContent = objectiveCorrect;
+                document.getElementById('objectiveAnswered').textContent = objectiveAnswered;
+                document.getElementById('objectivePercent').textContent = `(${objectivePercent}%)`;
+            } else {
+                // 객관식 문제가 없으면 숨김
+                document.querySelector('.objective-card').style.display = 'none';
+            }
+
+            // 주관식 점수
+            if (subjectiveTotal > 0) {
+                const subjectivePercent = subjectiveAnswered > 0 ? Math.round((subjectiveCorrect / subjectiveAnswered) * 100) : 0;
+                document.getElementById('subjectiveCorrect').textContent = subjectiveCorrect;
+                document.getElementById('subjectiveAnswered').textContent = subjectiveAnswered;
+                document.getElementById('subjectivePercent').textContent = `(${subjectivePercent}%)`;
+            } else {
+                // 주관식 문제가 없으면 숨김
+                document.querySelector('.subjective-card').style.display = 'none';
+            }
+
+            // 틀린 문제 준비
+            wrongQuestions = data.results.filter(r => r.is_correct === false);
+
+            document.getElementById('wrongSection').style.display = 'block';
+
+            if (wrongQuestions.length > 0) {
+                // 저장된 인덱스 복원
+                const savedIndex = localStorage.getItem(`${resultKey}_currentIndex`);
+                const startIndex = savedIndex ? Math.min(parseInt(savedIndex), wrongQuestions.length - 1) : 0;
+                displayQuestion(startIndex);
+            } else {
+                document.getElementById('noWrong').style.display = 'block';
+                document.querySelector('.wrong-pagination').style.display = 'none';
+            }
+        }
+
+        function displayQuestion(index) {
+            currentIndex = index;
+            // 현재 인덱스 저장
+            localStorage.setItem(`${resultKey}_currentIndex`, index);
+            const result = wrongQuestions[index];
+            const question = questions.find(q => q.id === result.question_id);
+
+            if (!question) return;
+
+            const userAnswers = Array.isArray(result.user_answer) ? result.user_answer : [result.user_answer];
+            const correctAnswers = Array.isArray(result.correct_answer) ? result.correct_answer : [result.correct_answer];
+
+            let choicesHtml = '<div class="choices-list">';
+            if (question.choices && question.choices.length > 0) {
+                question.choices.forEach(choice => {
+                    const isCorrect = correctAnswers.map(String).includes(String(choice.choice_number));
+                    const isUserSelected = userAnswers.map(String).includes(String(choice.choice_number));
+
+                    let classes = 'choice-item';
+                    if (isCorrect) classes += ' is-correct';
+                    if (isUserSelected) classes += ' user-selected';
+
+                    let tags = '';
+                    if (isCorrect) tags += '<span class="choice-tag tag-correct">정답</span>';
+                    if (isUserSelected && !isCorrect) tags += '<span class="choice-tag tag-user">내 선택</span>';
+
+                    choicesHtml += `
+                        <div class="${classes}">
+                            <span class="choice-number">${choice.choice_number}.</span>
+                            <span class="choice-content">${choice.content}</span>
+                            ${tags}
+                        </div>
+                    `;
+                });
+            }
+            choicesHtml += '</div>';
+
+            const sourceInfo = question.exam_name ? `<span class="question-source">📝 ${question.exam_name} #${question.question_number}</span>` : '';
+            const editUrl = `/manage/question/${question.id}/edit`;
+
+            let html = `
+                <div class="question-card">
+                    <div class="question-meta">
+                        <div class="question-title-row">
+                            <span class="question-number">문제 ${result.seq}</span>
+                            ${sourceInfo}
+                            <button class="edit-btn" onclick="openEdit('${editUrl}')">✏️ 수정</button>
+                        </div>
+                        <div class="answer-badge">
+                            <span class="user">내 답: ${formatAnswer(result.user_answer)}</span>
+                            <span class="correct">정답: ${formatAnswer(result.correct_answer)}</span>
+                        </div>
+                    </div>
+                    <div class="question-content">${question.content || '(이미지 문제)'}</div>
+                    ${choicesHtml}
+            `;
+
+            if (question.explanation) {
+                html += `<div class="explanation">💡 ${question.explanation}</div>`;
+            }
+
+            // 메모 입력 영역
+            const memoKey = `memo_${question.id}`;
+            const savedMemo = localStorage.getItem(memoKey) || '';
+            html += `
+                <div class="memo-section">
+                    <div class="memo-label">✍️ 내 메모</div>
+                    <textarea class="memo-textarea" id="memoInput" 
+                        placeholder="여기에 학습 내용을 메모하세요..."
+                        oninput="saveMemo(${question.id})">${savedMemo}</textarea>
+                    <div class="memo-saved" id="memoStatus"></div>
+                </div>
+            `;
+
+            html += '</div>';
+
+            document.getElementById('questionContainer').innerHTML = html;
+            document.getElementById('pageInfo').textContent = `${index + 1} / ${wrongQuestions.length}`;
+
+            // 버튼 상태
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === wrongQuestions.length - 1;
+        }
+
+        function prevQuestion() {
+            if (currentIndex > 0) displayQuestion(currentIndex - 1);
+        }
+
+        function nextQuestion() {
+            if (currentIndex < wrongQuestions.length - 1) displayQuestion(currentIndex + 1);
+        }
+
+        function formatAnswer(answer) {
+            if (!answer) return '-';
+            if (Array.isArray(answer)) return answer.join(', ');
+            return String(answer);
+        }
+
+        let memoTimeout;
+        function saveMemo(questionId) {
+            clearTimeout(memoTimeout);
+            memoTimeout = setTimeout(() => {
+                const memo = document.getElementById('memoInput').value;
+                localStorage.setItem(`memo_${questionId}`, memo);
+                const status = document.getElementById('memoStatus');
+                status.textContent = '✓ 저장됨';
+                setTimeout(() => { status.textContent = ''; }, 2000);
+            }, 500);
+        }
+
+        function clearSession() {
+            localStorage.removeItem(storageKey);
+            localStorage.removeItem(resultKey);
+        }
+
+        function openEdit(url) {
+            window.open(url, '_blank', 'width=800,height=700');
+        }
+    </script>
+</body>
+
+</html>

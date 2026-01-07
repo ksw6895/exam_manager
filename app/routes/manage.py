@@ -107,7 +107,7 @@ def create_lecture(block_id):
             title=request.form.get('title'),
             professor=request.form.get('professor'),
             order=int(request.form.get('order', 1)),
-            description=request.form.get('description')
+            keywords=request.form.get('keywords')
         )
         db.session.add(lecture)
         db.session.commit()
@@ -130,11 +130,114 @@ def edit_lecture(lecture_id):
         lecture.title = request.form.get('title')
         lecture.professor = request.form.get('professor')
         lecture.order = int(request.form.get('order', 1))
-        lecture.description = request.form.get('description')
+        lecture.keywords = request.form.get('keywords')
         db.session.commit()
         flash('강의가 수정되었습니다.', 'success')
         return redirect(url_for('manage.list_lectures', block_id=lecture.block_id))
     return render_template('manage/lecture_form.html', block=lecture.block, lecture=lecture)
+
+
+@manage_bp.route('/lecture/<int:lecture_id>/keywords', methods=['POST'])
+def update_lecture_keywords(lecture_id):
+    """강의 키워드 수정 API"""
+    try:
+        data = request.get_json()
+        if not data:
+            return {'success': False, 'error': '데이터가 없습니다.'}, 400
+            
+        lecture = Lecture.query.get_or_404(lecture_id)
+        lecture.keywords = data.get('keywords')
+        db.session.commit()
+        
+        return {'success': True}
+    except Exception as e:
+        db.session.rollback()
+        return {'success': False, 'error': str(e)}, 500
+
+
+@manage_bp.route('/lecture/<int:lecture_id>/extract-keywords', methods=['POST'])
+def extract_keywords_from_pdf(lecture_id):
+    """PDF 업로드 후 키워드 추출 API"""
+    import tempfile
+    
+    lecture = Lecture.query.get_or_404(lecture_id)
+    
+    if 'pdf_file' not in request.files:
+        return {'success': False, 'error': 'PDF 파일을 선택해주세요.'}, 400
+    
+    file = request.files['pdf_file']
+    if file.filename == '':
+        return {'success': False, 'error': '파일이 선택되지 않았습니다.'}, 400
+    
+    if not file.filename.lower().endswith('.pdf'):
+        return {'success': False, 'error': 'PDF 파일만 업로드 가능합니다.'}, 400
+    
+    try:
+        # 임시 파일로 저장
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp:
+            file.save(tmp.name)
+            tmp_path = tmp.name
+        
+        # 키워드 추출 서비스 호출
+        from app.services.keyword_extractor import process_pdf_and_extract_keywords
+        result = process_pdf_and_extract_keywords(tmp_path, lecture.title)
+        
+        # 임시 파일 삭제
+        import os
+        os.unlink(tmp_path)
+        
+        if result['success']:
+            return {
+                'success': True,
+                'keywords': result['keywords'],
+                'keywords_text': ', '.join(result['keywords']),
+                'text_length': result.get('text_length', 0)
+            }
+        else:
+            return {'success': False, 'error': result.get('error', '알 수 없는 오류')}, 500
+            
+    except Exception as e:
+        return {'success': False, 'error': str(e)}, 500
+
+
+@manage_bp.route('/extract-keywords-only', methods=['POST'])
+def extract_keywords_only():
+    """강의 ID 없이 PDF에서 키워드만 추출 (새 강의 생성용)"""
+    import tempfile
+    import os
+    
+    if 'pdf_file' not in request.files:
+        return {'success': False, 'error': 'PDF 파일을 선택해주세요.'}, 400
+    
+    file = request.files['pdf_file']
+    if file.filename == '':
+        return {'success': False, 'error': '파일이 선택되지 않았습니다.'}, 400
+    
+    if not file.filename.lower().endswith('.pdf'):
+        return {'success': False, 'error': 'PDF 파일만 업로드 가능합니다.'}, 400
+    
+    try:
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp:
+            file.save(tmp.name)
+            tmp_path = tmp.name
+        
+        from app.services.keyword_extractor import process_pdf_and_extract_keywords
+        result = process_pdf_and_extract_keywords(tmp_path, '')
+        
+        os.unlink(tmp_path)
+        
+        if result['success']:
+            return {
+                'success': True,
+                'keywords': result['keywords'],
+                'keywords_text': ', '.join(result['keywords']),
+                'text_length': result.get('text_length', 0)
+            }
+        else:
+            return {'success': False, 'error': result.get('error', '알 수 없는 오류')}, 500
+            
+    except Exception as e:
+        return {'success': False, 'error': str(e)}, 500
 
 
 @manage_bp.route('/lecture/<int:lecture_id>')
@@ -146,10 +249,14 @@ def view_lecture(lecture_id):
     from app.models import Question
     questions = Question.query.filter_by(lecture_id=lecture_id).order_by(Question.question_number).all()
     
+    # 모든 블록과 강의 정보 가져오기 (이동 모달용)
+    all_blocks = Block.query.order_by(Block.order).all()
+    
     return render_template('manage/lecture_detail.html', 
                          lecture=lecture, 
                          block=lecture.block,
-                         questions=questions)
+                         questions=questions,
+                         all_blocks=all_blocks)
 
 
 @manage_bp.route('/lecture/<int:lecture_id>/delete', methods=['POST'])
@@ -384,6 +491,7 @@ def edit_question(question_id):
     
     question = Question.query.get_or_404(question_id)
     exam = question.exam
+    from_practice = request.args.get('from_practice', '0') == '1'
     
     if request.method == 'POST':
         # 문제 내용 수정
@@ -391,24 +499,170 @@ def edit_question(question_id):
         question.explanation = request.form.get('explanation', '')
         question.q_type = request.form.get('q_type', question.q_type)
         
+        # 강의 분류 변경
+        new_lecture_id = request.form.get('lecture_id')
+        if new_lecture_id:
+            from app.models import Lecture
+            new_lecture = Lecture.query.get(int(new_lecture_id))
+            if new_lecture:
+                question.lecture_id = new_lecture.id
+        
         # 주관식 정답 수정
         if question.q_type == Question.TYPE_SHORT_ANSWER:
             question.correct_answer_text = request.form.get('correct_answer_text', '')
             question.answer = request.form.get('correct_answer_text', '')
+            # 주관식으로 변경 시 기존 선택지 모두 삭제
+            for choice in question.choices.all():
+                db.session.delete(choice)
         else:
             # 객관식 선택지 수정
             correct_answers = request.form.getlist('correct_answers')
             question.answer = ','.join(correct_answers)
             
-            # 선택지 업데이트
-            for choice in question.choices:
-                choice_content = request.form.get(f'choice_{choice.choice_number}', '')
-                choice.content = choice_content
-                choice.is_correct = str(choice.choice_number) in correct_answers
+            # 삭제된 선택지 처리
+            deleted_choices_str = request.form.get('deleted_choices', '')
+            if deleted_choices_str:
+                deleted_ids = [int(x) for x in deleted_choices_str.split(',') if x.strip()]
+                for choice_id in deleted_ids:
+                    choice_to_delete = Choice.query.get(choice_id)
+                    if choice_to_delete and choice_to_delete.question_id == question.id:
+                        db.session.delete(choice_to_delete)
+            
+            # 폼에서 선택지 데이터 수집
+            choice_data = []
+            i = 1
+            while True:
+                choice_content = request.form.get(f'choice_{i}')
+                if choice_content is None:
+                    break
+                is_correct = str(i) in correct_answers
+                choice_data.append({
+                    'number': i,
+                    'content': choice_content,
+                    'is_correct': is_correct
+                })
+                i += 1
+            
+            # 기존 선택지 가져오기 (삭제되지 않은 것들)
+            existing_choices = list(question.choices.filter(
+                ~Choice.id.in_([int(x) for x in deleted_choices_str.split(',') if x.strip()]) if deleted_choices_str else True
+            ).order_by(Choice.choice_number).all())
+            
+            # 기존 선택지 업데이트 또는 새 선택지 생성
+            for idx, data in enumerate(choice_data):
+                if idx < len(existing_choices):
+                    # 기존 선택지 업데이트
+                    choice = existing_choices[idx]
+                    choice.choice_number = data['number']
+                    choice.content = data['content']
+                    choice.is_correct = data['is_correct']
+                else:
+                    # 새 선택지 생성
+                    new_choice = Choice(
+                        question_id=question.id,
+                        choice_number=data['number'],
+                        content=data['content'],
+                        is_correct=data['is_correct']
+                    )
+                    db.session.add(new_choice)
+            
+            # 남는 기존 선택지 삭제 (폼에서 더 적게 제출된 경우)
+            for idx in range(len(choice_data), len(existing_choices)):
+                db.session.delete(existing_choices[idx])
         
         db.session.commit()
+        
+        # 연습 모드에서 왔으면 창 닫기 페이지 표시
+        if request.form.get('from_practice') == '1':
+            return render_template('manage/edit_complete.html')
+        
         flash('문제가 수정되었습니다.', 'success')
         return redirect(url_for('exam.view_question', exam_id=exam.id, question_number=question.question_number))
     
     blocks = Block.query.order_by(Block.order).all()
-    return render_template('manage/question_edit.html', question=question, exam=exam, blocks=blocks)
+    return render_template('manage/question_edit.html', question=question, exam=exam, blocks=blocks, from_practice=from_practice)
+
+
+# ===== 문제 일괄 관리 =====
+
+@manage_bp.route('/questions/move', methods=['POST'])
+def move_questions():
+    """선택한 문제 이동"""
+    from app.models import Question
+    
+    data = request.json
+    question_ids = data.get('question_ids', [])
+    target_lecture_id = data.get('target_lecture_id')
+    
+    if not question_ids:
+        return {'success': False, 'error': '선택된 문제가 없습니다.'}, 400
+    
+    if not target_lecture_id:
+        return {'success': False, 'error': '이동할 강의가 지정되지 않았습니다.'}, 400
+        
+    try:
+        Question.query.filter(Question.id.in_(question_ids)).update(
+            {'lecture_id': target_lecture_id},
+            synchronize_session=False
+        )
+        db.session.commit()
+        return {'success': True, 'moved_count': len(question_ids)}
+    except Exception as e:
+        db.session.rollback()
+        return {'success': False, 'error': str(e)}, 500
+
+
+@manage_bp.route('/questions/reset', methods=['POST'])
+def reset_questions():
+    """선택한 문제 분류 초기화 (미분류로)"""
+    from app.models import Question
+    
+    data = request.json
+    question_ids = data.get('question_ids', [])
+    
+    if not question_ids:
+        return {'success': False, 'error': '선택된 문제가 없습니다.'}, 400
+        
+    try:
+        Question.query.filter(Question.id.in_(question_ids)).update(
+            {'lecture_id': None},
+            synchronize_session=False
+        )
+        db.session.commit()
+        return {'success': True, 'reset_count': len(question_ids)}
+    except Exception as e:
+        db.session.rollback()
+        return {'success': False, 'error': str(e)}, 500
+
+
+@manage_bp.route('/upload-image', methods=['POST'])
+def upload_image():
+    """클립보드 이미지 업로드"""
+    import uuid
+    
+    if 'image' not in request.files:
+        return {'success': False, 'error': '이미지가 없습니다.'}, 400
+    
+    file = request.files['image']
+    if file.filename == '':
+        return {'success': False, 'error': '파일명이 없습니다.'}, 400
+    
+    # 고유 파일명 생성
+    ext = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else 'png'
+    if ext not in ['png', 'jpg', 'jpeg', 'gif', 'webp']:
+        return {'success': False, 'error': '허용되지 않는 이미지 형식입니다.'}, 400
+    
+    filename = f"{uuid.uuid4().hex}.{ext}"
+    
+    # 저장 경로
+    upload_folder = os.path.join(current_app.static_folder, 'uploads')
+    os.makedirs(upload_folder, exist_ok=True)
+    filepath = os.path.join(upload_folder, filename)
+    
+    try:
+        file.save(filepath)
+        # 마크다운 이미지 경로 반환
+        image_url = url_for('static', filename='uploads/' + filename)
+        return {'success': True, 'url': image_url, 'filename': filename}
+    except Exception as e:
+        return {'success': False, 'error': str(e)}, 500
