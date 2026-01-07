@@ -580,10 +580,10 @@
         </div>
     </div>
 
+    <script src="{{ url_for('static', filename='js/practice_storage.js') }}"></script>
     <script>
         const lectureId = {{ lecture.id }};
-        const storageKey = `practice_${lectureId}`;
-        const resultKey = `${storageKey}_result`;
+        const resultKey = getPracticeResultKey(lectureId);
         const questions = {{ questions | tojson }};
 
         let wrongQuestions = [];
@@ -598,7 +598,7 @@
             if (e.key === 'practice_edit_complete') {
                 localStorage.removeItem('practice_edit_complete');
                 // 결과 데이터 삭제하여 재채점 유도
-                localStorage.removeItem(resultKey);
+                clearPracticeResult(lectureId);
                 // 현재 인덱스 초기화
                 localStorage.removeItem(`${resultKey}_currentIndex`);
                 // 대시보드로 이동하여 다시 제출하도록 안내
@@ -615,15 +615,13 @@
         }
 
         function loadResults() {
-            const resultData = localStorage.getItem(resultKey);
-
-            if (!resultData) {
+            const result = loadPracticeResult(lectureId);
+            if (!result || !result.payload) {
                 document.getElementById('loadingState').textContent = '결과 데이터가 없습니다. 먼저 문제를 풀어주세요.';
                 return;
             }
 
-            const data = JSON.parse(resultData);
-            displayResults(data);
+            displayResults(result.payload);
         }
 
         function displayResults(data) {
@@ -800,8 +798,8 @@
         }
 
         function clearSession() {
-            localStorage.removeItem(storageKey);
-            localStorage.removeItem(resultKey);
+            clearPracticeState(lectureId);
+            clearPracticeResult(lectureId);
         }
 
         function openEdit(url) {

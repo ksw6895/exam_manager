@@ -327,9 +327,10 @@
             </div>
             <div class="grid-container" id="objectiveGrid">
                 {% for q in objective_questions %}
-                <a href="{{ url_for('practice.question', lecture_id=lecture.id, seq=q.original_seq) }}"
+                <a href="{{ url_for('practice.question_by_id', lecture_id=lecture.id, question_id=q.id) }}"
                     class="grid-item unanswered {% if q.is_multiple_response %}multiple{% endif %}"
-                    data-question-id="{{ q.id }}" data-seq="{{ q.original_seq }}" data-type="objective">
+                    data-question-id="{{ q.id }}" data-seq="{{ q.original_seq }}" data-type="objective"
+                    data-is-short="{{ 'true' if q.is_short_answer else 'false' }}">
                     {{ q.type_seq }}
                 </a>
                 {% endfor %}
@@ -345,9 +346,10 @@
             </div>
             <div class="grid-container" id="subjectiveGrid">
                 {% for q in subjective_questions %}
-                <a href="{{ url_for('practice.question', lecture_id=lecture.id, seq=q.original_seq) }}"
+                <a href="{{ url_for('practice.question_by_id', lecture_id=lecture.id, question_id=q.id) }}"
                     class="grid-item unanswered subjective-item" data-question-id="{{ q.id }}"
-                    data-seq="{{ q.original_seq }}" data-type="subjective">
+                    data-seq="{{ q.original_seq }}" data-type="subjective"
+                    data-is-short="{{ 'true' if q.is_short_answer else 'false' }}">
                     {{ q.type_seq }}
                 </a>
                 {% endfor %}
@@ -361,23 +363,39 @@
         </div>
     </div>
 
+    <script src="{{ url_for('static', filename='js/practice_storage.js') }}"></script>
     <script>
         const lectureId = {{ lecture.id }};
-        const storageKey = `practice_${lectureId}`;
         const totalCount = {{ total_count }};
+        const questionMetaMap = buildQuestionMetaMap();
 
         // 페이지 로드 시 저장된 답안 체크
         document.addEventListener('DOMContentLoaded', function () {
             updateGridStatus();
         });
 
-        function getStoredAnswers() {
-            const stored = localStorage.getItem(storageKey);
-            return stored ? JSON.parse(stored) : {};
+        function buildQuestionMetaMap() {
+            const map = {};
+            document.querySelectorAll('.grid-item').forEach(item => {
+                map[item.dataset.questionId] = item.dataset.isShort === 'true';
+            });
+            return map;
+        }
+
+        function isAnswerFilled(answer) {
+            if (!answer) return false;
+            if (answer.type === 'short') {
+                return typeof answer.value === 'string' && answer.value.trim() !== '';
+            }
+            if (Array.isArray(answer.value)) {
+                return answer.value.length > 0;
+            }
+            return typeof answer.value === 'number';
         }
 
         function updateGridStatus() {
-            const answers = getStoredAnswers();
+            const state = loadPracticeState(lectureId, questionMetaMap);
+            const answers = state.answers || {};
             const gridItems = document.querySelectorAll('.grid-item');
             let answeredCount = 0;
 
@@ -385,10 +403,7 @@
                 const questionId = item.dataset.questionId;
                 // 주관식은 문자열, 객관식은 배열로 저장됨
                 const answer = answers[questionId];
-                const hasAnswer = answer && (
-                    (Array.isArray(answer) && answer.length > 0) ||
-                    (typeof answer === 'string' && answer.trim() !== '')
-                );
+                const hasAnswer = isAnswerFilled(answer);
 
                 if (hasAnswer) {
                     item.classList.remove('unanswered');
@@ -405,14 +420,15 @@
 
         function resetAnswers() {
             if (confirm('모든 답안을 초기화하시겠습니까?')) {
-                localStorage.removeItem(storageKey);
+                clearPracticeState(lectureId);
                 updateGridStatus();
             }
         }
 
         function submitAnswers() {
-            const answers = getStoredAnswers();
-            const answeredCount = Object.keys(answers).filter(k => answers[k] && answers[k].length > 0).length;
+            const state = loadPracticeState(lectureId, questionMetaMap);
+            const answers = exportLegacyAnswers(state);
+            const answeredCount = Object.values(state.answers || {}).filter(isAnswerFilled).length;
 
             if (answeredCount === 0) {
                 alert('최소 한 문제 이상 풀어주세요.');
@@ -437,7 +453,7 @@
                 .then(data => {
                     if (data.success) {
                         // 결과를 localStorage에 저장하고 결과 페이지로 이동
-                        localStorage.setItem(`${storageKey}_result`, JSON.stringify(data));
+                        savePracticeResult(lectureId, data);
                         window.location.href = `/practice/lecture/${lectureId}/result`;
                     } else {
                         alert('제출 중 오류가 발생했습니다: ' + data.error);

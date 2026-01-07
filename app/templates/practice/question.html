@@ -390,7 +390,7 @@
 
             <div class="navigation">
                 {% if has_prev %}
-                <a href="{{ url_for('practice.question', lecture_id=lecture.id, seq=seq-1) }}" class="nav-btn secondary"
+                <a href="{{ url_for('practice.question_by_id', lecture_id=lecture.id, question_id=prev_question_id) }}" class="nav-btn secondary"
                     id="prevBtn" onclick="saveBeforeNav()">← 이전</a>
                 {% else %}
                 <button class="nav-btn secondary" disabled>← 이전</button>
@@ -399,7 +399,7 @@
                 <span class="spacer"></span>
 
                 {% if has_next %}
-                <a href="{{ url_for('practice.question', lecture_id=lecture.id, seq=seq+1) }}" class="nav-btn primary"
+                <a href="{{ url_for('practice.question_by_id', lecture_id=lecture.id, question_id=next_question_id) }}" class="nav-btn primary"
                     id="nextBtn" onclick="saveBeforeNav()">다음 →</a>
                 {% else %}
                 <a href="{{ url_for('practice.dashboard', lecture_id=lecture.id) }}" class="nav-btn primary"
@@ -415,11 +415,12 @@
         <img id="lightboxImg" src="" alt="확대 이미지">
     </div>
 
+    <script src="{{ url_for('static', filename='js/practice_storage.js') }}"></script>
     <script>
         const lectureId = {{ lecture.id }};
         const questionId = {{ question.id }};
-        const storageKey = `practice_${lectureId}`;
         const isMultipleResponse = {{ 'true' if question.is_multiple_response else 'false' }};
+        const questionMetaMap = { [questionId]: {{ 'true' if question.is_short_answer else 'false' }} };
 
         // 페이지 로드 시 저장된 답안 복원
         document.addEventListener('DOMContentLoaded', function () {
@@ -443,30 +444,24 @@
             }
         });
 
-        function getStoredAnswers() {
-            const stored = localStorage.getItem(storageKey);
-            return stored ? JSON.parse(stored) : {};
-        }
-
-        function saveAnswers(answers) {
-            localStorage.setItem(storageKey, JSON.stringify(answers));
-        }
-
         function loadSavedAnswer() {
-            const answers = getStoredAnswers();
-            const savedAnswer = answers[questionId];
+            const state = loadPracticeState(lectureId, questionMetaMap);
+            const savedAnswer = getAnswer(state, String(questionId));
 
             const shortAnswerInput = document.getElementById('shortAnswerInput');
             if (shortAnswerInput) {
                 // 주관식
-                if (savedAnswer && typeof savedAnswer === 'string') {
-                    shortAnswerInput.value = savedAnswer;
+                if (savedAnswer && typeof savedAnswer.value === 'string') {
+                    shortAnswerInput.value = savedAnswer.value;
                     shortAnswerInput.classList.add('answered');
                 }
             } else {
                 // 객관식
-                if (savedAnswer && Array.isArray(savedAnswer)) {
-                    savedAnswer.forEach(num => {
+                const choiceNumbers = savedAnswer && savedAnswer.type === 'mcq'
+                    ? (Array.isArray(savedAnswer.value) ? savedAnswer.value : [savedAnswer.value])
+                    : [];
+                if (choiceNumbers.length > 0) {
+                    choiceNumbers.forEach(num => {
                         const item = document.querySelector(`.choice-item[data-choice-number="${num}"]`);
                         if (item) {
                             item.classList.add('selected');
@@ -477,9 +472,7 @@
         }
 
         function saveShortAnswer(value) {
-            const answers = getStoredAnswers();
-            answers[questionId] = value;
-            saveAnswers(answers);
+            setAnswer(lectureId, questionId, { type: 'short', value: value });
 
             const input = document.getElementById('shortAnswerInput');
             if (value.trim()) {
@@ -509,12 +502,15 @@
                 parseInt(item.dataset.choiceNumber)
             );
 
-            const answers = getStoredAnswers();
-            answers[questionId] = selectedNumbers;
-            saveAnswers(answers);
+            setAnswer(lectureId, questionId, { type: 'mcq', value: selectedNumbers });
         }
 
         function saveBeforeNav() {
+            const shortAnswerInput = document.getElementById('shortAnswerInput');
+            if (shortAnswerInput) {
+                saveShortAnswer(shortAnswerInput.value);
+                return;
+            }
             saveCurrentAnswer();
         }
 
