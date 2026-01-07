@@ -1,16 +1,49 @@
 """연습 모드 Blueprint - 강의별 기출문제 풀이"""
+import json
+
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash
-from app.models import Block, Lecture, Choice
+from app import db
+from app.models import Block, Lecture, Choice, PracticeSession, PracticeAnswer, Question
 from app.services.practice_service import (
     build_question_groups,
     get_lecture_questions_ordered,
     get_prev_next,
     get_question_by_seq,
-    grade_questions,
-    normalize_answers_payload,
+    build_legacy_results,
+    evaluate_practice_answers,
+    grade_practice_submission,
+    normalize_practice_answers_payload,
 )
 
 practice_bp = Blueprint('practice', __name__)
+
+
+def _load_question_order(session):
+    if not session.question_order:
+        return []
+    try:
+        return json.loads(session.question_order)
+    except (TypeError, ValueError):
+        return []
+
+
+def _format_answer_payload(answer):
+    if not answer or not answer.answer_payload:
+        return ''
+    try:
+        payload = json.loads(answer.answer_payload)
+    except (TypeError, ValueError):
+        return answer.answer_payload
+
+    answer_type = payload.get('type')
+    value = payload.get('value')
+    if answer_type == 'mcq':
+        if not isinstance(value, list):
+            return ''
+        return ', '.join(str(item) for item in value)
+    if answer_type == 'short':
+        return value if isinstance(value, str) else ''
+    return ''
 
 
 @practice_bp.route('/')
@@ -18,6 +51,83 @@ def list_lectures():
     """연습할 강의 목록 표시"""
     blocks = Block.query.order_by(Block.order).all()
     return render_template('practice/list.html', blocks=blocks)
+
+
+@practice_bp.route('/sessions')
+def session_list():
+    """Practice sessions list."""
+    sessions = PracticeSession.query.order_by(PracticeSession.created_at.desc()).all()
+    session_rows = []
+    for session in sessions:
+        answers = session.answers
+        answered_count = answers.count()
+        correct_count = answers.filter_by(is_correct=True).count()
+        question_order = _load_question_order(session)
+        if question_order:
+            total_questions = len(question_order)
+        elif session.lecture:
+            total_questions = session.lecture.question_count
+        else:
+            total_questions = answered_count
+        session_rows.append({
+            'id': session.id,
+            'lecture_id': session.lecture_id,
+            'lecture_title': session.lecture.title if session.lecture else '',
+            'mode': session.mode,
+            'created_at': session.created_at,
+            'finished_at': session.finished_at,
+            'total_questions': total_questions,
+            'answered_count': answered_count,
+            'correct_count': correct_count,
+        })
+    return render_template('practice/sessions.html', sessions=session_rows)
+
+
+@practice_bp.route('/sessions/<int:session_id>')
+def session_detail(session_id):
+    """Practice session detail."""
+    session = PracticeSession.query.get_or_404(session_id)
+    question_order = _load_question_order(session)
+    answers = session.answers.all()
+    answer_map = {answer.question_id: answer for answer in answers}
+
+    ordered_questions = []
+    if question_order:
+        questions = Question.query.filter(Question.id.in_(question_order)).all()
+        question_map = {question.id: question for question in questions}
+        ordered_questions = [
+            question_map[qid] for qid in question_order if qid in question_map
+        ]
+
+    if not ordered_questions and session.lecture_id:
+        ordered_questions = get_lecture_questions_ordered(session.lecture_id) or []
+
+    if not ordered_questions:
+        ordered_questions = [answer.question for answer in answers if answer.question]
+
+    items = []
+    for question in ordered_questions:
+        answer = answer_map.get(question.id)
+        result = 'unanswered'
+        if answer is not None:
+            result = 'pending'
+            if answer.is_correct is True:
+                result = 'correct'
+            elif answer.is_correct is False:
+                result = 'wrong'
+
+        items.append({
+            'question_id': question.id,
+            'question_number': question.question_number,
+            'answer_text': _format_answer_payload(answer),
+            'result': result,
+        })
+
+    return render_template(
+        'practice/session_detail.html',
+        session=session,
+        items=items,
+    )
 
 
 @practice_bp.route('/lecture/<int:lecture_id>')
@@ -94,8 +204,23 @@ def submit(lecture_id):
     if not data:
         return jsonify({'success': False, 'error': '데이터가 없습니다.'}), 400
     
-    answers = normalize_answers_payload(data.get('answers', {}))
-    counts, results = grade_questions(questions, answers, include_content=True)
+    answers_payload = data.get('answers', {})
+    question_meta = {str(question.id): question.is_short_answer for question in questions}
+    answers_v1, _, error_code, _ = normalize_practice_answers_payload(
+        {'answers': answers_payload},
+        question_meta,
+    )
+    if error_code:
+        return jsonify({'success': False, 'error': '?°ì´?°ê? ?†ìŠµ?ˆë‹¤.'}), 400
+
+    _summary, items, counts = evaluate_practice_answers(questions, answers_v1 or {})
+    results = build_legacy_results(questions, items, include_content=True)
+
+    if answers_v1 and not error_code:
+        try:
+            grade_practice_submission(lecture_id, answers_v1)
+        except Exception:
+            db.session.rollback()
 
     return jsonify({
         'success': True,

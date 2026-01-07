@@ -1,32 +1,14 @@
 import json
+from datetime import datetime
 
 from app import db
-from app.models import Lecture, Question, StudyHistory
+from app.models import Lecture, PracticeAnswer, PracticeSession, Question
 
 
 def map_question_type(question):
     if question.is_short_answer:
         return "short"
     return "mcq"
-
-
-def normalize_answers_payload(raw_answers):
-    if not isinstance(raw_answers, dict):
-        return {}
-
-    normalized = {}
-    for key, value in raw_answers.items():
-        try:
-            question_id = str(int(key))
-        except (TypeError, ValueError):
-            continue
-
-        if isinstance(value, dict) and "value" in value:
-            normalized[question_id] = value.get("value")
-        else:
-            normalized[question_id] = value
-
-    return normalized
 
 
 def _is_numeric_key(value):
@@ -175,8 +157,7 @@ def normalize_practice_answers_payload(payload, lecture_questions_meta):
     return answers_v1, deprecated_input, None, None
 
 
-def grade_practice_submission(lecture_id, answers_v1):
-    questions = get_lecture_questions_ordered(lecture_id) or []
+def evaluate_practice_answers(questions, answers_v1):
     items = []
 
     all_total = len(questions)
@@ -192,8 +173,8 @@ def grade_practice_submission(lecture_id, answers_v1):
     for question in questions:
         question_id = str(question.id)
         is_short = question.is_short_answer
-        answer_entry = answers_v1.get(question_id)
         answer_type = 'short' if is_short else 'mcq'
+        answer_entry = answers_v1.get(question_id) if answers_v1 else None
         can_auto_grade = (not is_short) or bool(question.correct_answer_text)
         correct_answer = question.correct_choice_numbers if not is_short else None
         correct_answer_text = question.correct_answer_text if is_short else None
@@ -239,20 +220,6 @@ def grade_practice_submission(lecture_id, answers_v1):
                 else:
                     mcq_correct += 1
 
-            # StudyHistory is append-only; multiple submissions are recorded by design.
-            if is_answered:
-                if answer_type == 'mcq':
-                    serialized_answer = json.dumps(user_answer, ensure_ascii=True)
-                else:
-                    serialized_answer = str(user_answer)
-                # Schema requires boolean; ungradable answers are stored as False.
-                history = StudyHistory(
-                    question_id=question.id,
-                    is_correct=is_correct if is_correct is not None else False,
-                    user_answer=serialized_answer,
-                )
-                db.session.add(history)
-
         item = {
             'questionId': question.id,
             'type': answer_type,
@@ -267,13 +234,95 @@ def grade_practice_submission(lecture_id, answers_v1):
             item['correctAnswerText'] = correct_answer_text
         items.append(item)
 
-    db.session.commit()
-
     summary = {
         'all': {'total': all_total, 'answered': all_answered, 'correct': all_correct},
         'mcq': {'total': mcq_total, 'answered': mcq_answered, 'correct': mcq_correct},
         'short': {'total': short_total, 'answered': short_answered, 'correct': short_correct},
     }
+
+    counts = {
+        'total': all_total,
+        'answered': all_answered,
+        'correct': all_correct,
+        'objective_total': mcq_total,
+        'objective_answered': mcq_answered,
+        'objective_correct': mcq_correct,
+        'subjective_total': short_total,
+        'subjective_answered': short_answered,
+        'subjective_correct': short_correct,
+    }
+
+    return summary, items, counts
+
+
+def build_legacy_results(questions, items, include_content=False):
+    item_map = {item['questionId']: item for item in items}
+    results = []
+    for idx, question in enumerate(questions):
+        is_short = question.is_short_answer
+        item = item_map.get(question.id)
+        user_answer = item.get('userAnswer') if item else None
+        is_correct = item.get('isCorrect') if item else None
+        can_auto_grade = (
+            item.get('canAutoGrade') if item else (not is_short) or bool(question.correct_answer_text)
+        )
+
+        if is_short:
+            correct_answer = (
+                item.get('correctAnswerText') if item else question.correct_answer_text
+            )
+        else:
+            correct_answer = (
+                item.get('correctAnswer') if item else question.correct_choice_numbers
+            )
+            if correct_answer is None:
+                correct_answer = question.correct_choice_numbers
+
+        result = {
+            'seq': idx + 1,
+            'question_id': question.id,
+            'user_answer': user_answer,
+            'correct_answer': correct_answer,
+            'is_correct': is_correct,
+            'is_short_answer': is_short,
+            'can_auto_grade': can_auto_grade,
+        }
+        if include_content:
+            result['content'] = question.content[:100] if question.content else ''
+        results.append(result)
+    return results
+
+
+def grade_practice_submission(lecture_id, answers_v1):
+    questions = get_lecture_questions_ordered(lecture_id) or []
+    # Each submit creates a new session; repeated submissions are kept for history.
+    session = PracticeSession(
+        lecture_id=lecture_id,
+        lecture_ids_json=json.dumps([lecture_id], ensure_ascii=True),
+        mode='practice',
+        question_order=json.dumps([q.id for q in questions], ensure_ascii=True),
+    )
+    db.session.add(session)
+    summary, items, _counts = evaluate_practice_answers(questions, answers_v1 or {})
+
+    for item in items:
+        if not item.get('isAnswered'):
+            continue
+        answer_payload = json.dumps(
+            {'type': item.get('type'), 'value': item.get('userAnswer')},
+            ensure_ascii=True,
+        )
+        answer = PracticeAnswer(
+            session=session,
+            question_id=item.get('questionId'),
+            answer_payload=answer_payload,
+            is_correct=item.get('isCorrect'),
+            answered_at=datetime.utcnow(),
+        )
+        db.session.add(answer)
+
+    session.finished_at = datetime.utcnow()
+    db.session.commit()
 
     return summary, items
 
@@ -308,16 +357,6 @@ def get_prev_next(ordered_questions, index):
         next_question_id = ordered_questions[index + 1].id
 
     return prev_question_id, next_question_id
-
-
-def is_answered(answer):
-    if answer is None:
-        return False
-    if isinstance(answer, list):
-        return len(answer) > 0
-    if isinstance(answer, str):
-        return answer.strip() != ""
-    return True
 
 
 def build_question_groups(questions):
@@ -364,91 +403,15 @@ def build_question_groups(questions):
 
 
 def grade_questions(questions, answers, include_content=False):
-    results = []
-    answered_count = 0
-    correct_count = 0
-    objective_total = 0
-    objective_answered = 0
-    objective_correct = 0
-    subjective_total = 0
-    subjective_answered = 0
-    subjective_correct = 0
+    question_meta = {str(question.id): question.is_short_answer for question in questions}
+    answers_v1, _deprecated, error_code, _error_message = normalize_practice_answers_payload(
+        {'answers': answers or {}},
+        question_meta,
+    )
+    if error_code or answers_v1 is None:
+        answers_v1 = {}
 
-    for idx, question in enumerate(questions):
-        question_id = str(question.id)
-        user_answer = answers.get(question_id)
-        is_short = question.is_short_answer
-        can_auto_grade = (not is_short) or bool(question.correct_answer_text)
-
-        if is_short:
-            subjective_total += 1
-        else:
-            objective_total += 1
-
-        if not is_answered(user_answer):
-            result = {
-                "seq": idx + 1,
-                "question_id": question.id,
-                "user_answer": None,
-                "correct_answer": question.correct_choice_numbers
-                if not is_short
-                else question.correct_answer_text,
-                "is_correct": None,
-                "is_short_answer": is_short,
-                "can_auto_grade": can_auto_grade,
-            }
-            if include_content:
-                result["content"] = question.content[:100] if question.content else ""
-            results.append(result)
-            continue
-
-        answered_count += 1
-        if is_short:
-            subjective_answered += 1
-        else:
-            objective_answered += 1
-
-        is_correct, correct_answer = question.check_answer(user_answer)
-
-        if is_correct:
-            correct_count += 1
-            if is_short:
-                subjective_correct += 1
-            else:
-                objective_correct += 1
-
-        result = {
-            "seq": idx + 1,
-            "question_id": question.id,
-            "user_answer": user_answer,
-            "correct_answer": correct_answer,
-            "is_correct": is_correct,
-            "is_short_answer": is_short,
-            "can_auto_grade": can_auto_grade,
-        }
-        if include_content:
-            result["content"] = question.content[:100] if question.content else ""
-        results.append(result)
-
-        history = StudyHistory(
-            question_id=question.id,
-            is_correct=is_correct if is_correct is not None else False,
-            user_answer=str(user_answer),
-        )
-        db.session.add(history)
-
-    db.session.commit()
-
-    counts = {
-        "total": len(questions),
-        "answered": answered_count,
-        "correct": correct_count,
-        "objective_total": objective_total,
-        "objective_answered": objective_answered,
-        "objective_correct": objective_correct,
-        "subjective_total": subjective_total,
-        "subjective_answered": subjective_answered,
-        "subjective_correct": subjective_correct,
-    }
+    _summary, items, counts = evaluate_practice_answers(questions, answers_v1)
+    results = build_legacy_results(questions, items, include_content=include_content)
 
     return counts, results

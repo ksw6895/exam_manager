@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Session {{ session.id }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f6f7fb;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            margin-bottom: 0.5rem;
+            color: #222;
+        }
+
+        .meta {
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e6e6e6;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: #f2f3f7;
+        }
+
+        .result-correct {
+            color: #16a34a;
+        }
+
+        .result-wrong {
+            color: #dc2626;
+        }
+
+        .result-pending {
+            color: #6b7280;
+        }
+
+        .result-unanswered {
+            color: #9ca3af;
+        }
+
+        a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Practice Session {{ session.id }}</h1>
+        <div class="meta">
+            <div>Lecture: {{ session.lecture.title if session.lecture else '-' }}</div>
+            <div>Created: {{ session.created_at }}</div>
+            <div>Finished: {{ session.finished_at or '-' }}</div>
+        </div>
+
+        {% if items %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Answer</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>Q{{ item.question_number }} ({{ item.question_id }})</td>
+                    <td>{{ item.answer_text or '-' }}</td>
+                    <td class="result-{{ item.result }}">{{ item.result }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No answers recorded for this session.</p>
+        {% endif %}
+
+        <div class="actions">
+            <a href="{{ url_for('practice.session_list') }}">Back to Sessions</a>
+        </div>
+    </div>
+</body>
+
+</html>

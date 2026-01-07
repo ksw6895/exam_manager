@@ -24,6 +24,32 @@ except ImportError:
 from app import db
 from app.models import Question, Lecture, Block, ClassificationJob
 
+# ============================================================
+# Job payload helpers (idempotency + compatibility)
+# ============================================================
+
+def build_job_payload(request_meta: Optional[Dict], results: Optional[List[Dict]] = None) -> Dict:
+    return {
+        'request': request_meta or {},
+        'results': results or [],
+    }
+
+def parse_job_payload(result_json: Optional[str]) -> Tuple[Dict, List[Dict]]:
+    if not result_json:
+        return {}, []
+    try:
+        payload = json.loads(result_json)
+    except (TypeError, ValueError):
+        return {}, []
+    if isinstance(payload, list):
+        return {}, payload
+    if isinstance(payload, dict):
+        results = payload.get('results')
+        if isinstance(results, list):
+            return payload.get('request', {}) or {}, results
+        return payload.get('request', {}) or {}, []
+    return {}, []
+
 
 # ============================================================
 # 1단계: 후보 강의 추출 (Keyword/TF-IDF 기반)
@@ -265,7 +291,11 @@ class AsyncBatchProcessor:
     _executor = ThreadPoolExecutor(max_workers=2)
     
     @classmethod
-    def start_classification_job(cls, question_ids: List[int]) -> int:
+    def start_classification_job(
+        cls,
+        question_ids: List[int],
+        request_meta: Optional[Dict] = None,
+    ) -> int:
         """
         분류 작업 시작 (비동기)
         
@@ -276,6 +306,10 @@ class AsyncBatchProcessor:
         job = ClassificationJob(
             status=ClassificationJob.STATUS_PENDING,
             total_count=len(question_ids)
+        )
+        job.result_json = json.dumps(
+            build_job_payload(request_meta, []),
+            ensure_ascii=False,
         )
         db.session.add(job)
         db.session.commit()
@@ -297,6 +331,7 @@ class AsyncBatchProcessor:
             if not job:
                 return
             
+            request_meta, _ = parse_job_payload(job.result_json)
             job.status = ClassificationJob.STATUS_PROCESSING
             db.session.commit()
             
@@ -364,12 +399,19 @@ class AsyncBatchProcessor:
                 
                 # 완료
                 job.status = ClassificationJob.STATUS_COMPLETED
-                job.result_json = json.dumps(results, ensure_ascii=False)
+                job.result_json = json.dumps(
+                    build_job_payload(request_meta, results),
+                    ensure_ascii=False,
+                )
                 job.completed_at = datetime.utcnow()
                 
             except Exception as e:
                 job.status = ClassificationJob.STATUS_FAILED
                 job.error_message = str(e)
+                job.result_json = json.dumps(
+                    build_job_payload(request_meta, results),
+                    ensure_ascii=False,
+                )
                 job.completed_at = datetime.utcnow()
             
             db.session.commit()
@@ -394,7 +436,9 @@ def apply_classification_results(question_ids: List[int], job_id: int) -> int:
     if not job or not job.result_json:
         return 0
     
-    results = json.loads(job.result_json)
+    _, results = parse_job_payload(job.result_json)
+    if not results:
+        return 0
     results_map = {r['question_id']: r for r in results}
     
     applied_count = 0

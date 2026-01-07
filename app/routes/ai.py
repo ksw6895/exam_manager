@@ -1,5 +1,7 @@
 """AI 분류 관련 API Blueprint"""
 import json
+import hashlib
+from datetime import datetime, timedelta
 import re
 from flask import Blueprint, request, jsonify, render_template, current_app
 from app import db
@@ -8,7 +10,8 @@ from app.services.ai_classifier import (
     AsyncBatchProcessor,
     apply_classification_results,
     LectureRetriever,
-    GENAI_AVAILABLE
+    GENAI_AVAILABLE,
+    parse_job_payload
 )
 
 # Google GenAI SDK (for text correction)
@@ -19,6 +22,24 @@ except ImportError:
     pass
 
 ai_bp = Blueprint('ai', __name__, url_prefix='/ai')
+
+def _build_request_signature(question_ids, idempotency_key=None):
+    payload = {'question_ids': question_ids}
+    if idempotency_key:
+        payload['idempotency_key'] = str(idempotency_key)
+    raw = json.dumps(payload, separators=(',', ':'), sort_keys=True)
+    return hashlib.sha256(raw.encode('utf-8')).hexdigest()
+
+def _find_recent_job(signature, max_age_hours=24):
+    cutoff = datetime.utcnow() - timedelta(hours=max_age_hours)
+    jobs = ClassificationJob.query.filter(
+        ClassificationJob.created_at >= cutoff
+    ).order_by(ClassificationJob.created_at.desc()).all()
+    for job in jobs:
+        request_meta, _ = parse_job_payload(job.result_json)
+        if request_meta.get('signature') == signature:
+            return job
+    return None
 
 
 @ai_bp.route('/classify/start', methods=['POST'])
@@ -34,7 +55,7 @@ def start_classification():
     if not data:
         return jsonify({'success': False, 'error': '데이터가 없습니다.'}), 400
     
-    question_ids = data.get('question_ids', [])
+    question_ids = data.get('question_ids') or data.get('questionIds') or []
     if not question_ids:
         return jsonify({'success': False, 'error': '선택된 문제가 없습니다.'}), 400
     
@@ -45,13 +66,47 @@ def start_classification():
     
     if not valid_ids:
         return jsonify({'success': False, 'error': '유효한 문제가 없습니다.'}), 400
+
+    valid_ids = sorted(set(valid_ids))
+    idempotency_key = data.get('idempotency_key') or data.get('idempotencyKey')
+    force = bool(data.get('force'))
+    retry_failed = bool(data.get('retry') or data.get('retry_failed') or data.get('retryFailed'))
+    signature = _build_request_signature(valid_ids, idempotency_key)
+
+    existing_job = None
+    if not force:
+        existing_job = _find_recent_job(signature)
+
+    if existing_job and not (existing_job.status == ClassificationJob.STATUS_FAILED and retry_failed):
+        return jsonify({
+            'success': True,
+            'job_id': existing_job.id,
+            'total_count': existing_job.total_count,
+            'status': existing_job.status,
+            'reused': True,
+            'request_signature': signature
+        })
+
+    requested_at = datetime.utcnow().replace(microsecond=0).isoformat() + 'Z'
+    request_meta = {
+        'signature': signature,
+        'question_ids': valid_ids,
+        'requested_at': requested_at,
+    }
+    if idempotency_key:
+        request_meta['idempotency_key'] = str(idempotency_key)
+    if existing_job and existing_job.status == ClassificationJob.STATUS_FAILED and retry_failed:
+        request_meta['retry_of_job_id'] = existing_job.id
     
     try:
-        job_id = AsyncBatchProcessor.start_classification_job(valid_ids)
+        job_id = AsyncBatchProcessor.start_classification_job(valid_ids, request_meta=request_meta)
         return jsonify({
             'success': True,
             'job_id': job_id,
-            'total_count': len(valid_ids)
+            'total_count': len(valid_ids),
+            'status': ClassificationJob.STATUS_PENDING,
+            'reused': False,
+            'request_signature': signature
         })
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
@@ -64,6 +119,8 @@ def get_classification_status(job_id):
     if not job:
         return jsonify({'success': False, 'error': '작업을 찾을 수 없습니다.'}), 404
     
+    request_meta, _ = parse_job_payload(job.result_json)
+    
     return jsonify({
         'success': True,
         'status': job.status,
@@ -73,7 +130,9 @@ def get_classification_status(job_id):
         'failed_count': job.failed_count,
         'progress_percent': job.progress_percent,
         'is_complete': job.is_complete,
-        'error_message': job.error_message
+        'error_message': job.error_message,
+        'request_signature': request_meta.get('signature'),
+        'idempotency_key': request_meta.get('idempotency_key')
     })
 
 
@@ -93,7 +152,9 @@ def get_classification_result(job_id):
             'error': job.error_message or '작업 실패'
         }), 500
     
-    results = json.loads(job.result_json) if job.result_json else []
+    request_meta, results = parse_job_payload(job.result_json)
+    if not results:
+        results = []
     
     # 블록별로 그룹화
     blocks_map = {}
@@ -145,7 +206,8 @@ def get_classification_result(job_id):
             'success': job.success_count,
             'failed': job.failed_count,
             'no_match': len(no_match_list)
-        }
+        },
+        'request_signature': request_meta.get('signature')
     })
 
 
@@ -179,7 +241,6 @@ def apply_classification():
 def get_recent_jobs():
     """최근 AI 분류 작업 목록 조회"""
     # 최근 7일 이내, 최대 10개의 작업을 가져옴
-    from datetime import datetime, timedelta
     week_ago = datetime.utcnow() - timedelta(days=7)
     
     jobs = ClassificationJob.query.filter(

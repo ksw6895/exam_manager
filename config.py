@@ -5,6 +5,12 @@ from pathlib import Path
 # 프로젝트 루트 디렉토리
 BASE_DIR = Path(__file__).parent.absolute()
 
+def _env_flag(name, default=False):
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return value.lower() in ('1', 'true', 'yes', 'on')
+
 
 class Config:
     """기본 설정 클래스"""
@@ -27,10 +33,14 @@ class Config:
     AI_CONFIDENCE_THRESHOLD = 0.7
     AI_AUTO_APPLY_MARGIN = 0.2
 
+    # DB auto-create (dev convenience; disable for production safety)
+    AUTO_CREATE_DB = _env_flag('AUTO_CREATE_DB', default=False)
+
 
 class DevelopmentConfig(Config):
     """개발 환경 설정"""
     DEBUG = True
+    AUTO_CREATE_DB = _env_flag('AUTO_CREATE_DB', default=True)
 
 
 class ProductionConfig(Config):

@@ -267,22 +267,49 @@ class UserNote(db.Model):
         return f'<UserNote Q{self.question_id}>'
 
 
-class StudyHistory(db.Model):
-    """학습 이력 모델 - 문제 풀이 기록"""
-    __tablename__ = 'study_histories'
-    
+class PracticeSession(db.Model):
+    """Practice session model for repeated exams and replays."""
+    __tablename__ = 'practice_sessions'
+
     id = db.Column(db.Integer, primary_key=True)
-    question_id = db.Column(db.Integer, db.ForeignKey('questions.id'), nullable=False)
-    is_correct = db.Column(db.Boolean, nullable=False)  # 정답 여부
-    user_answer = db.Column(db.String(500))  # 사용자 답변
-    time_spent = db.Column(db.Integer)  # 소요 시간 (초)
-    attempt_date = db.Column(db.DateTime, default=datetime.utcnow)
-    
-    # 관계
-    question = db.relationship('Question', backref=db.backref('histories', lazy='dynamic'))
-    
+    lecture_id = db.Column(db.Integer, db.ForeignKey('lectures.id'), nullable=True)
+    mode = db.Column(db.String(50), default='practice')
+    lecture_ids_json = db.Column(db.Text)
+    seed = db.Column(db.Integer)
+    question_order = db.Column(db.Text)
+    total_time_spent = db.Column(db.Integer)
+    submission_count = db.Column(db.Integer, default=1)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    finished_at = db.Column(db.DateTime)
+
+    lecture = db.relationship('Lecture', backref=db.backref('practice_sessions', lazy='dynamic'))
+    answers = db.relationship(
+        'PracticeAnswer',
+        backref='session',
+        lazy='dynamic',
+        cascade='all, delete-orphan',
+    )
+
     def __repr__(self):
-        return f'<StudyHistory Q{self.question_id} {"O" if self.is_correct else "X"}>'
+        return f'<PracticeSession {self.id}>'
+
+
+class PracticeAnswer(db.Model):
+    """Per-question answer saved for a practice session."""
+    __tablename__ = 'practice_answers'
+
+    id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(db.Integer, db.ForeignKey('practice_sessions.id'), nullable=False)
+    question_id = db.Column(db.Integer, db.ForeignKey('questions.id'), nullable=False)
+    answer_payload = db.Column(db.Text)
+    is_correct = db.Column(db.Boolean, nullable=True)
+    time_spent = db.Column(db.Integer)
+    answered_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    question = db.relationship('Question', backref=db.backref('practice_answers', lazy='dynamic'))
+
+    def __repr__(self):
+        return f'<PracticeAnswer S{self.session_id} Q{self.question_id}>'
 
 
 class ClassificationJob(db.Model):
