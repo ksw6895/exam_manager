@@ -1,47 +1,49 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import { apiFetch } from "@/lib/http";
+import type { Block, Lecture, LectureSort } from "@/components/lectures/types";
+import { LectureGrid } from "@/components/lectures/LectureGrid";
+import { LectureSkeleton } from "@/components/lectures/LectureSkeleton";
+import { LectureErrorState } from "@/components/lectures/LectureErrorState";
 
-type Lecture = {
-  lectureId?: number;
-  title?: string;
-  order?: number;
-  questionCount?: number;
-};
-
-type Block = {
-  blockId?: number;
-  title?: string;
-  lectures?: Lecture[];
-};
-
-type LecturesResponse = {
-  blocks?: Block[];
-  ok?: boolean;
-  data?: Block[];
-};
+type LecturesResponse =
+  | {
+      blocks?: Block[];
+      ok?: boolean;
+      data?: unknown;
+    }
+  | unknown[];
 
 export default function LecturesPage() {
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState<LectureSort>("title");
 
   useEffect(() => {
     let active = true;
 
-    apiFetch<LecturesResponse>("/api/practice/lectures")
+    apiFetch<LecturesResponse>("/api/practice/lectures", { cache: "no-store" })
       .then((response) => {
         if (!active) return;
-        if (Array.isArray(response.data)) {
-          setBlocks(response.data);
+        if (Array.isArray(response)) {
+          setBlocks([{ title: "Lectures", lectures: response as Lecture[] }]);
           return;
         }
-        if (Array.isArray(response.blocks)) {
-          setBlocks(response.blocks);
-          return;
+        if (response && typeof response === "object") {
+          if (Array.isArray(response.blocks)) {
+            setBlocks(response.blocks);
+            return;
+          }
+          if (Array.isArray(response.data)) {
+            setBlocks([{ title: "Lectures", lectures: response.data as Lecture[] }]);
+            return;
+          }
         }
-        setBlocks([]);
+        setBlocks([{ title: "Lectures", lectures: [] }]);
       })
       .catch((err) => {
         if (!active) return;
@@ -57,28 +59,20 @@ export default function LecturesPage() {
   }, []);
 
   return (
-    <main style={{ padding: "2rem" }}>
-      <h1>Lectures</h1>
-      {loading && <p>Loading...</p>}
-      {!loading && error && <p>{error}</p>}
-      {!loading && !error && blocks.length === 0 && <p>No lectures found.</p>}
-      {!loading &&
-        !error &&
-        blocks.map((block) => (
-          <section key={block.blockId ?? block.title} style={{ marginTop: "1.5rem" }}>
-            <h2>{block.title ?? "Untitled Block"}</h2>
-            <ul>
-              {(block.lectures ?? []).map((lecture) => (
-                <li key={lecture.lectureId ?? lecture.title}>
-                  <strong>{lecture.title ?? "Untitled Lecture"}</strong> (ID: {lecture.lectureId ?? "-"})
-                  {typeof lecture.questionCount === "number" && (
-                    <> | Questions: {lecture.questionCount}</>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))}
-    </main>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+      <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-12">
+        {loading && <LectureSkeleton />}
+        {!loading && error && <LectureErrorState message={error} />}
+        {!loading && !error && (
+          <LectureGrid
+            blocks={blocks}
+            query={query}
+            onQueryChange={setQuery}
+            sort={sort}
+            onSortChange={setSort}
+          />
+        )}
+      </div>
+    </div>
   );
 }

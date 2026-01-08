@@ -78,6 +78,29 @@
             margin-left: 0.5rem;
         }
 
+        .related-questions {
+            font-size: 0.8rem;
+            color: #667eea;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            flex-wrap: wrap;
+        }
+
+        .related-questions .related-label {
+            color: #888;
+            margin-right: 0.2rem;
+        }
+
+        .related-questions a {
+            color: #667eea;
+            text-decoration: underline;
+        }
+
+        .related-questions a:hover {
+            color: #4c5fd7;
+        }
+
         .question-header-left {
             display: flex;
             align-items: baseline;
@@ -108,6 +131,7 @@
             border-radius: 6px;
             text-decoration: none;
             transition: all 0.2s;
+            cursor: pointer;
         }
 
         .edit-btn:hover {
@@ -330,6 +354,28 @@
         .spacer {
             flex: 1;
         }
+
+        /* 복사 완료 토스트 */
+        .copy-toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #28a745;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .copy-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -345,11 +391,21 @@
                 <div class="question-header-left">
                     <span class="question-number">문제 {{ seq }}</span>
                     <span class="question-source">({{ question.exam.title }} {{ question.question_number }}번)</span>
+                    {% if related_questions %}
+                    <span class="related-questions">
+                        <span class="related-label">&#51473;&#48373; &#47928;&#54637;:</span>
+                        {% for related in related_questions %}
+                        <a href="{{ url_for('practice.question_by_id', lecture_id=lecture.id, question_id=related.id) }}"
+                            title="{{ related.exam_title }} {{ related.question_number }}&#48264;">{{ related.exam_title }} {{ related.question_number }}&#48264;</a>{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </span>
+                    {% endif %}
                 </div>
                 <div class="question-header-right">
                     {% if question.is_multiple_response %}
                     <span class="question-type">복수 정답</span>
                     {% endif %}
+                    <button class="edit-btn" onclick="copyQuestion()" title="문제 복사">📋 복사</button>
                     <a href="{{ url_for('manage.edit_question', question_id=question.id, from_practice=1) }}"
                         class="edit-btn" target="_blank" onclick="saveBeforeNav()">✏️ 수정</a>
                 </div>
@@ -390,8 +446,8 @@
 
             <div class="navigation">
                 {% if has_prev %}
-                <a href="{{ url_for('practice.question_by_id', lecture_id=lecture.id, question_id=prev_question_id) }}" class="nav-btn secondary"
-                    id="prevBtn" onclick="saveBeforeNav()">← 이전</a>
+                <a href="{{ url_for('practice.question_by_id', lecture_id=lecture.id, question_id=prev_question_id) }}"
+                    class="nav-btn secondary" id="prevBtn" onclick="saveBeforeNav()">← 이전</a>
                 {% else %}
                 <button class="nav-btn secondary" disabled>← 이전</button>
                 {% endif %}
@@ -399,8 +455,8 @@
                 <span class="spacer"></span>
 
                 {% if has_next %}
-                <a href="{{ url_for('practice.question_by_id', lecture_id=lecture.id, question_id=next_question_id) }}" class="nav-btn primary"
-                    id="nextBtn" onclick="saveBeforeNav()">다음 →</a>
+                <a href="{{ url_for('practice.question_by_id', lecture_id=lecture.id, question_id=next_question_id) }}"
+                    class="nav-btn primary" id="nextBtn" onclick="saveBeforeNav()">다음 →</a>
                 {% else %}
                 <a href="{{ url_for('practice.dashboard', lecture_id=lecture.id) }}" class="nav-btn primary"
                     id="nextBtn" onclick="saveBeforeNav()">완료 →</a>
@@ -414,6 +470,9 @@
         <span class="lightbox-close">&times;</span>
         <img id="lightboxImg" src="" alt="확대 이미지">
     </div>
+
+    <!-- 복사 완료 토스트 -->
+    <div class="copy-toast" id="copyToast">✓ 클립보드에 복사되었습니다</div>
 
     <script src="{{ url_for('static', filename='js/practice_storage.js') }}"></script>
     <script>
@@ -444,6 +503,85 @@
             }
         });
 
+        // 문제 복사 기능
+        async function copyQuestion() {
+            const questionContent = document.querySelector('.question-content').textContent.trim();
+            const choiceItems = document.querySelectorAll('.choice-item');
+            const image = document.querySelector('.question-image');
+
+            let copyText = questionContent + "\n\n";
+
+            choiceItems.forEach(item => {
+                const num = item.querySelector('.choice-number').textContent;
+                const content = item.querySelector('.choice-content').textContent;
+                copyText += `${num}. ${content}\n`;
+            });
+
+            if (choiceItems.length === 0) {
+                const shortAnswerSection = document.querySelector('.short-answer-section');
+                if (shortAnswerSection) {
+                    copyText += "(\uc8fc\uad00\ubb38\uc81c)";
+                }
+            }
+
+            const textPayload = copyText.trim();
+            const toast = document.getElementById('copyToast');
+            const showToast = () => {
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            };
+
+            if (!navigator.clipboard || (!image && !navigator.clipboard.writeText)) {
+                alert("\ud074\ub9bd\ubcf4\ub4dc \uc0ac\uc6a9\uc774 \ubd88\uac00\ub2a5\ud569\ub2c8\ub2e4.");
+                return;
+            }
+
+            if (!image || !navigator.clipboard.write) {
+                navigator.clipboard.writeText(textPayload).then(showToast).catch(err => {
+                    alert("\ud074\ub9bd\ubcf4\ub4dc \ubcf5\uc0ac\uc5d0 \uc2e4\ud328\ud588\uc2b5\ub2c8\ub2e4.");
+                    console.error('Copy failed:', err);
+                });
+                return;
+            }
+
+            const escapeHtml = value => value
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+
+            const readAsDataUrl = blob => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+
+            try {
+                const response = await fetch(image.src);
+                const blob = await response.blob();
+                const dataUrl = await readAsDataUrl(blob);
+                const htmlText = escapeHtml(textPayload).replace(/\n/g, "<br>");
+                const htmlPayload = `<p>${htmlText}</p><img src="${dataUrl}" alt="question image">`;
+                const items = {
+                    "text/plain": new Blob([textPayload], { type: "text/plain" }),
+                    "text/html": new Blob([htmlPayload], { type: "text/html" }),
+                };
+                items[blob.type || "image/png"] = blob;
+
+                await navigator.clipboard.write([new ClipboardItem(items)]);
+                showToast();
+            } catch (err) {
+                navigator.clipboard.writeText(textPayload).then(showToast).catch(innerErr => {
+                    alert("\ud074\ub9bd\ubcf4\ub4dc \ubcf5\uc0ac\uc5d0 \uc2e4\ud328\ud588\uc2b5\ub2c8\ub2e4.");
+                    console.error('Copy failed:', innerErr);
+                });
+                console.error('Copy failed:', err);
+            }
+        }
         function loadSavedAnswer() {
             const state = loadPracticeState(lectureId, questionMetaMap);
             const savedAnswer = getAnswer(state, String(questionId));
@@ -580,11 +718,17 @@
                 case 'e':
                 case 'E':
                     // 문제 수정 페이지 열기
-                    const editBtn = document.querySelector('.edit-btn');
+                    const editBtn = document.querySelector('a.edit-btn');
                     if (editBtn) {
                         saveBeforeNav();
                         editBtn.click();
                     }
+                    break;
+
+                case 'c':
+                case 'C':
+                    // 문제 복사
+                    copyQuestion();
                     break;
 
                 case '1':

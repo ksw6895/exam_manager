@@ -1,4 +1,5 @@
 @echo off
+chcp 65001 > nul
 cd /d "d:\02_Non-Medicine\01_Coding\01_studyagent\exam_manager"
 call .venv\Scripts\activate
 echo Exam Manager를 시작합니다...

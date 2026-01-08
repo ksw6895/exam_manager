@@ -6,6 +6,7 @@ from app import db
 from app.models import Block, Lecture, Choice, PracticeSession, PracticeAnswer, Question
 from app.services.practice_service import (
     build_question_groups,
+    build_duplicate_question_map,
     get_lecture_questions_ordered,
     get_prev_next,
     get_question_by_seq,
@@ -168,6 +169,22 @@ def question_by_id(lecture_id, question_id):
     has_prev = prev_question_id is not None
     has_next = next_question_id is not None
 
+    duplicate_map = build_duplicate_question_map(questions)
+    related_questions = []
+    related_items = duplicate_map.get(current_question.id, [])
+    if related_items:
+        seq_map = {q.id: idx + 1 for idx, q in enumerate(questions)}
+        related_questions = [
+            {
+                'id': q.id,
+                'seq': seq_map.get(q.id),
+                'exam_title': q.exam.title if q.exam else '',
+                'question_number': q.question_number,
+            }
+            for q in related_items
+        ]
+        related_questions.sort(key=lambda item: item['seq'] or 0)
+
     return render_template('practice/question.html',
                          lecture=lecture,
                          question=current_question,
@@ -177,7 +194,8 @@ def question_by_id(lecture_id, question_id):
                          has_prev=has_prev,
                          has_next=has_next,
                          prev_question_id=prev_question_id,
-                         next_question_id=next_question_id)
+                         next_question_id=next_question_id,
+                         related_questions=related_questions)
 
 
 @practice_bp.route('/lecture/<int:lecture_id>/question/<int:seq>')

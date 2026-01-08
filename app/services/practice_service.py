@@ -1,4 +1,5 @@
 import json
+import re
 from datetime import datetime
 
 from app import db
@@ -400,6 +401,37 @@ def build_question_groups(questions):
         "question_map": question_map,
         "question_meta": question_meta,
     }
+
+
+def normalize_question_content(text):
+    if not text:
+        return ''
+    normalized = re.sub(r'\s+', ' ', text)
+    return normalized.strip().lower()
+
+
+def build_duplicate_question_map(questions):
+    groups = {}
+    for question in questions:
+        if question.image_path:
+            continue
+        if not question.content or not question.content.strip():
+            continue
+        normalized = normalize_question_content(question.content)
+        if not normalized:
+            continue
+        groups.setdefault(normalized, []).append(question)
+
+    duplicate_map = {}
+    for group in groups.values():
+        if len(group) < 2:
+            continue
+        ordered_group = sorted(group, key=lambda q: q.question_number)
+        for question in ordered_group:
+            duplicate_map[question.id] = [
+                item for item in ordered_group if item.id != question.id
+            ]
+    return duplicate_map
 
 
 def grade_questions(questions, answers, include_content=False):
