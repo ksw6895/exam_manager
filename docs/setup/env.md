@@ -11,7 +11,7 @@
 | 키 | 구분 | 설명 | 기본값/비고 |
 | --- | --- | --- | --- |
 | SECRET_KEY | 필수(프로덕션) | Flask 세션/보안 키 | 미설정 시 `dev-secret-key-change-in-production` |
-| GEMINI_API_KEY | 조건부 | Gemini API 키 (AI 분류/텍스트 교정/키워드 추출 사용 시) | 없음 |
+| GEMINI_API_KEY | 조건부 | Gemini API 키 (AI 분류/텍스트 교정 사용 시) | 없음 |
 | GEMINI_MODEL_NAME | 선택 | Gemini 모델명 | `gemini-2.0-flash-lite` |
 | AUTO_CREATE_DB | 선택 | 앱 시작 시 `db.create_all()` 자동 실행 | DevelopmentConfig 기본 True |
 | LOCAL_ADMIN_ONLY | 선택 | `/manage` 및 관련 API 로컬호스트 제한 | 값은 `1/true/yes/on` |

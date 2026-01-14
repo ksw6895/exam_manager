@@ -30,8 +30,6 @@ export function LectureForm({ blockId, initial }: LectureFormProps) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [keywordFile, setKeywordFile] = useState<File | null>(null);
-  const [extracting, setExtracting] = useState(false);
 
   const handleSubmit = async () => {
     setSaving(true);
@@ -75,39 +73,6 @@ export function LectureForm({ blockId, initial }: LectureFormProps) {
       setError(err instanceof Error ? err.message : "Unable to delete lecture.");
     } finally {
       setSaving(false);
-    }
-  };
-
-  const handleExtractKeywords = async () => {
-    if (!initial?.id || !keywordFile) return;
-    setExtracting(true);
-    setError(null);
-    try {
-      const formData = new FormData();
-      formData.append("pdf_file", keywordFile);
-      const response = await fetch(
-        `/api/proxy/manage/lecture/${initial.id}/extract-keywords`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Keyword extraction failed.");
-      }
-      const data = (await response.json()) as {
-        success?: boolean;
-        keywords_text?: string;
-        error?: string;
-      };
-      if (!data.success) {
-        throw new Error(data.error || "Keyword extraction failed.");
-      }
-      setKeywords(data.keywords_text ?? "");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Keyword extraction failed.");
-    } finally {
-      setExtracting(false);
     }
   };
 
@@ -159,26 +124,6 @@ export function LectureForm({ blockId, initial }: LectureFormProps) {
             onChange={(event) => setDescription(event.target.value)}
           />
         </div>
-        {initial?.id && (
-          <div className="space-y-3 rounded-2xl border border-border/70 bg-muted/60 p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              Extract keywords from PDF
-            </p>
-            <Input
-              type="file"
-              accept="application/pdf"
-              onChange={(event) => setKeywordFile(event.target.files?.[0] ?? null)}
-            />
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleExtractKeywords}
-              disabled={!keywordFile || extracting}
-            >
-              {extracting ? "Extracting..." : "Extract keywords"}
-            </Button>
-          </div>
-        )}
         {error && (
           <div className="rounded-lg border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
             {error}

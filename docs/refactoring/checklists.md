@@ -23,7 +23,6 @@
 - [ ] PDF 업로드 → 문제 생성 정상 (Next `/manage/upload-pdf`)
 - [ ] 문제 분류(수동/일괄) 정상 (Next `/exam/unclassified`)
 - [ ] AI 분류 시작/상태/적용 정상
-- [ ] 강의 키워드 추출 정상 (Legacy `/manage/lecture/<id>`)
 - [ ] 강의 노트 업로드/인덱싱 정상 (Legacy `/manage/lecture/<id>`)
 - [ ] Practice 흐름 정상 (Legacy `/practice/*`, Next `/lectures`)
 - [ ] Next.js `/manage`, `/lectures` 렌더링 정상

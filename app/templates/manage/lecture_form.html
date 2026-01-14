@@ -137,25 +137,6 @@
             margin-top: 0.5rem;
         }
 
-        .pdf-upload-mini {
-            border: 1px dashed rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 0.8rem;
-            text-align: center;
-            cursor: pointer;
-            margin-bottom: 0.8rem;
-            transition: all 0.3s;
-        }
-
-        .pdf-upload-mini:hover {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.05);
-        }
-
-        .pdf-upload-mini input[type="file"] {
-            display: none;
-        }
-
         .keyword-badge {
             display: inline-block;
             background: rgba(102, 126, 234, 0.2);
@@ -167,38 +148,6 @@
             margin-bottom: 0.3rem;
         }
 
-        .loading-spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #667eea;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .extraction-status {
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-            padding: 0.5rem;
-            border-radius: 5px;
-        }
-
-        .extraction-status.success {
-            background: rgba(46, 204, 113, 0.1);
-            color: #2ecc71;
-        }
-
-        .extraction-status.error {
-            background: rgba(231, 76, 60, 0.1);
-            color: #e74c3c;
-        }
     </style>
 </head>
 
@@ -235,12 +184,6 @@
                 <div class="form-group full">
                     <label for="keywords">🔑 키워드 (AI 분류 정확도 향상용)</label>
                     <div class="keyword-section">
-                        <div class="pdf-upload-mini" onclick="document.getElementById('pdfInput').click()">
-                            📄 강의 노트(PDF) 업로드로 키워드 자동 추출
-                            <input type="file" id="pdfInput" accept=".pdf"
-                                onchange="extractKeywordsFromPDF(this.files[0])">
-                        </div>
-                        <div id="extractionStatus"></div>
                         <textarea id="keywords" name="keywords" rows="2"
                             placeholder="쉼표(,)로 구분하여 입력. 예: 활동전위, Na+ Channel, 탈분극">{{ lecture.keywords if lecture else '' }}</textarea>
                     </div>
@@ -256,80 +199,6 @@
         </div>
     </div>
 
-    <script>
-        async function extractKeywordsFromPDF(file) {
-            if (!file) return;
-
-            // 파일 크기 체크 (100MB)
-            const MAX_SIZE = 100 * 1024 * 1024;
-            if (file.size > MAX_SIZE) {
-                const statusDiv = document.getElementById('extractionStatus');
-                statusDiv.className = 'extraction-status error';
-                statusDiv.innerHTML = `❌ 오류: 파일 크기가 너무 큽니다. (최대 100MB)`;
-                return;
-            }
-
-            const statusDiv = document.getElementById('extractionStatus');
-            statusDiv.className = 'extraction-status';
-            statusDiv.innerHTML = '<span class="loading-spinner"></span> AI가 키워드를 추출하는 중... (약 30초 소요)';
-
-            const formData = new FormData();
-            formData.append('pdf_file', file);
-
-            try {
-                // 새 강의의 경우 직접 키워드 추출 API 호출
-                const response = await fetch('/manage/extract-keywords-only', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                // 먼저 텍스트로 응답 받기 (HTML 에러 페이지일 수 있으므로)
-                const responseText = await response.text();
-                let result;
-
-                try {
-                    result = JSON.parse(responseText);
-                } catch (e) {
-                    console.error('JSON 파싱 에러:', e);
-                    // HTML 응답인 경우 에러 메시지 추출 시도
-                    let errorMessage = `서버 오류 (${response.status})`;
-                    if (responseText.includes('<!DOCTYPE html>')) {
-                        const div = document.createElement('div');
-                        div.innerHTML = responseText;
-                        const title = div.querySelector('title')?.innerText;
-                        const h1 = div.querySelector('h1')?.innerText;
-                        if (title) errorMessage += `: ${title}`;
-                        if (h1) errorMessage += ` - ${h1}`;
-                    } else if (responseText.length < 200) {
-                        errorMessage += `: ${responseText}`;
-                    }
-                    throw new Error(errorMessage);
-                }
-
-                if (response.ok && result.success) {
-                    const keywords = result.keywords;
-                    const keywordsText = result.keywords_text;
-
-                    // 텍스트 영역에 키워드 채우기
-                    const keywordInput = document.getElementById('keywords');
-                    if (keywordInput.value.trim()) {
-                        keywordInput.value = keywordInput.value + ', ' + keywordsText;
-                    } else {
-                        keywordInput.value = keywordsText;
-                    }
-
-                    statusDiv.className = 'extraction-status success';
-                    statusDiv.innerHTML = `✅ ${keywords.length}개 키워드 추출 완료!`;
-                } else {
-                    statusDiv.className = 'extraction-status error';
-                    statusDiv.innerHTML = `❌ 오류: ${result.error || '알 수 없는 오류'}`;
-                }
-            } catch (error) {
-                statusDiv.className = 'extraction-status error';
-                statusDiv.innerHTML = `❌ 요청 실패: ${error.message}`;
-            }
-        }
-    </script>
 </body>
 
 </html>

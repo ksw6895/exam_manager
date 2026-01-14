@@ -28,7 +28,6 @@
 - PDF 크롭 이미지 생성 (PyMuPDF, `app/services/pdf_cropper.py`)
 - 문제 분류/일괄 분류 (`app/routes/exam.py`, `/manage/questions/*`)
 - Gemini 기반 AI 분류(배치) + 적용 (`app/routes/ai.py`, `app/services/ai_classifier.py`)
-- 강의 키워드 추출 (Gemini + pdfplumber, `app/services/keyword_extractor.py`)
 - 강의 노트 업로드 및 FTS 인덱싱 (`app/services/lecture_indexer.py`)
 - 연습 모드(Flask 템플릿) + Next.js 연습 UI (`app/routes/practice.py`, `app/routes/api_practice.py`, `next_app/`)
 - Local admin 모드 (별도 DB + experimental PDF parser, `run_local_admin.py`)
@@ -168,7 +167,7 @@ python run_local_admin.py
 | 키 | 필수 | 설명 | 기본값/비고 |
 | --- | --- | --- | --- |
 | SECRET_KEY | 권장 | Flask 세션/보안 키 | 미설정 시 `dev-secret-key-change-in-production` |
-| GEMINI_API_KEY | 조건부 | Gemini API 키 (AI 분류/텍스트 교정/키워드 추출 사용 시) | 없음 |
+| GEMINI_API_KEY | 조건부 | Gemini API 키 (AI 분류/텍스트 교정 사용 시) | 없음 |
 | GEMINI_MODEL_NAME | 선택 | Gemini 모델명 | `gemini-2.0-flash-lite` |
 | AUTO_CREATE_DB | 선택 | 앱 시작 시 `db.create_all()` 자동 실행 | DevelopmentConfig 기본 True |
 | LOCAL_ADMIN_ONLY | 선택 | `/manage` 및 관련 API 로컬호스트 제한 | 값은 `1/true/yes/on` |
@@ -233,7 +232,6 @@ python run_local_admin.py
 - [ ] Question edit + 이미지 업로드 (Next `/manage/questions/[id]/edit`)
 - [ ] Unclassified queue: 분류/이동/초기화 (Next `/exam/unclassified`)
 - [ ] AI 분류: start/status/result/apply (Next `/exam/unclassified` 또는 Legacy preview)
-- [ ] 강의 키워드 추출 (Legacy `/manage/lecture/<id>`)
 - [ ] 강의 노트 업로드/인덱싱 (Legacy `/manage/lecture/<id>`)
 - [ ] Practice 흐름 (Legacy `/practice/*`, Next `/lectures`)
 

@@ -463,15 +463,6 @@
                 </div>
             </div>
 
-            <div class="pdf-upload-area" id="pdfUploadArea" onclick="document.getElementById('pdfInput').click()">
-                <div class="upload-icon">📄</div>
-                <div class="upload-text">강의 노트(PDF)를 업로드하면 AI가 키워드를 자동 추출합니다</div>
-                <div class="upload-text" style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;">클릭하거나 파일을 드래그하세요
-                </div>
-                <input type="file" id="pdfInput" accept=".pdf" onchange="uploadPDF(this.files[0])">
-            </div>
-
-            <div id="extractionResult" style="display: none;"></div>
         </div>
 
         <div class="keyword-section">
@@ -632,29 +623,8 @@
             document.getElementById('currentKeywords').style.display = 'block';
         }
 
-        // PDF 업로드 및 키워드 추출
-        const uploadArea = document.getElementById('pdfUploadArea');
+        // 강의 노트 업로드
         const noteUploadArea = document.getElementById('noteUploadArea');
-
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
-
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('dragover');
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-            const file = e.dataTransfer.files[0];
-            if (file && file.type === 'application/pdf') {
-                uploadPDF(file);
-            } else {
-                alert('PDF 파일만 업로드 가능합니다.');
-            }
-        });
 
         if (noteUploadArea) {
             noteUploadArea.addEventListener('dragover', (e) => {
@@ -676,55 +646,6 @@
                     alert('PDF 파일만 업로드 가능합니다.');
                 }
             });
-        }
-
-        async function uploadPDF(file) {
-            if (!file) return;
-
-            const resultDiv = document.getElementById('extractionResult');
-            resultDiv.style.display = 'block';
-            resultDiv.className = 'extraction-result';
-            resultDiv.innerHTML = '<div class="loading-spinner"></div> AI가 키워드를 추출하는 중... (30초~1분 소요)';
-
-            const formData = new FormData();
-            formData.append('pdf_file', file);
-
-            try {
-                const response = await fetch('/manage/lecture/{{ lecture.id }}/extract-keywords', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    const keywords = result.keywords;
-                    const keywordsText = result.keywords_text;
-
-                    resultDiv.innerHTML = `
-                        <div style="margin-bottom: 1rem;">
-                            <strong style="color: #2ecc71;">✅ ${keywords.length}개 키워드 추출 완료!</strong>
-                        </div>
-                        <div style="margin-bottom: 1rem;">
-                            ${keywords.map(k => `<span class="keyword-badge">${k}</span>`).join('')}
-                        </div>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <button class="btn btn-primary" onclick="applyKeywords('${keywordsText.replace(/'/g, "\\'")}')">
-                                적용하기
-                            </button>
-                            <button class="btn btn-secondary" onclick="appendKeywords('${keywordsText.replace(/'/g, "\\'")}')">
-                                기존에 추가
-                            </button>
-                        </div>
-                    `;
-                } else {
-                    resultDiv.className = 'extraction-result error';
-                    resultDiv.innerHTML = `<strong style="color: #e74c3c;">❌ 오류:</strong> ${result.error}`;
-                }
-            } catch (error) {
-                resultDiv.className = 'extraction-result error';
-                resultDiv.innerHTML = `<strong style="color: #e74c3c;">❌ 요청 실패:</strong> ${error.message}`;
-            }
         }
 
         async function uploadLectureNote(file) {
@@ -831,22 +752,6 @@
             }
         }
 
-        async function applyKeywords(keywords) {
-            await saveKeywords(keywords);
-        }
-
-        async function appendKeywords(newKeywords) {
-            const currentKeywordsDiv = document.getElementById('currentKeywords');
-            const existingBadges = currentKeywordsDiv.querySelectorAll('.keyword-badge');
-            let existing = Array.from(existingBadges).map(b => b.textContent.trim()).join(', ');
-
-            if (existing) {
-                await saveKeywords(existing + ', ' + newKeywords);
-            } else {
-                await saveKeywords(newKeywords);
-            }
-        }
-
         async function saveKeywords(keywords) {
             try {
                 const response = await fetch('/manage/lecture/{{ lecture.id }}/keywords', {
@@ -876,17 +781,14 @@
                     // localStorage에 저장 (뒤로가기 시 강의 목록에서 반영)
                     localStorage.setItem('updatedLectureKeywords', JSON.stringify({
                         lectureId: {{ lecture.id }},
-                keywords: keywords
-            }));
-
-            document.getElementById('extractionResult').innerHTML =
-                '<strong style="color: #2ecc71;">✅ 키워드가 저장되었습니다!</strong>';
-        } else {
-            alert('저장 실패: ' + result.error);
-        }
+                        keywords: keywords
+                    }));
+                } else {
+                    alert('저장 실패: ' + result.error);
+                }
             } catch (error) {
-            alert('오류: ' + error.message);
-        }
+                alert('오류: ' + error.message);
+            }
         }
     </script>
     <!-- Floating Action Bar -->
