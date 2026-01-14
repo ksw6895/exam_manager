@@ -25,7 +25,6 @@ export function LectureForm({ blockId, initial }: LectureFormProps) {
   const [title, setTitle] = useState(initial?.title ?? "");
   const [professor, setProfessor] = useState(initial?.professor ?? "");
   const [order, setOrder] = useState(initial?.order ?? 1);
-  const [keywords, setKeywords] = useState(initial?.keywords ?? "");
   const [description, setDescription] = useState(initial?.description ?? "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +38,6 @@ export function LectureForm({ blockId, initial }: LectureFormProps) {
       title: title.trim(),
       professor: professor?.trim() || null,
       order: Number.isFinite(order) ? Number(order) : 1,
-      keywords: keywords?.trim() || null,
       description: description?.trim() || null,
     };
     try {
@@ -103,15 +101,6 @@ export function LectureForm({ blockId, initial }: LectureFormProps) {
               type="number"
               value={order}
               onChange={(event) => setOrder(Number(event.target.value))}
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              Keywords
-            </label>
-            <Input
-              value={keywords ?? ""}
-              onChange={(event) => setKeywords(event.target.value)}
             />
           </div>
         </div>

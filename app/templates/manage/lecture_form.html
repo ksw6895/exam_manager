@@ -130,24 +130,6 @@
             margin-top: 1rem;
         }
 
-        .keyword-section {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-top: 0.5rem;
-        }
-
-        .keyword-badge {
-            display: inline-block;
-            background: rgba(102, 126, 234, 0.2);
-            color: #ccc;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            margin-right: 0.3rem;
-            margin-bottom: 0.3rem;
-        }
-
     </style>
 </head>
 
@@ -179,14 +161,6 @@
                     <label for="title">강의 제목 *</label>
                     <input type="text" id="title" name="title" value="{{ lecture.title if lecture else '' }}"
                         placeholder="예: 심전도의 원리, 부정맥의 이해" required>
-                </div>
-
-                <div class="form-group full">
-                    <label for="keywords">🔑 키워드 (AI 분류 정확도 향상용)</label>
-                    <div class="keyword-section">
-                        <textarea id="keywords" name="keywords" rows="2"
-                            placeholder="쉼표(,)로 구분하여 입력. 예: 활동전위, Na+ Channel, 탈분극">{{ lecture.keywords if lecture else '' }}</textarea>
-                    </div>
                 </div>
 
                 <div class="form-actions">

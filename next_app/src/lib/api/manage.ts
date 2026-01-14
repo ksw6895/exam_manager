@@ -21,7 +21,6 @@ const lectureSchema = z.object({
   professor: z.string().nullable().optional(),
   order: z.number().optional(),
   description: z.string().nullable().optional(),
-  keywords: z.string().nullable().optional(),
   questionCount: z.number().optional(),
   classifiedCount: z.number().optional(),
   createdAt: z.string().nullable().optional(),
@@ -130,7 +129,6 @@ export type ManageLectureInput = {
   professor?: string | null;
   order?: number | null;
   description?: string | null;
-  keywords?: string | null;
 };
 export type ManageExamInput = {
   title: string;

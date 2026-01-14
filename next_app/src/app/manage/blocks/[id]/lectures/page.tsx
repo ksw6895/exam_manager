@@ -5,18 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-const KEYWORD_LIMIT = 4;
-
-function formatKeywords(value: string) {
-  const parts = value
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean);
-  if (!parts.length) return "";
-  if (parts.length <= KEYWORD_LIMIT) return parts.join(", ");
-  return `${parts.slice(0, KEYWORD_LIMIT).join(", ")}...`;
-}
-
 type PageProps = {
   params: Promise<{ id: string }>;
 };
@@ -69,11 +57,6 @@ export default async function ManageBlockLecturesPage({ params }: PageProps) {
                   <Badge variant="neutral">{lecture.questionCount ?? 0} questions</Badge>
                   <Badge variant="success">{lecture.classifiedCount ?? 0} classified</Badge>
                 </div>
-                {lecture.keywords && (
-                  <p className="text-xs text-muted-foreground">
-                    Keywords: {formatKeywords(lecture.keywords)}
-                  </p>
-                )}
               </CardContent>
             </Card>
           ))}

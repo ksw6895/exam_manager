@@ -23,13 +23,6 @@ python scripts/init_fts.py --sync
 python scripts/migrate_ai_fields.py
 ```
 
-## 강의 키워드 컬럼 마이그레이션
-`lectures` 테이블에 `keywords` 컬럼을 추가합니다.
-
-```bash
-python scripts/migrate_lecture_keywords.py
-```
-
 ## 기타 유틸리티 (CLI)
 아래 스크립트들은 Flask와 직접 연결되어 있지 않은 독립 유틸리티입니다.
 

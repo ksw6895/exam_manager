@@ -41,8 +41,6 @@ class Lecture(db.Model):
     professor = db.Column(db.String(100))  # 교수명
     order = db.Column(db.Integer, default=0)  # 강의 순서 (1강, 2강...)
     description = db.Column(db.Text)
-    # 강의 키워드 (AI 분류 정확도 향상용)
-    keywords = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

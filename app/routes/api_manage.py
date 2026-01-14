@@ -75,7 +75,6 @@ def _lecture_payload(lecture):
         'professor': lecture.professor,
         'order': lecture.order,
         'description': lecture.description,
-        'keywords': lecture.keywords,
         'questionCount': lecture.question_count,
         'classifiedCount': lecture.classified_question_count,
         'createdAt': lecture.created_at.isoformat() if lecture.created_at else None,
@@ -252,7 +251,6 @@ def create_lecture(block_id):
         professor=data.get('professor'),
         order=int(data.get('order') or 1),
         description=data.get('description'),
-        keywords=data.get('keywords'),
     )
     db.session.add(lecture)
     db.session.commit()
@@ -283,8 +281,6 @@ def update_lecture(lecture_id):
         lecture.order = int(data['order'])
     if 'description' in data:
         lecture.description = data.get('description')
-    if 'keywords' in data:
-        lecture.keywords = data.get('keywords')
     db.session.commit()
     return ok(_lecture_payload(lecture))
 

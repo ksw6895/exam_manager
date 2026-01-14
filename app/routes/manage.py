@@ -129,7 +129,6 @@ def create_lecture(block_id):
             title=request.form.get('title'),
             professor=request.form.get('professor'),
             order=int(request.form.get('order', 1)),
-            keywords=request.form.get('keywords')
         )
         db.session.add(lecture)
         db.session.commit()
@@ -152,29 +151,10 @@ def edit_lecture(lecture_id):
         lecture.title = request.form.get('title')
         lecture.professor = request.form.get('professor')
         lecture.order = int(request.form.get('order', 1))
-        lecture.keywords = request.form.get('keywords')
         db.session.commit()
         flash('강의가 수정되었습니다.', 'success')
         return redirect(url_for('manage.list_lectures', block_id=lecture.block_id))
     return render_template('manage/lecture_form.html', block=lecture.block, lecture=lecture)
-
-
-@manage_bp.route('/lecture/<int:lecture_id>/keywords', methods=['POST'])
-def update_lecture_keywords(lecture_id):
-    """강의 키워드 수정 API"""
-    try:
-        data = request.get_json()
-        if not data:
-            return {'success': False, 'error': '데이터가 없습니다.'}, 400
-            
-        lecture = Lecture.query.get_or_404(lecture_id)
-        lecture.keywords = data.get('keywords')
-        db.session.commit()
-        
-        return {'success': True}
-    except Exception as e:
-        db.session.rollback()
-        return {'success': False, 'error': str(e)}, 500
 
 
 @manage_bp.route('/lecture/<int:lecture_id>/upload-note', methods=['POST'])

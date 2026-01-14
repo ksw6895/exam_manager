@@ -167,55 +167,6 @@
             border-radius: 15px;
         }
 
-        .keyword-badge {
-            display: inline-block;
-            background: rgba(102, 126, 234, 0.2);
-            color: #ccc;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            margin-right: 0.3rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal-overlay.hidden {
-            display: none;
-        }
-
-        .modal-content {
-            background: #1a1a2e;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 2rem;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-content h3 {
-            margin-bottom: 1rem;
-            color: #667eea;
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
     </style>
 </head>
 
@@ -248,7 +199,6 @@
                 <tr>
                     <th style="width: 80px; text-align: center;">순서</th>
                     <th style="width: 200px;">강의 제목</th>
-                    <th>키워드</th>
                     <th style="width: 100px;">교수</th>
                     <th style="width: 80px; text-align: center;">문제 수</th>
                     <th style="width: 140px; text-align: right;">관리</th>
@@ -264,29 +214,7 @@
                             {{ lecture.title }}
                         </a>
                     </td>
-                    <td>
-                        <div style="font-size: 0.85rem;" id="keywords-display-{{ lecture.id }}">
-                            {% if lecture.keywords %}
-                            {% set keyword_list = lecture.keywords.split(',') %}
-                            {% for keyword in keyword_list[:3] %}
-                            <span class="keyword-badge">{{ keyword.strip() }}</span>
-                            {% endfor %}
-                            {% if keyword_list|length > 3 %}
-                            <span class="keyword-badge more-keywords"
-                                style="background: rgba(255,255,255,0.1); cursor: pointer;"
-                                onclick="expandKeywords({{ lecture.id }}, '{{ lecture.keywords|replace("'", "\\'") }}')">
-                                +{{ keyword_list|length - 3 }}개
-                            </span>
-                            {% endif %}
-                            {% else %}
-                            <span style="color: #666;">키워드 없음</span>
-                            {% endif %}
-                        </div>
-                        <button onclick="openKeywordModal({{ lecture.id }}, '{{ lecture.keywords or '' }}')"
-                            class="btn btn-secondary"
-                            style="padding: 0.2rem 0.5rem; font-size: 0.7rem; margin-top: 0.5rem;">편집</button>
-                    </td>
-                    <td class="lecture-professor">{{ lecture.professor or '-' }}</td>
+                                        <td class="lecture-professor">{{ lecture.professor or '-' }}</td>
                     <td class="lecture-count">{{ lecture.question_count }}문제</td>
                     <td class="actions">
                         <a href="{{ url_for('manage.view_lecture', lecture_id=lecture.id) }}" class="btn btn-primary"
@@ -311,115 +239,6 @@
         {% endif %}
     </div>
 
-    <!-- Keyword Edit Modal -->
-    <div class="modal-overlay hidden" id="keywordModal">
-        <div class="modal-content">
-            <h3>🔑 키워드 편집</h3>
-            <p style="color: #aaa; margin-bottom: 1rem; font-size: 0.9rem;">쉼표(,)로 구분하여 입력하세요.</p>
-            <input type="hidden" id="editLectureId">
-            <textarea id="keywordInput" rows="4" placeholder="예: 활동전위, 나트륨 통로, 탈분극"
-                style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; resize: vertical;"></textarea>
-            <div class="modal-buttons">
-                <button class="btn btn-secondary" onclick="closeKeywordModal()">취소</button>
-                <button class="btn btn-primary" onclick="saveKeywords()">저장</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function openKeywordModal(lectureId, currentKeywords) {
-            document.getElementById('editLectureId').value = lectureId;
-            document.getElementById('keywordInput').value = currentKeywords;
-            document.getElementById('keywordModal').classList.remove('hidden');
-            document.getElementById('keywordInput').focus();
-        }
-
-        function closeKeywordModal() {
-            document.getElementById('keywordModal').classList.add('hidden');
-        }
-
-        async function saveKeywords() {
-            const lectureId = document.getElementById('editLectureId').value;
-            const keywords = document.getElementById('keywordInput').value;
-
-            try {
-                const response = await fetch(`/manage/lecture/${lectureId}/keywords`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ keywords: keywords })
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    updateKeywordDisplay(lectureId, keywords);
-                    closeKeywordModal();
-                } else {
-                    alert('저장 실패: ' + result.error);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('오류가 발생했습니다.');
-            }
-        }
-
-        function updateKeywordDisplay(lectureId, keywords) {
-            const displayDiv = document.getElementById(`keywords-display-${lectureId}`);
-            if (!keywords || !keywords.trim()) {
-                displayDiv.innerHTML = '<span style="color: #666;">키워드 없음</span>';
-            } else {
-                const keywordList = keywords.split(',').map(k => k.trim()).filter(k => k);
-                let html = keywordList.slice(0, 3).map(k =>
-                    `<span class="keyword-badge">${k}</span>`
-                ).join('');
-
-                if (keywordList.length > 3) {
-                    const escaped = keywords.replace(/'/g, "\\'");
-                    html += `<span class="keyword-badge more-keywords" style="background: rgba(255,255,255,0.1); cursor: pointer;" 
-                              onclick="expandKeywords(${lectureId}, '${escaped}')">+${keywordList.length - 3}개</span>`;
-                }
-                displayDiv.innerHTML = html;
-            }
-
-            const btn = displayDiv.nextElementSibling;
-            if (btn) {
-                const escaped = (keywords || '').replace(/'/g, "\\'");
-                btn.setAttribute('onclick', `openKeywordModal(${lectureId}, '${escaped}')`);
-            }
-        }
-
-        function expandKeywords(lectureId, keywords) {
-            const displayDiv = document.getElementById(`keywords-display-${lectureId}`);
-            const keywordList = keywords.split(',').map(k => k.trim()).filter(k => k);
-
-            let html = keywordList.map(k =>
-                `<span class="keyword-badge">${k}</span>`
-            ).join('');
-
-            const escaped = keywords.replace(/'/g, "\\'");
-            html += `<span class="keyword-badge" style="background: rgba(255,255,255,0.1); cursor: pointer;" 
-                      onclick="collapseKeywords(${lectureId}, '${escaped}')">접기</span>`;
-            displayDiv.innerHTML = html;
-        }
-
-        function collapseKeywords(lectureId, keywords) {
-            updateKeywordDisplay(lectureId, keywords);
-        }
-
-        // 페이지 로드 시 localStorage에서 업데이트된 키워드 확인
-        document.addEventListener('DOMContentLoaded', function () {
-            const updatedKeywords = localStorage.getItem('updatedLectureKeywords');
-            if (updatedKeywords) {
-                try {
-                    const data = JSON.parse(updatedKeywords);
-                    if (data.lectureId && data.keywords !== undefined) {
-                        updateKeywordDisplay(data.lectureId, data.keywords);
-                    }
-                } catch (e) { }
-                localStorage.removeItem('updatedLectureKeywords');
-            }
-        });
-    </script>
 </body>
 
 </html>

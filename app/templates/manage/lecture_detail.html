@@ -287,8 +287,8 @@
             font-size: 0.9rem;
         }
 
-        /* 키워드 관리 섹션 */
-        .keyword-section {
+        /* Note section */
+        .note-section {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             padding: 1.5rem;
@@ -296,26 +296,13 @@
             border: 1px dashed rgba(102, 126, 234, 0.3);
         }
 
-        .keyword-section h3 {
+        .note-section h3 {
             color: #667eea;
             margin-bottom: 1rem;
             font-size: 1.1rem;
         }
 
-        .current-keywords {
-            margin-bottom: 1rem;
-        }
 
-        .keyword-badge {
-            display: inline-block;
-            background: rgba(102, 126, 234, 0.2);
-            color: #ccc;
-            padding: 0.3rem 0.6rem;
-            border-radius: 5px;
-            font-size: 0.85rem;
-            margin-right: 0.4rem;
-            margin-bottom: 0.4rem;
-        }
 
         .pdf-upload-area {
             border: 2px dashed rgba(255, 255, 255, 0.2);
@@ -430,42 +417,8 @@
             </div>
         </div>
 
-        <!-- 키워드 관리 섹션 -->
-        <div class="keyword-section">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3 style="margin: 0;">🔑 강의 키워드</h3>
-                <button class="btn btn-secondary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;"
-                    onclick="toggleKeywordEdit()">
-                    ✏️ 편집
-                </button>
-            </div>
-
-            <!-- 키워드 표시 모드 -->
-            <div class="current-keywords" id="currentKeywords">
-                {% if lecture.keywords %}
-                {% for keyword in lecture.keywords.split(',') %}
-                <span class="keyword-badge">{{ keyword.strip() }}</span>
-                {% endfor %}
-                {% else %}
-                <span style="color: #666;">등록된 키워드가 없습니다.</span>
-                {% endif %}
-            </div>
-
-            <!-- 키워드 편집 모드 (초기엔 숨김) -->
-            <div id="keywordEditArea" style="display: none; margin-top: 1rem;">
-                <textarea id="keywordEditInput" rows="3" placeholder="쉼표(,)로 구분하여 입력하세요. 예: 활동전위, Na+ Channel, 탈분극"
-                    style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; resize: vertical; font-size: 0.9rem;">{{ lecture.keywords or '' }}</textarea>
-                <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                    <button class="btn btn-primary" style="padding: 0.4rem 1rem; font-size: 0.85rem;"
-                        onclick="saveEditedKeywords()">저장</button>
-                    <button class="btn btn-secondary" style="padding: 0.4rem 1rem; font-size: 0.85rem;"
-                        onclick="cancelKeywordEdit()">취소</button>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="keyword-section">
+        <!-- Note section -->
+        <div class="note-section">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                 <h3 style="margin: 0;">강의 노트 업로드 (인덱싱)</h3>
             </div>
@@ -554,9 +507,6 @@
     </div>
 
     <script>
-        // Keywords input cache to avoid breaking JS when keywords contain quotes
-        let initialKeywords = {{ (lecture.keywords or '') | tojson }};
-        const keywordInput = document.getElementById('keywordEditInput');
         document.addEventListener('DOMContentLoaded', () => {
             refreshNoteStatus();
         });
@@ -594,36 +544,7 @@
             });
         }
 
-        // 키워드 직접 편집
-        function toggleKeywordEdit() {
-            const editArea = document.getElementById('keywordEditArea');
-            const displayArea = document.getElementById('currentKeywords');
-
-            if (editArea.style.display === 'none') {
-                editArea.style.display = 'block';
-                displayArea.style.display = 'none';
-                keywordInput.focus();
-            } else {
-                editArea.style.display = 'none';
-                displayArea.style.display = 'block';
-            }
-        }
-
-        function cancelKeywordEdit() {
-            document.getElementById('keywordEditArea').style.display = 'none';
-            document.getElementById('currentKeywords').style.display = 'block';
-            // 원래 값으로 복원
-            keywordInput.value = initialKeywords;
-        }
-
-        async function saveEditedKeywords() {
-            const keywords = keywordInput.value;
-            await saveKeywords(keywords);
-            document.getElementById('keywordEditArea').style.display = 'none';
-            document.getElementById('currentKeywords').style.display = 'block';
-        }
-
-        // 강의 노트 업로드
+        // Note upload
         const noteUploadArea = document.getElementById('noteUploadArea');
 
         if (noteUploadArea) {
@@ -752,44 +673,6 @@
             }
         }
 
-        async function saveKeywords(keywords) {
-            try {
-                const response = await fetch('/manage/lecture/{{ lecture.id }}/keywords', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ keywords: keywords })
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    // 화면 업데이트
-                    const currentKeywordsDiv = document.getElementById('currentKeywords');
-                    if (keywords.trim()) {
-                        const badges = keywords.split(',').map(k =>
-                            `<span class="keyword-badge">${k.trim()}</span>`
-                        ).join('');
-                        currentKeywordsDiv.innerHTML = badges;
-                    } else {
-                        currentKeywordsDiv.innerHTML = '<span style="color: #666;">등록된 키워드가 없습니다.</span>';
-                    }
-
-                    // 편집 모드 input도 업데이트
-                    keywordInput.value = keywords;
-                    initialKeywords = keywords;
-
-                    // localStorage에 저장 (뒤로가기 시 강의 목록에서 반영)
-                    localStorage.setItem('updatedLectureKeywords', JSON.stringify({
-                        lectureId: {{ lecture.id }},
-                        keywords: keywords
-                    }));
-                } else {
-                    alert('저장 실패: ' + result.error);
-                }
-            } catch (error) {
-                alert('오류: ' + error.message);
-            }
-        }
     </script>
     <!-- Floating Action Bar -->
     <div id="floatingActionBar" class="floating-action-bar" style="display: none;">

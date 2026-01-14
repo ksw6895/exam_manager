@@ -198,7 +198,7 @@ python run_local_admin.py
 
 ### Legacy Flask UI
 - `/manage` (dashboard)
-- `/manage/lecture/<id>` (강의 상세, 키워드/노트 업로드)
+- `/manage/lecture/<id>` (강의 상세, 노트 업로드)
 - `/exam` `/exam/<id>` `/exam/unclassified`
 - `/practice` `/practice/lecture/<id>` `/practice/sessions`
 - `/ai/classify/preview/<job_id>`
