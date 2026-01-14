@@ -10,6 +10,11 @@ from app.services.practice_service import (
     grade_practice_submission,
     normalize_practice_answers_payload,
 )
+from app.services.practice_filters import (
+    parse_exam_filter_args,
+    apply_exam_filter,
+    build_exam_options,
+)
 
 api_practice_bp = Blueprint('api_practice', __name__)
 
@@ -48,51 +53,6 @@ def _parse_pagination_args():
             return None, None, ('Invalid limit.', 'INVALID_PAYLOAD')
 
     return limit, offset, None
-
-
-def _parse_exam_filter_args():
-    raw_ids = request.args.getlist('exam_ids')
-    exam_ids = []
-    for raw in raw_ids:
-        for part in str(raw).split(','):
-            part = part.strip()
-            if not part:
-                continue
-            if part.isdigit():
-                exam_ids.append(int(part))
-    seen = set()
-    ordered = []
-    for exam_id in exam_ids:
-        if exam_id in seen:
-            continue
-        seen.add(exam_id)
-        ordered.append(exam_id)
-    filter_requested = request.args.get('filter')
-    filter_active = filter_requested is not None or bool(ordered)
-    return ordered, filter_active
-
-
-def _apply_exam_filter(questions, exam_ids, filter_active):
-    if not questions:
-        return []
-    if not filter_active:
-        return questions
-    if not exam_ids:
-        return []
-    exam_set = set(exam_ids)
-    return [question for question in questions if question.exam_id in exam_set]
-
-
-def _build_exam_options(questions):
-    options = []
-    seen = set()
-    for question in questions:
-        exam = question.exam
-        if not exam or exam.id in seen:
-            continue
-        seen.add(exam.id)
-        options.append({'id': exam.id, 'title': exam.title})
-    return options
 
 
 def _load_choices_for_questions(question_ids):
@@ -173,10 +133,10 @@ def lecture_questions(lecture_id):
     if lecture is None:
         return error_response('Lecture not found.', 'LECTURE_NOT_FOUND', 404)
 
-    exam_ids, filter_active = _parse_exam_filter_args()
+    exam_ids, filter_active = parse_exam_filter_args(request.args)
     all_questions = get_lecture_questions_ordered(lecture_id) or []
-    exam_options = _build_exam_options(all_questions)
-    questions = _apply_exam_filter(all_questions, exam_ids, filter_active)
+    exam_options = build_exam_options(all_questions)
+    questions = apply_exam_filter(all_questions, exam_ids, filter_active)
     groups = build_question_groups(questions)
     question_meta = groups['question_meta']
     question_map = {question.id: question for question in questions}
@@ -256,7 +216,7 @@ def lecture_question_list(lecture_id):
         message, code = error
         return error_response(message, code, 400)
 
-    exam_ids, filter_active = _parse_exam_filter_args()
+    exam_ids, filter_active = parse_exam_filter_args(request.args)
     query = Question.query.filter_by(lecture_id=lecture_id)
     if filter_active:
         if not exam_ids:
@@ -326,9 +286,9 @@ def submit_answers(lecture_id):
             return error_response('Invalid JSON.', 'INVALID_JSON', 400)
         return error_response('Invalid request payload.', 'INVALID_PAYLOAD', 400)
 
-    exam_ids, filter_active = _parse_exam_filter_args()
+    exam_ids, filter_active = parse_exam_filter_args(request.args)
     all_questions = get_lecture_questions_ordered(lecture_id) or []
-    questions = _apply_exam_filter(all_questions, exam_ids, filter_active)
+    questions = apply_exam_filter(all_questions, exam_ids, filter_active)
     if filter_active and not questions:
         return error_response(
             'No questions for the selected exams.',
@@ -492,7 +452,7 @@ def lecture_result(lecture_id):
         message, code = error
         return error_response(message, code, 400)
 
-    exam_ids, filter_active = _parse_exam_filter_args()
+    exam_ids, filter_active = parse_exam_filter_args(request.args)
     query = Question.query.filter_by(lecture_id=lecture_id)
     if filter_active:
         if not exam_ids:

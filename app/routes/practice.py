@@ -14,6 +14,11 @@ from app.services.practice_service import (
     grade_practice_submission,
     normalize_practice_answers_payload,
 )
+from app.services.practice_filters import (
+    parse_exam_filter_args,
+    apply_exam_filter,
+    build_exam_options,
+)
 
 practice_bp = Blueprint('practice', __name__)
 
@@ -46,28 +51,6 @@ def _format_answer_payload(answer):
     return ''
 
 
-def _parse_exam_filter_args():
-    raw_ids = request.args.getlist('exam_ids')
-    exam_ids = []
-    for raw in raw_ids:
-        for part in str(raw).split(','):
-            part = part.strip()
-            if not part:
-                continue
-            if part.isdigit():
-                exam_ids.append(int(part))
-    seen = set()
-    ordered = []
-    for exam_id in exam_ids:
-        if exam_id in seen:
-            continue
-        seen.add(exam_id)
-        ordered.append(exam_id)
-    filter_requested = request.args.get('filter')
-    filter_active = filter_requested is not None or bool(ordered)
-    return ordered, filter_active
-
-
 def _build_filter_query(exam_ids, filter_active):
     if not filter_active:
         return ''
@@ -75,29 +58,6 @@ def _build_filter_query(exam_ids, filter_active):
     if exam_ids:
         params['exam_ids'] = exam_ids
     return f"?{urlencode(params, doseq=True)}"
-
-
-def _apply_exam_filter(questions, exam_ids, filter_active):
-    if not questions:
-        return []
-    if not filter_active:
-        return questions
-    if not exam_ids:
-        return []
-    exam_set = set(exam_ids)
-    return [question for question in questions if question.exam_id in exam_set]
-
-
-def _build_exam_options(questions):
-    options = []
-    seen = set()
-    for question in questions:
-        exam = question.exam
-        if not exam or exam.id in seen:
-            continue
-        seen.add(exam.id)
-        options.append({'id': exam.id, 'title': exam.title})
-    return options
 
 
 @practice_bp.route('/')
@@ -188,15 +148,15 @@ def session_detail(session_id):
 def dashboard(lecture_id):
     """강의별 문제 대시보드 (바둑판 형태) - 유형별 분리"""
     lecture = Lecture.query.get_or_404(lecture_id)
-    exam_ids, filter_active = _parse_exam_filter_args()
+    exam_ids, filter_active = parse_exam_filter_args(request.args)
     all_questions = get_lecture_questions_ordered(lecture_id) or []
-    questions = _apply_exam_filter(all_questions, exam_ids, filter_active)
+    questions = apply_exam_filter(all_questions, exam_ids, filter_active)
     
     groups = build_question_groups(questions)
     objective_questions = groups['objective_questions']
     subjective_questions = groups['subjective_questions']
     question_map = groups['question_map']
-    exam_options = _build_exam_options(all_questions)
+    exam_options = build_exam_options(all_questions)
     if filter_active:
         selected_exam_ids = exam_ids
     else:
@@ -222,9 +182,9 @@ def dashboard(lecture_id):
 def question_by_id(lecture_id, question_id):
     """개별 문제 풀이 페이지 (question_id 기반)"""
     lecture = Lecture.query.get_or_404(lecture_id)
-    exam_ids, filter_active = _parse_exam_filter_args()
+    exam_ids, filter_active = parse_exam_filter_args(request.args)
     all_questions = get_lecture_questions_ordered(lecture_id) or []
-    questions = _apply_exam_filter(all_questions, exam_ids, filter_active)
+    questions = apply_exam_filter(all_questions, exam_ids, filter_active)
     filter_query = _build_filter_query(exam_ids, filter_active)
     index = next((i for i, q in enumerate(questions) if q.id == question_id), None)
     if index is None:
@@ -314,9 +274,9 @@ def question_by_id(lecture_id, question_id):
 def question(lecture_id, seq):
     """레거시 seq 라우트 -> question_id 라우트로 리다이렉트"""
     Lecture.query.get_or_404(lecture_id)
-    exam_ids, filter_active = _parse_exam_filter_args()
+    exam_ids, filter_active = parse_exam_filter_args(request.args)
     all_questions = get_lecture_questions_ordered(lecture_id) or []
-    questions = _apply_exam_filter(all_questions, exam_ids, filter_active)
+    questions = apply_exam_filter(all_questions, exam_ids, filter_active)
     filter_query = _build_filter_query(exam_ids, filter_active)
     index = seq - 1
     if index < 0 or index >= len(questions):
@@ -332,9 +292,9 @@ def question(lecture_id, seq):
 def submit(lecture_id):
     """답안 제출 및 채점 - 유형별 분리 채점"""
     lecture = Lecture.query.get_or_404(lecture_id)
-    exam_ids, filter_active = _parse_exam_filter_args()
+    exam_ids, filter_active = parse_exam_filter_args(request.args)
     all_questions = get_lecture_questions_ordered(lecture_id) or []
-    questions = _apply_exam_filter(all_questions, exam_ids, filter_active)
+    questions = apply_exam_filter(all_questions, exam_ids, filter_active)
     
     data = request.get_json()
     if not data:
@@ -380,9 +340,9 @@ def submit(lecture_id):
 def result(lecture_id):
     """결과 페이지 (GET 방식으로 표시, 실제 데이터는 JS에서 처리)"""
     lecture = Lecture.query.get_or_404(lecture_id)
-    exam_ids, filter_active = _parse_exam_filter_args()
+    exam_ids, filter_active = parse_exam_filter_args(request.args)
     all_questions = get_lecture_questions_ordered(lecture_id) or []
-    questions = _apply_exam_filter(all_questions, exam_ids, filter_active)
+    questions = apply_exam_filter(all_questions, exam_ids, filter_active)
     filter_query = _build_filter_query(exam_ids, filter_active)
     
     # 문제 정보 (JS에서 사용)

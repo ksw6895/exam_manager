@@ -12,6 +12,8 @@
 
 ## 2) 작업 중 체크리스트
 - [ ] 라우트는 요청/응답만 담당, 로직은 서비스로 이동
+- [ ] 공통 유틸 분리 시 Legacy/API 양쪽 사용처를 모두 교체
+- [ ] 공통 유틸 입력/출력 샘플을 간단히 비교(동일성 확인)
 - [ ] 서비스 함수 입력/출력이 명확 (dict/dataclass)
 - [ ] `db.session.commit()` 경계가 일관됨
 - [ ] 동일 쿼리가 중복되지 않음
@@ -23,8 +25,11 @@
 - [ ] PDF 업로드 → 문제 생성 정상 (Next `/manage/upload-pdf`)
 - [ ] 문제 분류(수동/일괄) 정상 (Next `/exam/unclassified`)
 - [ ] AI 분류 시작/상태/적용 정상
+- [ ] 문제 편집에서 마크다운 이미지 정리 정상 (Legacy `/manage/question/<id>/edit`, API `PUT /api/manage/questions/<id>`)
 - [ ] 강의 노트 업로드/인덱싱 정상 (Legacy `/manage/lecture/<id>`)
+- [ ] Practice 필터 정상 (Legacy `/practice/lecture/<id>`, API `/api/practice/lecture/<id>`)
 - [ ] Practice 흐름 정상 (Legacy `/practice/*`, Next `/lectures`)
+- [ ] `PDF_PARSER_MODE=experimental`/`legacy` 동일 PDF 결과 비교(샘플 1건)
 - [ ] Next.js `/manage`, `/lectures` 렌더링 정상
 - [ ] Local admin 실행 가능 (`run_local_admin.py`)
 - [ ] 문서/README 반영 완료
@@ -33,6 +38,7 @@
 - 요청당 쿼리 수 급증 (페이지 로딩 느려짐)
 - 업로드 이미지/파일 경로 불일치
 - `PDF_PARSER_MODE` 변경 시 파싱 결과 차이 발생
+- Legacy/API 결과 불일치(동일 기능인데 응답/화면이 다름)
 - API 응답 구조 변경으로 프론트 오류 발생
 - AI 분류 결과가 비어있거나 적용 실패
 

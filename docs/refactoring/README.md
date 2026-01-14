@@ -32,17 +32,17 @@
 - API/DB 변경 여부를 사전에 합의
 
 ## 코드 기반 리팩토링 포인트 (현 상태)
-- 중복 로직
-  - `app/routes/manage.py`와 `app/routes/api_manage.py`의 질문 편집/마크다운 이미지 처리 로직 중복
-  - `app/routes/practice.py`와 `app/routes/api_practice.py`의 시험 필터 처리 로직 중복
-- 파서 중복
-  - `app/services/pdf_parser.py`와 `app/services/pdf_parser_experimental.py` 내용 동일
 - 유틸리티 위치 혼재
   - `app/routes/parse_pdf_questions.py`, `app/routes/crop.py`는 라우트가 아닌 CLI 유틸리티 성격
 - API 응답 형식 불일치
   - 일부 API는 `{ ok, code, message }`, 일부는 `{ status }` 형태
 - 연습 세션 흐름 불일치
   - Next.js는 세션 생성 API가 없어 클라이언트 fallback 모드로 시작
+
+## 최근 반영
+- 마크다운 이미지 처리 및 시험 필터 파싱 공통화
+  - `app/services/markdown_images.py`, `app/services/practice_filters.py`
+- `pdf_parser_experimental`는 legacy parser 래퍼로 정리
 
 ## 단계별 리팩토링 전략
 
@@ -55,7 +55,7 @@
 3) 라우트에서 유틸 호출로 교체
 4) 기존 동작과 결과 비교 (샘플 데이터 기준)
 
-예시 대상
+예시 대상(이미 분리됨)
 - 마크다운 이미지 처리: `app/routes/manage.py`, `app/routes/api_manage.py`
 - 시험 필터 처리: `app/routes/practice.py`, `app/routes/api_practice.py`
 
