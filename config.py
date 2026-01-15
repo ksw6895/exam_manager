@@ -35,6 +35,7 @@ class Config:
     AUTO_BACKUP_BEFORE_WRITE = _env_flag('AUTO_BACKUP_BEFORE_WRITE', default=False)
     AUTO_BACKUP_KEEP = _env_int('AUTO_BACKUP_KEEP', default=30)
     AUTO_BACKUP_DIR = os.environ.get('AUTO_BACKUP_DIR', str(BASE_DIR / 'backups'))
+    ENFORCE_BACKUP_BEFORE_WRITE = _env_flag('ENFORCE_BACKUP_BEFORE_WRITE', default=False)
     
     # 업로드 설정
     UPLOAD_FOLDER = BASE_DIR / 'app' / 'static' / 'uploads'
@@ -53,6 +54,10 @@ class Config:
 
     # Read-only guard for write paths.
     DB_READ_ONLY = _env_flag('DB_READ_ONLY', default=False)
+
+    # Pending migration checks at startup.
+    CHECK_PENDING_MIGRATIONS = _env_flag('CHECK_PENDING_MIGRATIONS', default=True)
+    FAIL_ON_PENDING_MIGRATIONS = _env_flag('FAIL_ON_PENDING_MIGRATIONS', default=False)
 
     # DB auto-create (dev convenience; disable for production safety)
     AUTO_CREATE_DB = _env_flag('AUTO_CREATE_DB', default=False)

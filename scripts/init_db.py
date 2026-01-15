@@ -33,7 +33,11 @@ def main() -> None:
     args = parser.parse_args()
 
     db_uri = _normalize_db_uri(args.db)
-    app = create_app(args.config, db_uri_override=db_uri)
+    app = create_app(
+        args.config,
+        db_uri_override=db_uri,
+        skip_migration_check=True,
+    )
     with app.app_context():
         db.create_all()
     print("Schema initialized.")

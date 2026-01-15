@@ -1,6 +1,7 @@
 """Flask 애플리케이션 팩토리"""
 import os
 import re
+from pathlib import Path
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from markupsafe import Markup, escape
@@ -30,7 +31,11 @@ def render_markdown_images(value):
     return Markup(''.join(parts))
 
 
-def create_app(config_name='default', db_uri_override: str | None = None):
+def create_app(
+    config_name='default',
+    db_uri_override: str | None = None,
+    skip_migration_check: bool = False,
+):
     """
     Flask 애플리케이션 팩토리
     
@@ -44,8 +49,20 @@ def create_app(config_name='default', db_uri_override: str | None = None):
     
     # 설정 로드
     app.config.from_object(config[config_name])
+    app.config['ENV_NAME'] = config_name
     if db_uri_override:
         app.config['SQLALCHEMY_DATABASE_URI'] = db_uri_override
+
+    if not skip_migration_check and app.config.get('CHECK_PENDING_MIGRATIONS', True):
+        from app.services.migrations import check_pending_migrations
+        migrations_dir = Path(__file__).resolve().parents[1] / 'migrations'
+        check_pending_migrations(
+            app.config['SQLALCHEMY_DATABASE_URI'],
+            migrations_dir,
+            app.config['ENV_NAME'],
+            app.logger,
+            app.config.get('FAIL_ON_PENDING_MIGRATIONS', False),
+        )
     
     # SQLAlchemy 초기화
     db.init_app(app)

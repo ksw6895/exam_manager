@@ -16,7 +16,11 @@ def _normalize_db_uri(db_value: str | None) -> str | None:
 
 
 def migrate(db_uri: str | None = None, config_name: str = "default"):
-    app = create_app(config_name, db_uri_override=db_uri)
+    app = create_app(
+        config_name,
+        db_uri_override=db_uri,
+        skip_migration_check=True,
+    )
     with app.app_context():
         # Add new columns to questions table
         columns_to_add = [
