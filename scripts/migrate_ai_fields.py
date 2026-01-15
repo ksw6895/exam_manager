@@ -1,9 +1,22 @@
 """데이터베이스 스키마 마이그레이션 - AI 분류 필드 추가"""
+from pathlib import Path
+import argparse
+
 from app import create_app, db
 from sqlalchemy import text
 
-def migrate():
-    app = create_app()
+def _normalize_db_uri(db_value: str | None) -> str | None:
+    if not db_value:
+        return None
+    if "://" in db_value:
+        return db_value
+    path = Path(db_value).resolve()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    return f"sqlite:///{path}"
+
+
+def migrate(db_uri: str | None = None, config_name: str = "default"):
+    app = create_app(config_name, db_uri_override=db_uri)
     with app.app_context():
         # Add new columns to questions table
         columns_to_add = [
@@ -36,4 +49,12 @@ def migrate():
         print('Schema migration complete!')
 
 if __name__ == '__main__':
-    migrate()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--db", help="Path to sqlite db file.")
+    parser.add_argument(
+        "--config",
+        default="default",
+        help="Config name: development|production|local_admin|default",
+    )
+    args = parser.parse_args()
+    migrate(_normalize_db_uri(args.db), config_name=args.config)
