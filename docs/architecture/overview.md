@@ -133,6 +133,35 @@ flowchart TD
     Update --> Done
 ```
 
+#### BM25 → 임베딩 → Gemini 상세 흐름
+```mermaid
+flowchart TD
+    Input["입력 정규화<br/>질문 본문 + 보기 결합"]
+    BM25["1차 후보 추출<br/>BM25 FTS (lecture_chunks_fts)"]
+    Embed["2차 의미 검색 (선택)<br/>임베딩 인덱스/벡터 스토어"]
+    Merge["후보 통합/정렬<br/>Top-K 강의 + 근거 스니펫"]
+    Prompt["프롬프트 구성<br/>후보/근거/문제 텍스트"]
+    Gemini["Gemini API 호출<br/>lecture_id, confidence, reason"]
+    Guard["후처리/검증<br/>no_match, evidence 정규화"]
+    Persist["결과 저장<br/>classification_jobs.result_json"]
+
+    Input --> BM25
+    BM25 --> Merge
+    BM25 -.->|"임베딩 사용 시"| Embed
+    Embed --> Merge
+    Merge --> Prompt
+    Prompt --> Gemini
+    Gemini --> Guard
+    Guard --> Persist
+```
+
+설명:
+- 입력 정규화는 문제 본문과 선택지를 결합해 검색용 텍스트를 만듭니다.
+- 1차 후보는 FTS(BM25)에서 가져오며, 증거 스니펫(페이지/부분 인용)을 함께 수집합니다.
+- 임베딩 단계는 **존재/활성화된 경우에만** 의미 기반 후보를 추가로 검색해 후보군을 보강합니다.
+- 후보는 통합/정렬되어 Gemini 프롬프트에 들어가며, 결과는 JSON으로 파싱 후 검증/정규화됩니다.
+- 최종 결과는 `classification_jobs.result_json`에 저장되고, 이후 적용 API에서 `questions`에 반영됩니다.
+
 ### 분류 로직 상세
 - AI 분류는 2단계입니다.
   - 1단계: `LectureRetriever`가 FTS(BM25)로 후보 강의를 Top-K 추출
