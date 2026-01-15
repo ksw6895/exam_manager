@@ -8,6 +8,7 @@ from app import db
 from app.models import Block, Lecture, PreviousExam, Question, Choice, LectureMaterial, LectureChunk
 from app.services.exam_cleanup import delete_exam_with_assets
 from app.services.markdown_images import strip_markdown_images
+from app.services.db_backup import maybe_backup_before_write
 from pathlib import Path
 from sqlalchemy import text
 
@@ -21,6 +22,14 @@ def restrict_to_local_admin():
     remote_addr = request.remote_addr or ''
     if remote_addr not in {'127.0.0.1', '::1'}:
         abort(404)
+    return None
+
+
+@manage_bp.before_request
+def backup_before_write():
+    if request.method not in {'POST', 'PUT', 'PATCH', 'DELETE'}:
+        return None
+    maybe_backup_before_write(request.endpoint)
     return None
 
 
