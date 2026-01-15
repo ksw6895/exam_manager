@@ -19,8 +19,17 @@ from app.services.practice_filters import (
     apply_exam_filter,
     build_exam_options,
 )
+from app.services.db_guard import guard_write_request
 
 practice_bp = Blueprint('practice', __name__)
+
+
+@practice_bp.before_request
+def guard_read_only():
+    blocked = guard_write_request()
+    if blocked is not None:
+        return blocked
+    return None
 
 
 def _load_question_order(session):

@@ -9,6 +9,7 @@ from app.models import Block, Lecture, PreviousExam, Question, Choice, LectureMa
 from app.services.exam_cleanup import delete_exam_with_assets
 from app.services.markdown_images import strip_markdown_images
 from app.services.db_backup import maybe_backup_before_write
+from app.services.db_guard import guard_write_request
 from pathlib import Path
 from sqlalchemy import text
 
@@ -27,6 +28,9 @@ def restrict_to_local_admin():
 
 @manage_bp.before_request
 def backup_before_write():
+    blocked = guard_write_request()
+    if blocked is not None:
+        return blocked
     if request.method not in {'POST', 'PUT', 'PATCH', 'DELETE'}:
         return None
     maybe_backup_before_write(request.endpoint)

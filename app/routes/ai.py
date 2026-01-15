@@ -13,6 +13,7 @@ from app.services.ai_classifier import (
     GENAI_AVAILABLE,
     parse_job_payload
 )
+from app.services.db_guard import guard_write_request
 
 # Google GenAI SDK (for text correction)
 try:
@@ -22,6 +23,16 @@ except ImportError:
     pass
 
 ai_bp = Blueprint('ai', __name__, url_prefix='/ai')
+
+
+@ai_bp.before_request
+def guard_read_only():
+    if request.endpoint in {'ai.correct_text'}:
+        return None
+    blocked = guard_write_request()
+    if blocked is not None:
+        return blocked
+    return None
 
 def _build_request_signature(question_ids, idempotency_key=None):
     payload = {'question_ids': question_ids}

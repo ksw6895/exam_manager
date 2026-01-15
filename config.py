@@ -46,6 +46,13 @@ class Config:
     GEMINI_MODEL_NAME = os.environ.get('GEMINI_MODEL_NAME', 'gemini-2.0-flash-lite')
     AI_CONFIDENCE_THRESHOLD = 0.7
     AI_AUTO_APPLY_MARGIN = 0.2
+    AI_AUTO_APPLY = _env_flag('AI_AUTO_APPLY', default=False)
+
+    # Retrieval mode: bm25|off (future: hybrid/rerank)
+    RETRIEVAL_MODE = os.environ.get('RETRIEVAL_MODE', 'bm25')
+
+    # Read-only guard for write paths.
+    DB_READ_ONLY = _env_flag('DB_READ_ONLY', default=False)
 
     # DB auto-create (dev convenience; disable for production safety)
     AUTO_CREATE_DB = _env_flag('AUTO_CREATE_DB', default=False)

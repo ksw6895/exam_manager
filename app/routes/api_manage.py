@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 from app.models import Block, Lecture, PreviousExam, Question, Choice
 from app.services.exam_cleanup import delete_exam_with_assets
 from app.services.markdown_images import strip_markdown_images
+from app.services.db_guard import guard_write_request
 
 api_manage_bp = Blueprint('api_manage', __name__, url_prefix='/api/manage')
 
@@ -22,6 +23,14 @@ def restrict_to_local_admin():
     remote_addr = request.remote_addr or ''
     if remote_addr not in {'127.0.0.1', '::1'}:
         abort(404)
+    return None
+
+
+@api_manage_bp.before_request
+def guard_read_only():
+    blocked = guard_write_request()
+    if blocked is not None:
+        return blocked
     return None
 
 

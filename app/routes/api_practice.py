@@ -15,8 +15,17 @@ from app.services.practice_filters import (
     apply_exam_filter,
     build_exam_options,
 )
+from app.services.db_guard import guard_write_request
 
 api_practice_bp = Blueprint('api_practice', __name__)
+
+
+@api_practice_bp.before_request
+def guard_read_only():
+    blocked = guard_write_request()
+    if blocked is not None:
+        return blocked
+    return None
 
 
 def error_response(message, code, status=400, details=None):
