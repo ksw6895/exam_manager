@@ -11,15 +11,25 @@ env/
 
 # Environment / secrets
 .env
+.env.local
 
 # Databases and generated datasets
 *.sqlite3
+*.sqlite3-*
 *.db
+*.db-*
+*.db-journal
+*.db-shm
+*.db-wal
 data/**/*.db
+data/**/*.db-*
+backups/
 
 # Uploaded assets
 app/static/uploads/*
 !app/static/uploads/.gitkeep
+app/static/uploads_admin/*
+!app/static/uploads_admin/.gitkeep
 
 # IDE / OS
 .vscode/
