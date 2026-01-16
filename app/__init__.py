@@ -1,6 +1,7 @@
 """Flask 애플리케이션 팩토리"""
 import os
 import re
+from pathlib import Path
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from markupsafe import Markup, escape
@@ -30,7 +31,11 @@ def render_markdown_images(value):
     return Markup(''.join(parts))
 
 
-def create_app(config_name='default'):
+def create_app(
+    config_name='default',
+    db_uri_override: str | None = None,
+    skip_migration_check: bool = False,
+):
     """
     Flask 애플리케이션 팩토리
     
@@ -44,6 +49,20 @@ def create_app(config_name='default'):
     
     # 설정 로드
     app.config.from_object(config[config_name])
+    app.config['ENV_NAME'] = config_name
+    if db_uri_override:
+        app.config['SQLALCHEMY_DATABASE_URI'] = db_uri_override
+
+    if not skip_migration_check and app.config.get('CHECK_PENDING_MIGRATIONS', True):
+        from app.services.migrations import check_pending_migrations
+        migrations_dir = Path(__file__).resolve().parents[1] / 'migrations'
+        check_pending_migrations(
+            app.config['SQLALCHEMY_DATABASE_URI'],
+            migrations_dir,
+            app.config['ENV_NAME'],
+            app.logger,
+            app.config.get('FAIL_ON_PENDING_MIGRATIONS', False),
+        )
     
     # SQLAlchemy 초기화
     db.init_app(app)
@@ -78,10 +97,5 @@ def create_app(config_name='default'):
     app.register_blueprint(api_exam_bp)
 
     app.jinja_env.filters['md_image'] = render_markdown_images
-    
-    # 앱 컨텍스트에서 DB 테이블 생성
-    if app.config.get('AUTO_CREATE_DB'):
-        with app.app_context():
-            db.create_all()
     
     return app

@@ -174,6 +174,9 @@ class LectureRetriever:
     
     def find_candidates(self, question_text: str, top_k: int = 8) -> List[Dict]:
         """FTS5 BM25 기반 후보 강의 검색"""
+        mode = current_app.config.get('RETRIEVAL_MODE', 'bm25')
+        if mode != 'bm25':
+            return []
         chunks = retrieval.search_chunks_bm25(question_text, top_n=80)
         return retrieval.aggregate_candidates(chunks, top_k_lectures=top_k, evidence_per_lecture=3)
 
@@ -602,31 +605,50 @@ def apply_classification_results(question_ids: List[int], job_id: int) -> int:
     results_map = {r['question_id']: r for r in results}
     
     applied_count = 0
+    auto_apply = current_app.config.get('AI_AUTO_APPLY', False)
+    threshold = float(current_app.config.get('AI_CONFIDENCE_THRESHOLD', 0.7))
+    margin = float(current_app.config.get('AI_AUTO_APPLY_MARGIN', 0.2))
+    auto_apply_min = threshold + margin
     for qid in question_ids:
         result = results_map.get(qid)
-        if not result or not result.get('lecture_id'):
+        if not result:
             continue
         
         question = Question.query.get(qid)
         if not question:
             continue
         
-        lecture = Lecture.query.get(result['lecture_id'])
-        if not lecture:
-            continue
+        lecture_id = result.get('lecture_id')
+        lecture = Lecture.query.get(lecture_id) if lecture_id else None
+        no_match = bool(result.get('no_match', False))
+        try:
+            confidence = float(result.get('confidence', 0.0))
+        except (TypeError, ValueError):
+            confidence = 0.0
         
-        # 분류 적용
-        question.lecture_id = lecture.id
-        question.is_classified = True
-        question.ai_suggested_lecture_id = lecture.id
-        question.ai_suggested_lecture_title_snapshot = f"{lecture.block.name} > {lecture.title}"
-        question.ai_confidence = result.get('confidence', 0.0)
+        # AI 제안 정보는 항상 저장
+        if lecture and not no_match:
+            question.ai_suggested_lecture_id = lecture.id
+            question.ai_suggested_lecture_title_snapshot = f"{lecture.block.name} > {lecture.title}"
+            if not question.is_classified:
+                question.classification_status = 'ai_suggested'
+        else:
+            question.ai_suggested_lecture_id = None
+            question.ai_suggested_lecture_title_snapshot = None
+            if not question.is_classified:
+                question.classification_status = 'manual'
+
+        question.ai_confidence = confidence
         question.ai_reason = result.get('reason', '')
         question.ai_model_name = result.get('model_name', '')
         question.ai_classified_at = datetime.utcnow()
-        question.classification_status = 'ai_confirmed'
-        
-        applied_count += 1
+
+        # 자동 반영은 플래그 + confidence 기준을 모두 만족할 때만
+        if auto_apply and lecture and not no_match and confidence >= auto_apply_min:
+            question.lecture_id = lecture.id
+            question.is_classified = True
+            question.classification_status = 'ai_confirmed'
+            applied_count += 1
     
     db.session.commit()
     return applied_count

@@ -8,6 +8,36 @@
 - Python 3.10+ / Node.js 18+ 필요
 - 실행/설정 상세: `docs/README.md`
 
+## Ops Quick Commands
+- Dev sync (prod -> dev + migrations + FTS rebuild):
+  ```bash
+  python scripts/clone_db.py --db data/exam.db --out data/dev.db
+  python scripts/run_migrations.py --db data/dev.db && python scripts/init_fts.py --db data/dev.db --rebuild
+  ```
+- Prod apply (optional backup + migrations + FTS rebuild):
+  ```bash
+  python scripts/backup_db.py --db data/exam.db --keep 30
+  python scripts/run_migrations.py --db data/exam.db && python scripts/init_fts.py --db data/exam.db --rebuild
+  ```
+- Read-only: `DB_READ_ONLY=1`
+- Retrieval mode: `RETRIEVAL_MODE=bm25` / `RETRIEVAL_MODE=hybrid` (when implemented)
+- AI auto apply: `AI_AUTO_APPLY=false` / `AI_AUTO_APPLY=true`
+- Ops playbook: `docs/ops.md`
+
+## Example Commands (5)
+```bash
+python scripts/clone_db.py --db data/exam.db --out data/dev.db
+python scripts/run_migrations.py --db data/dev.db
+python scripts/init_fts.py --db data/dev.db --rebuild
+python scripts/backup_db.py --db data/exam.db --keep 30
+DB_READ_ONLY=1 python run.py
+```
+
+## 데이터 손상 방지 원칙
+- 모든 변경 전 백업
+- migrations만으로 스키마 변경
+- prod에서 실험 금지(항상 dev에서 먼저)
+
 ## UI 분리 현황 (Next.js vs Legacy)
 ### Next.js (현재 주 관리 화면)
 - 블록/강의/시험 CRUD
@@ -86,7 +116,16 @@ FLASK_BASE_URL=http://127.0.0.1:5000
 EOT
 ```
 
-### 4) 서버 실행
+### 4) DB 초기화/마이그레이션 (처음 1회)
+```bash
+python scripts/init_db.py --db data/exam.db
+python scripts/run_migrations.py --db data/exam.db
+python scripts/init_fts.py --db data/exam.db --sync
+```
+- 강의 노트 인덱싱/AI 분류를 안 쓰면 `init_fts.py`는 나중에 실행해도 됩니다.
+- local admin DB를 쓸 경우 `data/admin_local.db`를 대상으로 동일하게 실행하세요.
+
+### 5) 서버 실행
 Flask (관리 UI + API):
 ```bash
 python run.py
@@ -101,7 +140,7 @@ npm run dev
 ```
 접속: http://localhost:3000/lectures
 
-### 5) Local admin (실험용)
+### 6) Local admin (실험용)
 ```bash
 python run_local_admin.py
 ```
@@ -133,7 +172,16 @@ Next.js용 `.env.local` 생성:
 Set-Content -Path next_app\.env.local -Value "FLASK_BASE_URL=http://127.0.0.1:5000"
 ```
 
-### 4) 서버 실행
+### 4) DB 초기화/마이그레이션 (처음 1회)
+```powershell
+python scripts\init_db.py --db data\exam.db
+python scripts\run_migrations.py --db data\exam.db
+python scripts\init_fts.py --db data\exam.db --sync
+```
+- 강의 노트 인덱싱/AI 분류를 안 쓰면 `init_fts.py`는 나중에 실행해도 됩니다.
+- local admin DB를 쓸 경우 `data\admin_local.db`를 대상으로 동일하게 실행하세요.
+
+### 5) 서버 실행
 Flask (관리 UI + API):
 ```powershell
 python run.py
@@ -148,13 +196,13 @@ npm run dev
 ```
 접속: http://localhost:3000/lectures
 
-### 5) Local admin (실험용)
+### 6) Local admin (실험용)
 ```powershell
 python run_local_admin.py
 ```
 접속: http://127.0.0.1:5001/manage
 
-### 6) Windows 실행 스크립트
+### 7) Windows 실행 스크립트
 - `launch_exam_manager.bat`
 - `launch_exam_manager_local_admin.bat`
 
@@ -169,11 +217,20 @@ python run_local_admin.py
 | SECRET_KEY | 권장 | Flask 세션/보안 키 | 미설정 시 `dev-secret-key-change-in-production` |
 | GEMINI_API_KEY | 조건부 | Gemini API 키 (AI 분류/텍스트 교정 사용 시) | 없음 |
 | GEMINI_MODEL_NAME | 선택 | Gemini 모델명 | `gemini-2.0-flash-lite` |
-| AUTO_CREATE_DB | 선택 | 앱 시작 시 `db.create_all()` 자동 실행 | DevelopmentConfig 기본 True |
+| AUTO_CREATE_DB | 선택 | (deprecated) 앱 시작 시 `db.create_all()` 자동 실행 | 현재 사용 안 함 |
 | LOCAL_ADMIN_ONLY | 선택 | `/manage` 및 관련 API 로컬호스트 제한 | 값은 `1/true/yes/on` |
 | LOCAL_ADMIN_DB | 선택 | local admin DB 경로 | 미설정 시 `data/admin_local.db` |
 | PDF_PARSER_MODE | 선택 | PDF 파서 선택 (`legacy`/`experimental`) | 기본 `legacy` |
 | FLASK_CONFIG | 선택 | 설정 프로파일 선택 | `default`, `development`, `production`, `local_admin` |
+| DB_READ_ONLY | 선택 | 쓰기 경로 차단 | 기본 False |
+| RETRIEVAL_MODE | 선택 | 검색 모드 | 기본 `bm25` |
+| AI_AUTO_APPLY | 선택 | AI 자동 반영 | 기본 False |
+| AUTO_BACKUP_BEFORE_WRITE | 선택 | 쓰기 전 핫백업 수행 | 기본 False |
+| AUTO_BACKUP_KEEP | 선택 | 백업 유지 개수 | 기본 30 |
+| AUTO_BACKUP_DIR | 선택 | 백업 디렉터리 | 기본 `backups` |
+| CHECK_PENDING_MIGRATIONS | 선택 | 앱 시작 시 미적용 마이그레이션 감지 | 기본 True |
+| FAIL_ON_PENDING_MIGRATIONS | 선택 | 프로덕션에서 미적용 마이그레이션 있으면 중단 | 기본 False |
+| ENFORCE_BACKUP_BEFORE_WRITE | 선택 | 프로덕션에서 백업 강제 | 기본 False |
 
 ### Next.js (`next_app/.env.local`)
 | 키 | 필수 | 설명 |
@@ -241,7 +298,7 @@ python run_local_admin.py
 - FTS 검색은 `lecture_chunks_fts`를 사용
 
 ## 운영 포인트
-- `AUTO_CREATE_DB` 활성 시 앱 시작 시점에 테이블 자동 생성
+- `AUTO_CREATE_DB`는 deprecated (스키마 생성은 `scripts/init_db.py`로 수행)
 - Local admin 모드는 `LOCAL_ADMIN_ONLY`로 localhost 접근만 허용
 - PDF 파서 모드(`PDF_PARSER_MODE`)는 `legacy`/`experimental` 선택
 - 업로드 최대 크기: 100MB (`config.py`의 `MAX_CONTENT_LENGTH`)

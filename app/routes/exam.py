@@ -2,8 +2,17 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from app import db
 from app.models import PreviousExam, Question, Block, Lecture
+from app.services.db_guard import guard_write_request
 
 exam_bp = Blueprint('exam', __name__)
+
+
+@exam_bp.before_request
+def guard_read_only():
+    blocked = guard_write_request()
+    if blocked is not None:
+        return blocked
+    return None
 
 
 @exam_bp.route('/')

@@ -4,6 +4,7 @@ Initialize SQLite FTS5 table for lecture chunks.
 Usage:
   python scripts/init_fts.py --sync
   python scripts/init_fts.py --rebuild
+  python scripts/init_fts.py --db path/to/exam.db --rebuild
 """
 from __future__ import annotations
 
@@ -21,7 +22,10 @@ if str(ROOT_DIR) not in sys.path:
 from config import Config
 
 
-def _resolve_db_path() -> str:
+def _resolve_db_path(db_arg: str | None) -> str:
+    if db_arg:
+        return db_arg
+
     uri = Config.SQLALCHEMY_DATABASE_URI
     if uri.startswith("sqlite:///"):
         return uri.replace("sqlite:///", "", 1)
@@ -90,9 +94,14 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--sync", action="store_true", help="Sync lecture_chunks into FTS.")
     parser.add_argument("--rebuild", action="store_true", help="Clear FTS before sync.")
+    parser.add_argument("--db", help="Path to sqlite db file.")
     args = parser.parse_args()
 
-    init_fts(_resolve_db_path(), rebuild=args.rebuild, sync=args.sync or args.rebuild)
+    init_fts(
+        _resolve_db_path(args.db),
+        rebuild=args.rebuild,
+        sync=args.sync or args.rebuild,
+    )
 
 
 if __name__ == "__main__":
