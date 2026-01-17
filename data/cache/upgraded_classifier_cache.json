@@ -1,0 +1,2882 @@
+{
+  "588:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:35.548482"
+  },
+  "580:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:35.595907"
+  },
+  "586:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:35.814406"
+  },
+  "577:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:35.817412"
+  },
+  "578:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:35.821369"
+  },
+  "579:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:35.821369"
+  },
+  "581:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:35.948502"
+  },
+  "583:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:36.241779"
+  },
+  "576:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:36.246849"
+  },
+  "582:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:36.948544"
+  },
+  "593:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:41.479886"
+  },
+  "589:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:41.479886"
+  },
+  "597:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:41.695352"
+  },
+  "594:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:41.700606"
+  },
+  "595:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:41.827542"
+  },
+  "591:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:41.830330"
+  },
+  "596:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:42.257691"
+  },
+  "598:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:42.263257"
+  },
+  "590:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:45.099656"
+  },
+  "602:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:47.243481"
+  },
+  "599:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:47.432186"
+  },
+  "601:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:47.437295"
+  },
+  "606:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:47.676018"
+  },
+  "603:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:48.293105"
+  },
+  "604:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:48.797666"
+  },
+  "600:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:50.065693"
+  },
+  "609:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:52.659150"
+  },
+  "610:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:52.778294"
+  },
+  "611:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:53.368404"
+  },
+  "607:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:53.586078"
+  },
+  "612:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:54.723177"
+  },
+  "592:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:55.503527"
+  },
+  "605:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:56.890530"
+  },
+  "614:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:56.899147"
+  },
+  "615:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:57.646370"
+  },
+  "616:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:58.026222"
+  },
+  "608:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:58.362206"
+  },
+  "617:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:58.553664"
+  },
+  "619:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:58.787210"
+  },
+  "613:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:59.440561"
+  },
+  "620:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:15:59.855931"
+  },
+  "622:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:02.108295"
+  },
+  "624:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:03.132154"
+  },
+  "626:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:03.238553"
+  },
+  "625:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:03.556174"
+  },
+  "627:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:03.780533"
+  },
+  "628:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:03.883807"
+  },
+  "621:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:04.272136"
+  },
+  "629:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:04.387613"
+  },
+  "623:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:04.505704"
+  },
+  "630:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:06.732234"
+  },
+  "631:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:07.164326"
+  },
+  "634:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:08.734390"
+  },
+  "635:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:08.927577"
+  },
+  "637:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:09.244791"
+  },
+  "633:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:09.651800"
+  },
+  "636:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:10.066428"
+  },
+  "639:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:10.389769"
+  },
+  "638:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:10.705245"
+  },
+  "640:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:11.838530"
+  },
+  "641:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:12.685140"
+  },
+  "632:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:13.202472"
+  },
+  "642:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:14.032317"
+  },
+  "643:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:14.433488"
+  },
+  "644:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:14.538875"
+  },
+  "645:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:14.763104"
+  },
+  "649:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:15.654738"
+  },
+  "647:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:15.753821"
+  },
+  "646:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:15.872274"
+  },
+  "650:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:16.856760"
+  },
+  "651:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:17.902488"
+  },
+  "652:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:18.311670"
+  },
+  "655:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:19.967546"
+  },
+  "653:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:20.063410"
+  },
+  "654:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:20.194507"
+  },
+  "658:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:21.188808"
+  },
+  "659:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:21.674532"
+  },
+  "656:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:21.772710"
+  },
+  "657:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:21.863656"
+  },
+  "660:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:22.173729"
+  },
+  "661:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:23.154932"
+  },
+  "662:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:23.989755"
+  },
+  "664:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:25.570025"
+  },
+  "665:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:25.679100"
+  },
+  "666:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:26.208207"
+  },
+  "663:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:26.298847"
+  },
+  "669:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:27.096729"
+  },
+  "670:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:27.448491"
+  },
+  "672:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:28.965203"
+  },
+  "668:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:29.374464"
+  },
+  "671:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:30.260393"
+  },
+  "673:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:30.448323"
+  },
+  "674:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:30.770085"
+  },
+  "667:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:31.068303"
+  },
+  "682:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:35.621130"
+  },
+  "675:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:38.124716"
+  },
+  "681:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:38.130490"
+  },
+  "683:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:38.339639"
+  },
+  "676:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:38.438032"
+  },
+  "684:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:38.739793"
+  },
+  "678:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:38.845473"
+  },
+  "677:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:38.994597"
+  },
+  "685:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:40.839719"
+  },
+  "680:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:41.178077"
+  },
+  "679:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:41.503855"
+  },
+  "687:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:43.275400"
+  },
+  "689:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:43.674252"
+  },
+  "688:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:43.679897"
+  },
+  "690:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:44.228894"
+  },
+  "692:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:44.429007"
+  },
+  "691:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:44.882426"
+  },
+  "686:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:46.011575"
+  },
+  "694:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:46.106815"
+  },
+  "693:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:46.204516"
+  },
+  "695:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:47.452278"
+  },
+  "696:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:48.407999"
+  },
+  "697:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:48.955692"
+  },
+  "698:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:49.370416"
+  },
+  "699:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:49.484134"
+  },
+  "701:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:50.325652"
+  },
+  "700:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:51.215365"
+  },
+  "704:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:51.619141"
+  },
+  "703:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:51.730011"
+  },
+  "702:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:52.775376"
+  },
+  "705:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:53.546611"
+  },
+  "707:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:53.840642"
+  },
+  "708:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:54.093134"
+  },
+  "709:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:54.732384"
+  },
+  "711:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:56.414041"
+  },
+  "710:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:56.874815"
+  },
+  "713:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:57.173456"
+  },
+  "712:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:57.502082"
+  },
+  "714:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:57.899199"
+  },
+  "706:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:58.202525"
+  },
+  "716:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:16:59.507916"
+  },
+  "717:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:00.013266"
+  },
+  "715:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:00.126710"
+  },
+  "718:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:00.223876"
+  },
+  "722:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:02.407457"
+  },
+  "721:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:02.507419"
+  },
+  "723:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:02.820704"
+  },
+  "719:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:03.110761"
+  },
+  "720:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:03.553776"
+  },
+  "724:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:03.766098"
+  },
+  "725:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:04.772434"
+  },
+  "726:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:05.386202"
+  },
+  "727:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:05.500089"
+  },
+  "728:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:05.802046"
+  },
+  "812:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:07.241584"
+  },
+  "813:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:08.098672"
+  },
+  "815:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:08.437246"
+  },
+  "816:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:08.634013"
+  },
+  "817:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:08.639630"
+  },
+  "814:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:08.730133"
+  },
+  "818:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:10.246735"
+  },
+  "820:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:10.679956"
+  },
+  "819:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:10.778781"
+  },
+  "821:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:10.875739"
+  },
+  "822:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:12.209197"
+  },
+  "823:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:13.052488"
+  },
+  "824:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:13.660746"
+  },
+  "827:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:14.028957"
+  },
+  "825:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:14.032196"
+  },
+  "826:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:14.164023"
+  },
+  "828:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:15.957249"
+  },
+  "829:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:16.050862"
+  },
+  "830:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:16.356260"
+  },
+  "831:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:16.489130"
+  },
+  "833:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:17.932293"
+  },
+  "832:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:18.158596"
+  },
+  "839:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:19.052519"
+  },
+  "834:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:19.257028"
+  },
+  "835:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:19.267804"
+  },
+  "838:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:19.856770"
+  },
+  "841:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:21.210489"
+  },
+  "840:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:21.316725"
+  },
+  "842:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:21.691982"
+  },
+  "843:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:22.025420"
+  },
+  "844:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:23.377590"
+  },
+  "845:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:23.494568"
+  },
+  "847:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:24.652155"
+  },
+  "848:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:24.654674"
+  },
+  "849:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:24.763205"
+  },
+  "846:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:24.944500"
+  },
+  "850:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:26.690508"
+  },
+  "851:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:26.694530"
+  },
+  "852:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:26.991036"
+  },
+  "853:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:27.126003"
+  },
+  "855:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:29.116187"
+  },
+  "854:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:29.116187"
+  },
+  "858:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:30.111827"
+  },
+  "856:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:30.313260"
+  },
+  "857:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:30.411200"
+  },
+  "859:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:30.603567"
+  },
+  "861:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:32.369321"
+  },
+  "862:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x168a59deea0 state=finished raised ServerError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:35.840666"
+  },
+  "864:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:36.565302"
+  },
+  "868:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:37.840043"
+  },
+  "865:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:37.950681"
+  },
+  "860:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:38.780714"
+  },
+  "866:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:39.192285"
+  },
+  "863:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:39.298646"
+  },
+  "867:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:39.298646"
+  },
+  "870:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:40.774422"
+  },
+  "872:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:41.578082"
+  },
+  "871:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:41.673452"
+  },
+  "869:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:42.312959"
+  },
+  "873:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:43.284213"
+  },
+  "874:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:43.648969"
+  },
+  "875:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:44.212969"
+  },
+  "878:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:44.503938"
+  },
+  "876:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:44.940379"
+  },
+  "877:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:46.086550"
+  },
+  "879:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:47.000920"
+  },
+  "880:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:47.102305"
+  },
+  "881:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:47.212986"
+  },
+  "882:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:47.310899"
+  },
+  "884:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:49.692819"
+  },
+  "886:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:49.815667"
+  },
+  "885:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:49.819906"
+  },
+  "887:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:49.915118"
+  },
+  "883:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:49.918670"
+  },
+  "888:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:50.993387"
+  },
+  "890:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:52.233831"
+  },
+  "892:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:52.370212"
+  },
+  "891:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:52.773266"
+  },
+  "889:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:53.421768"
+  },
+  "893:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:54.976603"
+  },
+  "897:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:55.077668"
+  },
+  "895:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:55.485479"
+  },
+  "896:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:55.723691"
+  },
+  "894:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:55.837298"
+  },
+  "899:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:57.861616"
+  },
+  "900:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:58.502154"
+  },
+  "902:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:58.601946"
+  },
+  "901:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:59.263153"
+  },
+  "903:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:17:59.872653"
+  },
+  "904:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:18:00.280488"
+  },
+  "898:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:18:00.284072"
+  },
+  "905:c22695d662a1b9270a23cf0b63a43efa3b94de97:gemini-2.5-flash": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.5-flash"
+    },
+    "cached_at": "2026-01-16T14:18:00.675221"
+  }
+}

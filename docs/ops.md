@@ -77,6 +77,12 @@ sqlite3 data/exam.db "SELECT count(*) FROM lecture_chunks_fts;"
 - `RETRIEVAL_MODE=bm25` (default) or `off` to disable retrieval.
 - Optional hot backup hook: `AUTO_BACKUP_BEFORE_WRITE=1` and `AUTO_BACKUP_KEEP=30`.
 
+## Embedding config (hybrid_rrf)
+- `EMBEDDING_MODEL_NAME` defaults to `intfloat/multilingual-e5-base`.
+- `EMBEDDING_DIM` must match the model dimension (e.g., 768 for E5 base).
+- `EMBEDDING_TOP_N` controls how many BM25 chunks get embedding rerank (default 300).
+- Rebuild embeddings after any model change: `python scripts/build_embeddings.py --db data/dev.db --rebuild`.
+
 ## Manual verification (no automated tests)
 - [ ] Open `/manage` and confirm CRUD still works (dev only).
 - [ ] Run a known FTS query and check candidate results.

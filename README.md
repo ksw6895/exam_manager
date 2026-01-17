@@ -20,7 +20,7 @@
   python scripts/run_migrations.py --db data/exam.db && python scripts/init_fts.py --db data/exam.db --rebuild
   ```
 - Read-only: `DB_READ_ONLY=1`
-- Retrieval mode: `RETRIEVAL_MODE=bm25` / `RETRIEVAL_MODE=hybrid` (when implemented)
+- Retrieval mode: `RETRIEVAL_MODE=hybrid_rrf` (기본값)
 - AI auto apply: `AI_AUTO_APPLY=false` / `AI_AUTO_APPLY=true`
 - Ops playbook: `docs/ops.md`
 
@@ -216,14 +216,15 @@ python run_local_admin.py
 | --- | --- | --- | --- |
 | SECRET_KEY | 권장 | Flask 세션/보안 키 | 미설정 시 `dev-secret-key-change-in-production` |
 | GEMINI_API_KEY | 조건부 | Gemini API 키 (AI 분류/텍스트 교정 사용 시) | 없음 |
-| GEMINI_MODEL_NAME | 선택 | Gemini 모델명 | `gemini-2.0-flash-lite` |
+| GEMINI_MODEL_NAME | 선택 | Gemini 모델명 | `gemini-3-flash-preview` |
 | AUTO_CREATE_DB | 선택 | (deprecated) 앱 시작 시 `db.create_all()` 자동 실행 | 현재 사용 안 함 |
 | LOCAL_ADMIN_ONLY | 선택 | `/manage` 및 관련 API 로컬호스트 제한 | 값은 `1/true/yes/on` |
 | LOCAL_ADMIN_DB | 선택 | local admin DB 경로 | 미설정 시 `data/admin_local.db` |
 | PDF_PARSER_MODE | 선택 | PDF 파서 선택 (`legacy`/`experimental`) | 기본 `legacy` |
 | FLASK_CONFIG | 선택 | 설정 프로파일 선택 | `default`, `development`, `production`, `local_admin` |
 | DB_READ_ONLY | 선택 | 쓰기 경로 차단 | 기본 False |
-| RETRIEVAL_MODE | 선택 | 검색 모드 | 기본 `bm25` |
+| RETRIEVAL_MODE | 선택 | 검색 모드 | 기본 `hybrid_rrf` |
+| GEMINI_MAX_OUTPUT_TOKENS | 선택 | Gemini 최대 출력 토큰 | 기본 `2048` |
 | AI_AUTO_APPLY | 선택 | AI 자동 반영 | 기본 False |
 | AUTO_BACKUP_BEFORE_WRITE | 선택 | 쓰기 전 핫백업 수행 | 기본 False |
 | AUTO_BACKUP_KEEP | 선택 | 백업 유지 개수 | 기본 30 |
@@ -281,6 +282,24 @@ python run_local_admin.py
 - `/ai/classify/apply`
 - `/ai/classify/recent`
 - `/ai/correct-text`
+
+## AI 분류기 업그레이드 (2026-01-17)
+### Gemini 3.0 Flash 마이그레이션
+- **모델**: `gemini-2.5-flash-lite` → `gemini-3-flash-preview`
+- **검색 모드**: `bm25` → `hybrid_rrf` (BM25 + Semantic RRF 융합)
+- **토큰 설정**: `max_output_tokens=2048`, `thinking_config(include_thoughts=False)`
+
+### 성능 향상
+| 지표 | 기존 | 신규 | 개선 |
+| --- | --- | --- | --- |
+| 정확도 | 73.75% | 85.42% | **+11.67%** |
+| 자동 확정률 | 75.4% | 81.7% | +6.3% |
+| 범위 외 오류 | 5.8% | 1.25% | -4.55% |
+
+### 주요 수정 사항
+- `config.py`: `GEMINI_MAX_OUTPUT_TOKENS` 설정 추가 (기본값 2048)
+- `app/services/ai_classifier.py`: 토큰 설정 및 thinking 비활성화
+- `.env`: `GEMINI_MODEL_NAME`, `RETRIEVAL_MODE` 영구 반영
 
 ## Manual QA 체크리스트
 - [ ] Blocks/Lectures CRUD (Next `/manage/blocks`)

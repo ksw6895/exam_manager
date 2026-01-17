@@ -1,0 +1,3408 @@
+{
+  "582:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "제시된 강의들은 문제에서 묻는 신경근 접합부 질환(아세틸콜린 수용체 자가항체)과 관련된 내용을 포함하고 있지 않습니다.",
+      "study_hint": "신경근 접합부, 아세틸콜린 수용체, 자가면역 질환 관련 내용을 학습하십시오.",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:08:53.268135"
+  },
+  "583:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 9,
+      "confidence": 0.8,
+      "reason": "제시된 문제는 근육 약화와 관련된 증상을 다루고 있으며, 이는 운동 생리학과 직접적으로 관련됩니다. 특히, 근육의 기능 부전과 관련된 내용이 포함되어 있어 해당 강의가 가장 적절합니다.",
+      "study_hint": "운동 생리학 강의의 근육 기능 및 조절 부분을 복습하십시오.",
+      "evidence": [
+        {
+          "lecture_id": 9,
+          "page_start": 1,
+          "page_end": 9,
+          "quote": "운동의 주된 기관 • Respiratory system: 근육에 필요한 산소와 이산화탄소 교환 • Cardiovascular system: 근육에 필요한 영양분과 산소 공급 • Nervous system: 근육 조절 및 기관들의 조율...",
+          "chunk_id": 53
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:08:53.646134"
+  },
+  "578:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 5,
+      "confidence": 0.95,
+      "reason": "문제에서 링거액이 개구리 심장 박동에 미치는 영향과 관련된 질문을 하고 있으며, 강의 '생리학1차 > 근육'에서 링거액의 발명과 칼슘의 역할에 대한 내용이 직접적으로 언급되어 있습니다.",
+      "study_hint": "Review p.12-21 for the discovery of Ringer's solution and the role of calcium in heartbeats.",
+      "evidence": [
+        {
+          "lecture_id": 5,
+          "page_start": 12,
+          "page_end": 21,
+          "quote": "실제로 수축하는 과정 - 링거 링거의 링거액 발명(개구리 심장을 뛰게하는 용액) 이후 칼슘이 심장박동 유지에 필요하다는 것을 밝혀냄 * 2. General mechanism of muscle contraction...",
+          "chunk_id": 31
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:08:53.740741"
+  },
+  "577:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 5,
+      "confidence": 0.95,
+      "reason": "문제에서 ATP 분해 기능을 가진 구조물을 묻고 있으며, 생리학1차 > 근육 강의에서 myosin head의 ATP 분해 과정을 설명하고 있습니다.",
+      "study_hint": "근육 생리학 강의의 p.29-39에서 ATP와 근육 수축의 분자적 메커니즘을 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 5,
+          "page_start": 29,
+          "page_end": 39,
+          "quote": "...Molecular mechanism of muscle contraction ⑤ Contraction의 energy source = ATP head & ATP + myosin activitEld# > 아까 앞에서 설명하신 myosin head에서 ATP를 분해해서 꺾이고 - 엑틴을 당기고...",
+          "chunk_id": 34
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:08:53.745596"
+  },
+  "580:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 5,
+      "confidence": 0.95,
+      "reason": "문제에서 종판전위(end-plate potential)를 묻고 있으며, 강의 '생리학1차 > 근육'에서 종판전위에 대한 설명이 있습니다.",
+      "study_hint": "근육 생리학 강의의 p.57-59에서 종판전위(end plate potential)의 정의와 생성 과정을 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 5,
+          "page_start": 57,
+          "page_end": 59,
+          "quote": "내로 들어옴 → muscle fiber의 membrane potential이 50-70 mV까지 증가함 (end plate potential) - Muscle AP의 threshold: resting membrane potential보다 20-30 mV 높다 - Threshold...",
+          "chunk_id": 38
+        },
+        {
+          "lecture_id": 5,
+          "page_start": 51,
+          "page_end": 56,
+          "quote": "potential E Na +50 0 -50 E K millisecond inside outside Na+ K+ 5. Secretion of acetylcholine by the nerve terminals ③ End plate...",
+          "chunk_id": 37
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:08:54.195851"
+  },
+  "576:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 19,
+      "confidence": 0.9,
+      "reason": "문제에서 묻는 phagocytosis와 pinocytosis의 차이점에 대한 내용이 강의자료에 직접적으로 언급되어 있음.",
+      "study_hint": "p.25-32에서 phagocytosis, pinocytosis, endocytosis의 차이점을 비교하여 학습하십시오.",
+      "evidence": [
+        {
+          "lecture_id": 19,
+          "page_start": 25,
+          "page_end": 32,
+          "quote": "Special phagocytosis, pinocytosis, endocytosis solvent drag 54 27 Figure 11-1 Molecular Biology of the Cell(© Garland Science 2008) 55 Membrane transport – transport of...",
+          "chunk_id": 467
+        },
+        {
+          "lecture_id": 19,
+          "page_start": 19,
+          "page_end": 24,
+          "quote": "Special phagocytosis, pinocytosis, endocytosis solvent drag 48 24",
+          "chunk_id": 466
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:08:54.320956"
+  },
+  "581:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 1,
+      "confidence": 0.9,
+      "reason": "제시된 문항은 물질의 농도에 따른 확산 속도와 관련된 통로의 특징을 묻고 있으며, 이는 생리학1차 > 물질이동 강의에서 다루는 촉진 확산 및 이온 통로의 특성과 직접적으로 관련됩니다. 특히, ATP를 사용하지 않는 점, 특정 자극에 의해 개폐되는 점, 선택적 투과성을 가지는 점 등이 해당 강의에서 설명됩니다.",
+      "study_hint": "물질이동 강의 p.65-76에서 촉진 확산과 이온 통로의 특징을 복습하고, p.38-47에서 농도에 따른 확산의 한계를 확인하세요.",
+      "evidence": [
+        {
+          "lecture_id": 1,
+          "page_start": 65,
+          "page_end": 76,
+          "quote": "촉진 확산 – 이온통로 같은 말 다른 그림 Where is 촉진확산 important? 열리고 닫히고에 따라서 membrane potential이 달라지면서 신호전달이 된다 이온 농도에 따른 평형전위 • Nernst...",
+          "chunk_id": 7
+        },
+        {
+          "lecture_id": 1,
+          "page_start": 38,
+          "page_end": 47,
+          "quote": "같은 기체들 hydrophobic하긴 하지만 열린 통로에 따라 왔다갔다 통로를 열었다 닫았다로 조절 hydrophobic하니까 통로가 필요 농도가 높아지더라도 어느 지점에서는 한계가 존재 Diffusion (확산) Diffusion...",
+          "chunk_id": 5
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:08:54.707341"
+  },
+  "579:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 1,
+      "confidence": 0.95,
+      "reason": "제시된 문항은 세포 내외 물질 이동 방식에 대한 이해를 묻고 있으며, 선택지들은 능동 수송, 촉진 확산, 단순 확산, 세포외배출 등 다양한 수송 방식을 포함합니다. 강의 '생리학1차 > 물질이동'에서는 이러한 다양한 물질 이동 방식들을 상세히 다루고 있으며, 특히 Na+, K+, glucose 등의 구체적인 물질들의 이동 기전을 설명하고 있어 문제 해결에 직접적인 도움을 줄 수 있습니다.",
+      "study_hint": "물질이동 강의 p.48-64에서 다양한 수동/능동 수송 방식의 정의와 특징을 복습하고, p.102-119에서 Na+, K+, glucose의 구체적인 이동 기전을 확인하세요.",
+      "evidence": [
+        {
+          "lecture_id": 1,
+          "page_start": 48,
+          "page_end": 64,
+          "quote": "것은 facilitated 안쪽으로 들어가는 것은 active 수동이동 - 단순확산 항상 열려있으면 simple diffusion pore이 열었다가 닫으면 촉진확산 water pore (aquaporin) - water은 hydrophilic하므로, 그냥 세포안팎 으로...",
+          "chunk_id": 6
+        },
+        {
+          "lecture_id": 1,
+          "page_start": 102,
+          "page_end": 119,
+          "quote": "K+ channel blocker Na+ channel • Na channel – facilitated diffusion • Na –K pump – 1st active transport • Na-co transport – 2nd active transport – Na-glucose – Na...",
+          "chunk_id": 9
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:08:55.589019"
+  },
+  "588:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 2,
+      "confidence": 0.95,
+      "reason": "제시된 문항은 resting membrane potential 형성에 대한 기여도를 묻고 있으며, 강의 '생리학1차 > 전기적현상'에서는 resting membrane potential의 형성에 sodium, potassium 이온의 확산과 Na+/K+ pump가 기여한다고 명시하고 있습니다.",
+      "study_hint": "Review p.22-25 for the definition and compare with related concepts.",
+      "evidence": [
+        {
+          "lecture_id": 2,
+          "page_start": 22,
+          "page_end": 25,
+          "quote": "...membrane potential is caused by diffusion of both sodium and potassium ions plus pumping of both these ions by the Na+-K+ pump. (-90mV...",
+          "chunk_id": 14
+        },
+        {
+          "lecture_id": 2,
+          "page_start": 18,
+          "page_end": 21,
+          "quote": "...Na+ - K+ Pump Main • 막 양쪽의 이온 농도 차이로 인해 resting membrane potential 이 발생하는데 이온 농도 차이가 만들어지는 기전에는 2가지가 있습니다 ① Na...",
+          "chunk_id": 13
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:08:57.201690"
+  },
+  "586:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 5,
+      "confidence": 0.9,
+      "reason": "문제에서 신장 혈관 조직의 면역형광 염색 사진과 녹색으로 염색된 조직 구성 물질 중 칼슘 결합에 대해 묻고 있습니다. 녹색으로 염색된 조직은 α-smooth muscle actin이며, 평활근의 수축에 칼슘이 중요한 역할을 합니다. 강의 '생리학1차 > 근육'에서는 평활근의 수축 기전에 대한 내용을 다루므로 가장 관련성이 높습니다.",
+      "study_hint": "평활근 수축 기전과 칼슘의 역할을 p.105-115에서 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 5,
+          "page_start": 105,
+          "page_end": 108,
+          "quote": "Contraction of smooth muscle ① Skeletal muscle vs Smooth muscle vs Cardiac muscle 골격근 평활근 심근 골격에 부착되어 있음 내장기관 벽, 혈관, 피부 심장에...",
+          "chunk_id": 47
+        },
+        {
+          "lecture_id": 5,
+          "page_start": 112,
+          "page_end": 115,
+          "quote": "신경, 호르몬, 근육 자체의 신장 (stretch)에 의해 조절됨 신경, 호르몬, 근육 자체가 당겨지면서 모두 조절 가능 ① Neuromuscular junction of smooth muscle ⓐ Physiological...",
+          "chunk_id": 49
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:08:57.203864"
+  },
+  "589:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 2,
+      "confidence": 0.9,
+      "reason": "문제에서 action potential의 propagation 방향과 관련된 기전을 묻고 있으며, lecture 2에서는 실제 신경세포에서 action potential이 한 방향으로만 퍼져나가는 이유와 voltage gated ion channels에 대해 설명하고 있어 가장 관련성이 높습니다.",
+      "study_hint": "전기적현상 강의자료 p.42-43에서 action potential의 propagation과 관련된 내용을, p.29-33에서 voltage gated ion channels에 대한 내용을 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 2,
+          "page_start": 42,
+          "page_end": 43,
+          "quote": "Propagation 그렇지만 실제 신경세포에서는 한 방향으로만 Action Potential이 퍼져나간다. • As demonstrated in Figure 5-11, an excitable membrane has no single direction of propagation...",
+          "chunk_id": 20
+        },
+        {
+          "lecture_id": 2,
+          "page_start": 29,
+          "page_end": 33,
+          "quote": "Voltage gated ion channels are involved Action potential stages & voltage gated ion channels 뉴런에서 AP의 Stage와, 관련된 Voltage gated ion channel을 보여주는 그림 φ...",
+          "chunk_id": 16
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:08:57.682521"
+  },
+  "590:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883e699550 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:00.838987"
+  },
+  "591:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883e66a1b0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:01.010301"
+  },
+  "592:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883e6b3500 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:01.127887"
+  },
+  "593:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883e6d64e0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:01.481032"
+  },
+  "594:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883e6de7e0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:02.409853"
+  },
+  "596:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883e6dd460 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:04.043643"
+  },
+  "595:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883e6ff8f0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:04.055624"
+  },
+  "597:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fa25490 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:04.487867"
+  },
+  "598:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fa25bb0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:07.672480"
+  },
+  "599:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fa32390 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:07.879408"
+  },
+  "600:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fa31550 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:07.953139"
+  },
+  "601:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fa3d3a0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:08.285406"
+  },
+  "602:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fa3ee10 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:09.195856"
+  },
+  "603:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883e61e180 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:10.874874"
+  },
+  "604:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fa55cd0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:10.893394"
+  },
+  "605:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fa24770 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:11.220233"
+  },
+  "606:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fa731d0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:14.456275"
+  },
+  "607:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fa85430 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:14.717889"
+  },
+  "608:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fa84bf0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:14.786946"
+  },
+  "609:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fa8db50 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:15.085485"
+  },
+  "610:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883faaadb0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:15.974535"
+  },
+  "612:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883faa8950 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:17.729792"
+  },
+  "611:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fac9670 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:17.808229"
+  },
+  "613:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883faa92e0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:18.024569"
+  },
+  "614:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fadf050 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:21.203033"
+  },
+  "615:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fac9f70 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:21.537219"
+  },
+  "616:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fa8e6f0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:21.626615"
+  },
+  "617:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fa56630 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:21.900722"
+  },
+  "619:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883fb0b110 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:22.781892"
+  },
+  "620:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842a91a30 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:24.535796"
+  },
+  "621:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842a90e30 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:24.627404"
+  },
+  "622:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842ab4260 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:24.806548"
+  },
+  "623:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842ab6f60 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:27.995950"
+  },
+  "624:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842aca8a0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:28.349186"
+  },
+  "625:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842acb800 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:28.479057"
+  },
+  "626:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842ae1e50 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:28.700857"
+  },
+  "627:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842af7f20 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:29.573742"
+  },
+  "628:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842b0b020 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:31.333072"
+  },
+  "629:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842b093a0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:31.479026"
+  },
+  "630:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842b180e0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:31.622524"
+  },
+  "631:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883ce8e0f0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:34.786828"
+  },
+  "632:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883ce8e060 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:35.131925"
+  },
+  "633:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883e6deed0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:35.322885"
+  },
+  "634:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842ae2630 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:35.527739"
+  },
+  "635:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883ceed640 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:36.443399"
+  },
+  "636:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883ceb3fb0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:38.147211"
+  },
+  "637:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883c9f27b0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:38.307200"
+  },
+  "638:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883ceb2c90 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:38.436903"
+  },
+  "639:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842b18470 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:41.544534"
+  },
+  "640:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883faf7c50 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:41.919186"
+  },
+  "641:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842b19ca0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:42.106382"
+  },
+  "642:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842b1b2f0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:42.343643"
+  },
+  "643:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844b30860 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:43.227254"
+  },
+  "644:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842b7c9b0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:44.955740"
+  },
+  "645:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883ceb30e0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:45.141675"
+  },
+  "646:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842b7c0b0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:45.241736"
+  },
+  "647:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844b320f0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:48.282556"
+  },
+  "649:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844b4c530 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:48.732583"
+  },
+  "650:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844b4e360 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:48.929913"
+  },
+  "651:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844b68bf0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:49.157760"
+  },
+  "652:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844b6ae70 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:49.997681"
+  },
+  "654:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844b912b0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:51.945620"
+  },
+  "655:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844b79520 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:52.080561"
+  },
+  "653:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 17,
+      "confidence": 0.95,
+      "reason": "문제에서 변연계와 편도의 역할을 묻고 있으며, 강의 '생리학2차 > 감정 및 동기'에서 변연계의 기능과 감정 형성에 대한 내용을 다루고 있습니다.",
+      "study_hint": "변연계의 기능과 관련된 p.19-27을 복습하고, 편도의 역할을 추가적으로 학습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 17,
+          "page_start": 19,
+          "page_end": 27,
+          "quote": "피질 및 피질하 구조물로 구성된다. OC PHI HANS 기능  감정의 형성과 표현에 관여한다.  타고난 본능적 행동 (생존이나 성과 관련)  \" 동기화 및...",
+          "chunk_id": 353
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:54.089479"
+  },
+  "657:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 3,
+      "confidence": 0.95,
+      "reason": "문제는 관상 순환의 특징을 묻고 있으며, 강의 '생리학1차 > 심장(3/8)'에서는 관상동맥의 입구 위치, 후하행동맥의 분지, 심박수와 관상 순환 혈류량의 관계 등을 다루고 있어 가장 관련성이 높습니다.",
+      "study_hint": "관상동맥의 해부학적 특징 (p.13-17) 및 심장 판막과 관상동맥 혈류의 관계 (p.34-38)를 복습하십시오.",
+      "evidence": [
+        {
+          "lecture_id": 3,
+          "page_start": 34,
+          "page_end": 38,
+          "quote": "...심장 판막이 닫힐 때 발생하는 소리  수축기 이상 심음: 박출째깍음 (ejection click) fValve 열릴 때 S 연달아Ec 에 대동맥판막,열릴...",
+          "chunk_id": 162
+        },
+        {
+          "lecture_id": 3,
+          "page_start": 13,
+          "page_end": 17,
+          "quote": "...artery)  뒤\"내림 동맥(후하행동맥, posterior descending artery) • 꼭것은것은...",
+          "chunk_id": 140
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:54.726889"
+  },
+  "660:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 3,
+      "confidence": 0.9,
+      "reason": "심장의 구조와 기능 (섬유골격의 절연 기능, 심장막, 심근의 전기적 연결, 유산소 대사)에 대한 내용을 다루고 있어 가장 적합합니다.",
+      "study_hint": "심장(3/8) 강의자료의 p.1-5, p.10-12를 복습하여 심장의 구조와 기능에 대한 설명을 확인하세요.",
+      "evidence": [
+        {
+          "lecture_id": 3,
+          "page_start": 10,
+          "page_end": 12,
+          "quote": "...심장막에섬유 심장막(fibrous pericardium)  심장 눌림증(cardiac tamponade) 심낭심장의...",
+          "chunk_id": 139
+        },
+        {
+          "lecture_id": 3,
+          "page_start": 1,
+          "page_end": 5,
+          "quote": "...체표 심전도는 심장의 동심방 결절에서 발생된 활동전위가 심장 전체에 전도되는 심장의 전기적 현상을 신체표면에서 ->심방과 심실세포의 활동전위가 시간대별로...",
+          "chunk_id": 147
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:55.750277"
+  },
+  "663:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 3,
+      "confidence": 0.95,
+      "reason": "심전도 판독 간격(PR, QRS, RR 간격)에 대한 질문이므로, 심전도 관련 내용을 다루는 '생리학1차 > 심장(3/8)' 강의가 가장 적절합니다.",
+      "study_hint": "p.23-28에서 심전도 판독 간격(PR, QRS, RR interval)에 대한 내용을 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 3,
+          "page_start": 23,
+          "page_end": 28,
+          "quote": "심전도 판독 간격 - Intervals  PR interval = P wave + PR segment 방실결절의QRS interval = QRS complex only 탈분극이...",
+          "chunk_id": 152
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:57.107553"
+  },
+  "661:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 3,
+      "confidence": 0.95,
+      "reason": "문제는 심장의 활동 전위 전파에 대한 이해를 묻고 있으며, 강의 ID 3은 심장에서의 활동 전위 전도 속도와 방실 결절에서의 전도 속도에 대한 내용을 포함하고 있어 가장 관련성이 높습니다.",
+      "study_hint": "심장(3/8) 강의의 p.1-9를 복습하여 심장의 활동 전위 전도 속도에 영향을 미치는 요인을 확인하고, p.37-40에서 심장박동 조율기의 역할에 대해 학습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 3,
+          "page_start": 1,
+          "page_end": 9,
+          "quote": " 심장에서 활동전위의 전도속도에 영향을 미치는 인자에 대해 설명한다.  방실 결절(atrioventricular node)에서 활동전위의 전도속도가 느린 이유를 설명 한다. 학습목표  심전도...",
+          "chunk_id": 138
+        },
+        {
+          "lecture_id": 3,
+          "page_start": 37,
+          "page_end": 40,
+          "quote": " 특수한 상황에서 심장박동 조율기 역할을 하며, 이 경우 심방과 심실의 정상...",
+          "chunk_id": 145
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:58.148837"
+  },
+  "656:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 3,
+      "confidence": 0.95,
+      "reason": "문제는 심장에 분포하는 교감신경계에 대한 설명으로, 강의 '생리학1차 > 심장(3/8)'에서는 심장 활동전위, 박동 조절 기전, 동심방결절 활동전위 발생 빈도 조절 등을 다루고 있어 가장 관련성이 높습니다.",
+      "study_hint": "Review p.41-46 for 심장 활동전위의 기능 심장의 박동 조절 기전 SA Node  동심방결절 활동전위 발생 빈도 조절 기울기  phase 4 의 탈분극 속도 (slow depolarization and p.37-40 for 동심방결절에서의 활동전위 발생기전  Phase 0  L-type Ca2+ channel.",
+      "evidence": [
+        {
+          "lecture_id": 3,
+          "page_start": 41,
+          "page_end": 46,
+          "quote": "심장 활동전위의 기능 심장의 박동 조절 기전 SA Node  동심방결절 활동전위 발생 빈도 조절 기울기  phase 4 의 탈분극 속도 (slow depolarization",
+          "chunk_id": 146
+        },
+        {
+          "lecture_id": 3,
+          "page_start": 37,
+          "page_end": 40,
+          "quote": "동심방결절에서의 활동전위 발생기전  Phase 0  L-type Ca2+ channel 의 활성화 속도가 Na+ channel 보다 느려 Phase 0의 upstroke 기울기가 심근세포의 활동전위보다",
+          "chunk_id": 145
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:58.662911"
+  },
+  "665:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 3,
+      "confidence": 0.9,
+      "reason": "심전도, 서맥, 심실 전기축에 대한 내용이 생리학1차 > 심장(3/8) 강의에 포함되어 있습니다.",
+      "study_hint": "심전도 파형 및 시간 간격 관련 내용을 p.1-5, p.15-17에서 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 3,
+          "page_start": 1,
+          "page_end": 5,
+          "quote": "...심방의심실의심전도 기록 표준화 x축;...",
+          "chunk_id": 147
+        },
+        {
+          "lecture_id": 3,
+          "page_start": 15,
+          "page_end": 17,
+          "quote": "...0.1mV 심전도 파형 및 시간 간격 •정상적으로는...",
+          "chunk_id": 150
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:58.886663"
+  },
+  "662:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844b7bad0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:58.898089"
+  },
+  "664:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 3,
+      "confidence": 0.9,
+      "reason": "문제에서 좌심실비대의 심전도 소견을 묻고 있으며, 강의 '생리학1차 > 심장(3/8)'에서 좌심실비대와 관련된 내용이 언급되어 있습니다.",
+      "study_hint": "p.33-39에서 좌심실비대와 관련된 심전도 변화를 복습하고, p.6-9에서 심장 앞 유도(precordial lead)의 위치를 확인하세요.",
+      "evidence": [
+        {
+          "lecture_id": 3,
+          "page_start": 33,
+          "page_end": 39,
+          "quote": "...좌심실비대로terminalVentricular hypertrophy) 각차단(bundle branch block) ->Left ...",
+          "chunk_id": 154
+        },
+        {
+          "lecture_id": 3,
+          "page_start": 6,
+          "page_end": 9,
+          "quote": "...ail  aVL =  aVF =  심장 앞 유도 (precordial lead) 심장...",
+          "chunk_id": 148
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:58.976722"
+  },
+  "659:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 3,
+      "confidence": 0.95,
+      "reason": "심장 부위별 활동 전위 형성에 관여하는 이온 전류에 대한 질문이므로, 심장 활동전위 형성에 관여하는 이온 전류를 다루는 강의가 가장 적절함.",
+      "study_hint": "심장(3/8) 강의의 p.30-33, p.41-46을 복습하여 심실근과 동심방결절의 활동 전위 형성에 관여하는 이온 전류를 확인하십시오.",
+      "evidence": [
+        {
+          "lecture_id": 3,
+          "page_start": 30,
+          "page_end": 33,
+          "quote": "심장 활동전위 형성에 관여하는 이온 전류  이온전류 형성에 관여하는 세포막 단백질 전자...",
+          "chunk_id": 143
+        },
+        {
+          "lecture_id": 3,
+          "page_start": 41,
+          "page_end": 46,
+          "quote": "...나 심장 활동전위의 기능 Pace동심방결절의...",
+          "chunk_id": 146
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:58.981844"
+  },
+  "658:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 3,
+      "confidence": 0.95,
+      "reason": "문제에서 심방과 심실을 연결하는 유일한 통로 및 주된 박동 조율기 역할을 묻고 있으며, 강의 '생리학1차 > 심장(3/8)'에서 방실 결절(AV node)이 심방과 심실을 연결하는 유일한 통로이며, 동심방 결절(SA node)이 주된 박동 조율기 역할을 한다는 내용을 포함하고 있습니다.",
+      "study_hint": "p.15-17, p.37-40을 참고하여 심장의 흥분 전도 경로와 각 부위의 역할을 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 3,
+          "page_start": 37,
+          "page_end": 40,
+          "quote": "...AV lNode D 정상 심장에서 심방과 심실을 전기적으로 연결하는 유일한 통로이다. ->흥분 전도 속도는 0.05...",
+          "chunk_id": 145
+        },
+        {
+          "lecture_id": 3,
+          "page_start": 15,
+          "page_end": 17,
+          "quote": "... 방실 결절 전도 시간, 0.12~0.20초 기억하라고심방과심실을연결하는유일한...",
+          "chunk_id": 150
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:09:59.082319"
+  },
+  "666:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 3,
+      "confidence": 0.9,
+      "reason": "심전도 판독은 심장 박동수, 심실 전기축, 방실전도, 심방 확장 등 다양한 요소를 포함하며, 강의 ID 3은 심장 박동수와 심실 전기축에 대한 정보를 제공하므로 가장 관련성이 높습니다.",
+      "study_hint": "심전도 판독과 관련된 내용은 생리학1차 > 심장(3/8) 강의의 p.10-14, p.18-22를 참고하십시오.",
+      "evidence": [
+        {
+          "lecture_id": 3,
+          "page_start": 18,
+          "page_end": 22,
+          "quote": "...달라진다. 심실의가장 긴 Q-T간격/R-R간격, 심장 박동수 따...",
+          "chunk_id": 151
+        },
+        {
+          "lecture_id": 3,
+          "page_start": 10,
+          "page_end": 14,
+          "quote": "...alk alh 각각의전기축은30~120도...",
+          "chunk_id": 149
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:00.248230"
+  },
+  "667:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28842b19fa0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:04.895363"
+  },
+  "668:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844b33f50 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:05.454352"
+  },
+  "670:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844bb9df0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:05.793363"
+  },
+  "669:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844bd05c0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:05.844886"
+  },
+  "671:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844bd0a40 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:05.878756"
+  },
+  "672:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844bd20c0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:05.937978"
+  },
+  "673:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844bd32c0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:06.023244"
+  },
+  "674:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844be6e10 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:07.037038"
+  },
+  "675:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847b99760 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:11.667663"
+  },
+  "676:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844c0e060 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:12.241852"
+  },
+  "677:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844be5670 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:12.663995"
+  },
+  "679:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844bb9a00 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:12.767688"
+  },
+  "678:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883d4120c0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:12.794293"
+  },
+  "680:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844babc80 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:12.815765"
+  },
+  "681:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844b68ad0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:12.872325"
+  },
+  "682:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847bc6480 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:13.815521"
+  },
+  "683:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847bf7b60 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:18.439371"
+  },
+  "684:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847c082f0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:19.003977"
+  },
+  "685:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847c0ac60 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:19.538908"
+  },
+  "686:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847c21940 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:19.653847"
+  },
+  "687:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847c21f10 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:19.682584"
+  },
+  "688:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847c22a80 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:19.703095"
+  },
+  "689:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847c23cb0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:19.745185"
+  },
+  "690:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847c61490 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:20.574732"
+  },
+  "691:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847c4dbb0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:25.217117"
+  },
+  "692:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847be2960 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:25.793515"
+  },
+  "693:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847be27e0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:26.419265"
+  },
+  "694:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847c4e1b0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:26.550906"
+  },
+  "695:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847bc5ac0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:26.613819"
+  },
+  "696:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847bc53d0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:26.637969"
+  },
+  "697:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847ba9820 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:26.657822"
+  },
+  "698:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847c86d50 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:27.353209"
+  },
+  "699:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847c85d30 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:32.005057"
+  },
+  "700:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849c32d80 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:32.555417"
+  },
+  "701:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849c4c470 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:33.233549"
+  },
+  "702:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849c4ea50 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:33.411177"
+  },
+  "703:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849c4ede0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:33.474628"
+  },
+  "704:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849c4f8f0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:33.501232"
+  },
+  "705:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849c60440 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:33.563610"
+  },
+  "706:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849c754f0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:34.119369"
+  },
+  "707:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849c90560 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:38.796875"
+  },
+  "708:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849c77170 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:39.325624"
+  },
+  "709:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849cae690 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:40.068921"
+  },
+  "710:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849cad220 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:40.272701"
+  },
+  "712:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849cc9280 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:40.376583"
+  },
+  "711:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849cc9d90 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:40.383656"
+  },
+  "713:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849cca8d0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:40.429688"
+  },
+  "714:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849cf4650 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:40.893722"
+  },
+  "715:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849d27380 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:45.581535"
+  },
+  "716:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849d0cef0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:46.098258"
+  },
+  "717:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849d0d220 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:46.896869"
+  },
+  "718:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849cea570 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:47.127674"
+  },
+  "719:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849c75af0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:47.251667"
+  },
+  "720:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849c63620 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:47.295576"
+  },
+  "721:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849c62420 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:47.336942"
+  },
+  "722:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849d27f50 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:47.678918"
+  },
+  "812:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bd240b0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:54.192644"
+  },
+  "723:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 9,
+      "confidence": 0.95,
+      "reason": "문제에서 묻는 운동능력의 3대 요소 (strength, power, endurance)가 해당 강의에서 핵심적으로 다루어지고 있습니다.",
+      "study_hint": "p.10-12를 통해 근육 운동능력의 3요소 정의를 복습하고, 각 요소의 측정 단위와 glycogen과의 관계를 확인하세요.",
+      "evidence": [
+        {
+          "lecture_id": 9,
+          "page_start": 10,
+          "page_end": 12,
+          "quote": "Power, and Endurance of Muscles 운동을 할 때 가장 핵심이 되는 장기 : 골격근 - 근육의 운동능력은 Strength, Power, Endurance로 구분한다. • The final common determinant of...",
+          "chunk_id": 54
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:54.937705"
+  },
+  "724:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 9,
+      "confidence": 0.95,
+      "reason": "문제에서 묻는 에너지 대사 시스템(phosphagen system, glycogen–lactic acid system, aerobic system)과 관련된 내용이 강의자료에 명시적으로 언급되어 있으며, 특히 운동 생리학과 관련된 내용이므로 가장 적절한 강의로 판단됩니다.",
+      "study_hint": "운동 생리학 강의자료의 1-9페이지를 참고하여 phosphagen system, glycogen–lactic acid system, aerobic system의 특징을 복습하고, 25-27페이지에서 이 시스템들이 어떻게 상호작용하는지 확인하세요.",
+      "evidence": [
+        {
+          "lecture_id": 9,
+          "page_start": 1,
+          "page_end": 9,
+          "quote": "...Strength /Power/Endurance Part 1 EG ZEHXt 1) Phosphagen System ~ : Glycogen-Lactic Acid System 2) ↑ Muscular System 3) Aerobic System Debt Oxygen Recovery System...",
+          "chunk_id": 53
+        },
+        {
+          "lecture_id": 9,
+          "page_start": 25,
+          "page_end": 27,
+          "quote": "...the glycogen–lactic acid system can be used to reconstitute phosphocreatine and ATP. (• Energy from the oxidative metabolism of the aerobic system can then...",
+          "chunk_id": 60
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:56.261403"
+  },
+  "813:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 6,
+      "confidence": 0.95,
+      "reason": "문제에서 점막의 움직임을 조절하고 점막샘의 분비 세포를 신경 지배한다는 설명은 소화 생리학 강의에서 다루는 내용과 일치합니다.",
+      "study_hint": "소화 생리학 강의의 p.20-23을 복습하여 점막의 움직임 조절과 분비 세포의 신경 지배에 대한 내용을 확인하세요.",
+      "evidence": [
+        {
+          "lecture_id": 6,
+          "page_start": 20,
+          "page_end": 23,
+          "quote": "...innervation • 부교감  It regulates movements of the mucosa and Mucosainnervates secretory cells of mucosal glands 분비를...",
+          "chunk_id": 82
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:56.703896"
+  },
+  "814:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 6,
+      "confidence": 1.0,
+      "reason": "문제에서 혀의 등쪽에서 triglycerides 소화를 시작하는 효소를 분비하는 샘에 대해 묻고 있으며, 생리학1차 > 소화 강의자료 p.48-50에 정확히 일치하는 내용이 제시되어 있습니다.",
+      "study_hint": "p.48-50을 복습하여 lingual lipase의 기능과 triglycerides 소화 과정을 자세히 이해하십시오.",
+      "evidence": [
+        {
+          "lecture_id": 6,
+          "page_start": 48,
+          "page_end": 50,
+          "quote": " On the dorsum of the tongue are glands that secrete lingual lipase, which initiates digestion of triglycerides Lipid의...",
+          "chunk_id": 87
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:57.012306"
+  },
+  "725:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 9,
+      "confidence": 0.95,
+      "reason": "문제는 운동 시 에너지원 사용 및 회복 과정을 다루고 있으며, 강의 '생리학1차 > 운동'은 ATP 고갈, 에너지 공급원, 운동 후 회복 등 관련 내용을 포함하고 있어 가장 적합합니다.",
+      "study_hint": "운동 생리학 강의의 p.14-27을 검토하여 ATP의 역할, 에너지 시스템(phosphocreatine, glycogen-lactic acid, aerobic system)의 작동 방식, 그리고 운동 후 에너지원 회복 과정을 자세히 학습하십시오.",
+      "evidence": [
+        {
+          "lecture_id": 9,
+          "page_start": 25,
+          "page_end": 27,
+          "quote": "...stores of the muscles. • 장기간 강도 높은 운동을 하면 대량의 에너지가 소모되기 때문에 가장 중요한 에너지 공 급원은 aerobic system이다. • 이런 경우에 운동이 끝났다고...",
+          "chunk_id": 60
+        },
+        {
+          "lecture_id": 9,
+          "page_start": 14,
+          "page_end": 16,
+          "quote": "...여러 종류의 에너지원을 산화시키면서 ATP가 발생한다. continuous supply of ATP in the muscle fibers. • 저장된 ATP는 3초 이내에 고갈되기 때문에 운동 을 유지하기 위해서...",
+          "chunk_id": 56
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:57.014845"
+  },
+  "728:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 9,
+      "confidence": 0.9,
+      "reason": "문제는 운동선수의 훈련을 통한 운동능력 향상에 관한 것이다. 생리학1차 > 운동 강의는 훈련을 통해 근육이 어떻게 변할 수 있는지에 대해 다루므로 가장 적합하다.",
+      "study_hint": "운동 생리학 강의의 p.10-12에서 근육의 변화를, p.43-45에서 호흡량 증가 부분을 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 9,
+          "page_start": 10,
+          "page_end": 12,
+          "quote": "...시스템 변화 • 훈련을 통해 근육이 어떻게 변할 수 있는지에 대하여 알아본다 ¥ Strength, Power, and Endurance of Muscles 운동을 할 때 가장 핵심이 되는 장기...",
+          "chunk_id": 54
+        },
+        {
+          "lecture_id": 9,
+          "page_start": 43,
+          "page_end": 45,
+          "quote": "...들이마신 산소를 어떻게 섭취할 것인가 • 훈련을 통해 호흡량이 증가할 수 있다. 그 외의 다른 호흡 관련 지표에 대하여 알아본다 • 운동량이 증가할 때에 증가할 수...",
+          "chunk_id": 68
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:57.215951"
+  },
+  "726:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 9,
+      "confidence": 0.95,
+      "reason": "문제에서 묻는 oxygen debt 현상에 대한 설명이 강의자료에 명확하게 제시되어 있음. 특히, 운동 후 산소 부채의 개념과 관련된 에너지 보충 과정에 대한 설명이 일치함.",
+      "study_hint": "운동 생리학 강의자료 p.25-28을 복습하여 oxygen debt의 정의, 발생 시점, 그리고 alactacid 및 lactic acid oxygen debt의 개념을 정확히 이해하십시오.",
+      "evidence": [
+        {
+          "lecture_id": 9,
+          "page_start": 25,
+          "page_end": 27,
+          "quote": "...가장 먼저 회복되어야 한다. 그런 과정에서 필요한 에너지를 aerobic system을 통해 보충 하게 되는 현상을 oxygen debt 이라고 한다 • 따라서 운동을 마친 이후에 oxygen...",
+          "chunk_id": 60
+        },
+        {
+          "lecture_id": 9,
+          "page_start": 28,
+          "page_end": 28,
+          "quote": "Oxygen Debt 운동 초기에 Aerobic System이 안정적으로 작동하기까지를 책임지는 에너지원 운동 후에는 가장 먼저 보충된다. 먼저 당겨쓰고 나중에 갚아야 하는 느낌이라 Debt로 표현한다. • The...",
+          "chunk_id": 61
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:57.424663"
+  },
+  "815:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 6,
+      "confidence": 0.95,
+      "reason": "식도의 역할은 점액을 분비하고 음식을 위로 운반하는 것인데, 이는 소화 강의에서 다루는 내용입니다.",
+      "study_hint": "소화 강의의 p.59-63을 검토하여 식도의 기능에 대해 자세히 알아보세요.",
+      "evidence": [
+        {
+          "lecture_id": 6,
+          "page_start": 59,
+          "page_end": 63,
+          "quote": "...differences  The role of the esophagus is to secrete mucus and transport food to the stomach Esophagus KNU  Collapsed muscular tube 자기들끼리...",
+          "chunk_id": 89
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:57.427830"
+  },
+  "727:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 9,
+      "confidence": 0.9,
+      "reason": "문제에서 근육이 사용하는 영양소에 대해 묻고 있으며, 강의 '생리학1차 > 운동'에서는 운동 시 근육이 사용하는 에너지원에 대해 자세히 다루고 있습니다. 특히 탄수화물, 지방, 단백질의 사용에 대한 설명이 문제의 선택지와 관련이 깊습니다.",
+      "study_hint": "운동 생리학 강의의 에너지원 관련 부분을 복습하세요. 특히 p.31-32를 참고하여 탄수화물, 지방, 단백질의 사용 비율을 확인하고, p.14-16에서 지구력과 에너지원의 관계를 이해하는 것이 중요합니다.",
+      "evidence": [
+        {
+          "lecture_id": 9,
+          "page_start": 31,
+          "page_end": 32,
+          "quote": "이렇게 순차적으로 사용해도 체내의 에너지원을 다 사용하는데 4-5시간밖에 안 걸린다. • In addition to the use of a large amount of carbohydrates by the...",
+          "chunk_id": 63
+        },
+        {
+          "lecture_id": 9,
+          "page_start": 14,
+          "page_end": 16,
+          "quote": "운동을 얼마나 지속할 수 있는가? 근육 자체의 능력보다 근육이 사용하는 에너지원에 의해 결정된다. 고탄수화물 식단에서 지구력이 증가 • The corresponding amounts of glycogen stored in...",
+          "chunk_id": 56
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:57.640250"
+  },
+  "816:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 6,
+      "confidence": 0.95,
+      "reason": "문제에서 음식물을 섞고 보관하며, 단백질 소화를 시작하고, 중성지방 소화를 지속하여 bolus를 액체로 변환시키는 장소를 묻고 있으며, 이는 위(stomach)의 기능에 해당합니다. 강의 '생리학1차 > 소화'에서는 위(stomach)의 기능에 대한 설명이 있습니다.",
+      "study_hint": "소화 강의의 1-7페이지를 복습하여 위(stomach)의 기능과 소화 과정에 대해 자세히 알아보세요.",
+      "evidence": [
+        {
+          "lecture_id": 6,
+          "page_start": 1,
+          "page_end": 7,
+          "quote": "...ends at the pyloric 유문괄약근 sphincter  It serves as a mixing and holding area for food, begins the digestion of proteins, 단백질의...",
+          "chunk_id": 91
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:10:59.096929"
+  },
+  "817:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 6,
+      "confidence": 0.95,
+      "reason": "문제에서 G 세포가 분비하는 호르몬과 위 활동성 증진에 대해 묻고 있으며, 강의 '생리학1차 > 소화'에서 G 세포가 gastrin 호르몬을 분비하여 위 활동성을 증진시킨다는 내용이 명확하게 제시되어 있습니다.",
+      "study_hint": "소화 생리 lecture의 p.8-12, p.55-60을 복습하여 gastrin 호르몬의 역할과 Zollinger-Ellison Syndrome과의 연관성을 확인하십시오.",
+      "evidence": [
+        {
+          "lecture_id": 6,
+          "page_start": 8,
+          "page_end": 12,
+          "quote": "G cells secrete the 1. Gcellssecretehormone gastrin into the bloodstream (위활동성 증진)  Zollinger-Ellison Syndrome is...",
+          "chunk_id": 92
+        },
+        {
+          "lecture_id": 6,
+          "page_start": 55,
+          "page_end": 60,
+          "quote": "protein cause G cells secretion of gastrin into Gastricsecrete bloodstream  gastrin hormone increases stomach glandular *gastrin은...",
+          "chunk_id": 110
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:00.584787"
+  },
+  "819:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bd3bc50 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:03.872227"
+  },
+  "818:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bd38da0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:03.890348"
+  },
+  "820:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bd25100 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:04.102961"
+  },
+  "821:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bcfb890 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:04.346647"
+  },
+  "822:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bcfabd0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:04.372102"
+  },
+  "823:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849c62330 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:04.530852"
+  },
+  "824:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bd04ce0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:05.908007"
+  },
+  "825:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bd5fda0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:07.346048"
+  },
+  "826:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bd5ee70 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:10.699221"
+  },
+  "827:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bd5ec90 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:10.731859"
+  },
+  "828:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bd77140 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:10.991320"
+  },
+  "829:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bd87020 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:11.223180"
+  },
+  "830:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bd87fe0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:11.274568"
+  },
+  "831:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bda9d30 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:11.369200"
+  },
+  "832:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884ed4a2d0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:12.681591"
+  },
+  "833:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bdbdd60 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:14.129058"
+  },
+  "835:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bd05e20 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:17.533018"
+  },
+  "834:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bcd8950 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:17.543457"
+  },
+  "838:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884bd5ccb0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:17.808939"
+  },
+  "839:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884ed48830 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:18.115710"
+  },
+  "840:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884ed5cd40 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:18.167650"
+  },
+  "841:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884ed5e630 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:18.225864"
+  },
+  "842:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884ed8dca0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:19.436891"
+  },
+  "843:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884eda5eb0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:20.921385"
+  },
+  "844:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884edb4fe0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:24.341487"
+  },
+  "845:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884eda5820 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:24.370243"
+  },
+  "846:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884ed8c8c0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:24.617879"
+  },
+  "847:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884edc54f0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:24.982518"
+  },
+  "848:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884edb5250 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:25.053723"
+  },
+  "849:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884ed73a70 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:25.096746"
+  },
+  "850:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28849cf4da0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:26.265432"
+  },
+  "851:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884edc7260 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:27.684610"
+  },
+  "852:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884eddef60 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:31.187102"
+  },
+  "853:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884eddfa70 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:31.217028"
+  },
+  "854:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884edb7950 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:31.422288"
+  },
+  "855:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884edf3da0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:31.807955"
+  },
+  "856:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884ee16840 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:31.897037"
+  },
+  "857:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884ee174d0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:31.924517"
+  },
+  "858:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884ee334d0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:33.029650"
+  },
+  "859:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851db5a90 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:34.455392"
+  },
+  "860:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851db7560 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:38.024784"
+  },
+  "861:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884ee15be0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:38.050767"
+  },
+  "862:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2884edf2d80 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:38.228794"
+  },
+  "863:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851dcb230 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:38.655897"
+  },
+  "864:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851dcb980 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:38.731471"
+  },
+  "865:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851de44d0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:38.766335"
+  },
+  "866:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851df6e10 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:39.807024"
+  },
+  "867:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851df6ab0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:41.234308"
+  },
+  "868:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851e154c0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:44.831749"
+  },
+  "869:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851e2de50 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:44.879080"
+  },
+  "870:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851e2cd10 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:45.034532"
+  },
+  "871:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851e431a0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:45.487180"
+  },
+  "872:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851e60740 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:45.560400"
+  },
+  "873:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851e61250 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:45.598916"
+  },
+  "874:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851e778f0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:46.537237"
+  },
+  "875:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851e2d700 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:48.005398"
+  },
+  "877:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851e63b90 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:51.672637"
+  },
+  "880:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851e94bc0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:52.439979"
+  },
+  "876:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 10,
+      "confidence": 0.8,
+      "reason": "문제에서 코로나 감염 후 호흡 곤란과 기침이 지속되는 환자의 폐 합병증을 묻고 있으므로, 호흡 생리에 대한 이해가 필요합니다. 강의 '생리학1차 > 호흡'은 호흡의 기본 원리와 조절을 다루므로 가장 관련성이 높습니다.",
+      "study_hint": "호흡 생리 전반, 특히 폐 기능 검사 결과 해석과 관련된 부분을 복습하십시오.",
+      "evidence": [
+        {
+          "lecture_id": 10,
+          "page_start": 1,
+          "page_end": 9,
+          "quote": "호흡의 조절 • 흥분하면 호흡 빨라짐, 멈추고 싶으면 멈추기 가능 -> 즉 자율신경계를 통한 무의식적 조절 + 대뇌 등에 의한 의식적 조절 • 기본적으로! 호흡의 깊이와 수에 의해...",
+          "chunk_id": 220
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:54.157621"
+  },
+  "878:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 7,
+      "confidence": 0.95,
+      "reason": "문제에서 철결핍성 빈혈 치료 시 가장 먼저 증가하는 지표를 묻고 있으며, 강의 '생리학1차 > 혈액'의 p.70-72에 해당 내용이 직접적으로 언급되어 있습니다.",
+      "study_hint": "생리학1차 > 혈액 강의의 p.70-72를 복습하여 철결핍성 빈혈 치료 시 reticulocyte count가 가장 먼저 증가하는 이유를 이해하고, 다른 지표들과의 차이점을 비교하세요.",
+      "evidence": [
+        {
+          "lecture_id": 7,
+          "page_start": 70,
+          "page_end": 72,
+          "quote": "철결핍성 빈혈 치료시 가장 먼저 증가하는 것은? ① reticulocyte count ② MCH ③ MCV ④ TIBC ⑤ hematocrit 7. 틀린 것은? ① bone marrow에서...",
+          "chunk_id": 192
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:54.476792"
+  },
+  "879:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 7,
+      "confidence": 0.9,
+      "reason": "제시된 증상(열, 인두통)과 혈액검사 결과(백혈구 증가)가 강의 내용과 유사하며, 특히 '열, 인두통' 언급이 직접적으로 관련됩니다.",
+      "study_hint": "p.73-74에서 유사한 증상을 보이는 환자 사례를 검토하고, 백혈구 수치 변화의 원인을 복습하십시오.",
+      "evidence": [
+        {
+          "lecture_id": 7,
+          "page_start": 73,
+          "page_end": 74,
+          "quote": "...20세 여자가 지난 2주간의 피로, 열, 인두통을 호소하였다. 열은 38.3도였고 목에 림프 절이 만져지고 비장이 커져있었다. 진단은? 백혈구 5,000/mm3(5,000...",
+          "chunk_id": 193
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:55.164553"
+  },
+  "882:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 7,
+      "confidence": 0.9,
+      "reason": "문제는 염증 부위에서 일어나는 현상에 대한 이해를 묻고 있으며, 강의 '생리학1차 > 혈액'에서는 호중구의 염증 반응 관여 및 염증성 질환 시 혈장 응고 인자 농도 증가에 대해 설명하고 있어 가장 관련성이 높습니다.",
+      "study_hint": "p.1-10에서 호중구의 역할, p.70-72에서 염증성 질환과 혈장 응고 인자의 관계를 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 7,
+          "page_start": 1,
+          "page_end": 10,
+          "quote": "Granulocyte − Neutrophil (호중구) ; 세균 phagocytosis, 초기 염증 반응에 관여",
+          "chunk_id": 177
+        },
+        {
+          "lecture_id": 7,
+          "page_start": 70,
+          "page_end": 72,
+          "quote": "염증성 질환이 있을 경우 농도가 높아진다.",
+          "chunk_id": 192
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:56.060692"
+  },
+  "881:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 7,
+      "confidence": 0.9,
+      "reason": "제시된 문제는 토혈, 흑색변, 창백한 결막, 혈색소 감소 등으로 보아 상부 위장관 출혈을 의심할 수 있으며, 추가 검사로 적절하지 않은 것을 고르는 문제입니다. 삼투압취약성 검사는 유전성 구상적혈구증 진단에 사용되며, anti-HBV antibody 검사는 B형 간염 항체 확인에 사용되므로 위장관 출혈과는 관련이 적습니다. 혈액 관련 내용이 있는 강의가 적절합니다.",
+      "study_hint": "혈액응고 검사 관련 내용 (p.73-74) 및 출혈 관련 내용 (p.68-69)을 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 7,
+          "page_start": 73,
+          "page_end": 74,
+          "quote": "45세 남자가 코피가 잘 멎지 않아서 병원에 왔다. 혈액응고 검사에서 혈소판 숫자 (pla telet count) 정상, 출혈시간 (bleeding time) 정상, PT (thrombin time) 증가...",
+          "chunk_id": 193
+        },
+        {
+          "lecture_id": 7,
+          "page_start": 68,
+          "page_end": 69,
+          "quote": "35세 남자가 피가 잘 멎지 않아서 병원에 왔다. 혈액응고 검사에서 혈소판 숫자 (platel et count) 정상, 출혈시간 (bleeding time) 정상, PT (thrombin time) 증가...",
+          "chunk_id": 191
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:56.365028"
+  },
+  "886:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 13,
+      "confidence": 0.95,
+      "reason": "질문은 norepinephrine의 제거 기전에 관한 것이고, 강의 '생리학2차 > 자율신경계'는 norepinephrine의 제거 기전을 명확하게 설명하고 있습니다.",
+      "study_hint": "p.56-58에서 norepinephrine 제거 기전을 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 13,
+          "page_start": 56,
+          "page_end": 58,
+          "quote": "norepinephrine by the terminal nerve endings, it is removed from the secretory site in three ways: (1) reuptake into the adrenergic nerve endings by...",
+          "chunk_id": 265
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:56.745248"
+  },
+  "885:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "제공된 강의 자료에서 평형감각과 관련된 구체적인 정보를 찾을 수 없습니다. 문제에서 제시된 vestibulocochlear nerve, vestibulospinal tract, cerebellum 등의 용어가 강의 자료에서 직접적으로 연결되지 않아 적절한 강의를 선택할 수 없습니다.",
+      "study_hint": "평형감각의 신경 경로와 관련된 자료를 찾아보세요.",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:57.168164"
+  },
+  "883:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 4,
+      "confidence": 0.9,
+      "reason": "문제에서 미각 경로와 뇌신경의 연결을 묻고 있으며, 강의 '생리학1차 > 순환'에서 medulla의 solitary nucleus에 대한 언급과 미각 관련 감각 영역에 대한 정보가 제시되어 있어 가장 관련성이 높습니다.",
+      "study_hint": "미각 경로와 관련된 뇌신경의 연결을 복습하고, medulla의 nucleus tractus solitarius의 역할을 p.280-283에서 확인하세요.",
+      "evidence": [
+        {
+          "lecture_id": 4,
+          "page_start": 280,
+          "page_end": 283,
+          "quote": "A sensory area located bilaterally in the nucleus tractussolitarius in the posterolateral portions of the medulla and lower pons. The neurons of this area...",
+          "chunk_id": 715
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:57.374768"
+  },
+  "884:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 18,
+      "confidence": 0.9,
+      "reason": "문제에서 후각신경계의 구조와 위치를 묻고 있으며, 강의 ID 18은 후각신경계의 구조와 기능에 대한 내용을 포함하고 있습니다. 특히, 후각신경과 후각망울, 후각로의 연결 구조를 설명하고 있어 문제 해결에 직접적인 도움을 줄 수 있습니다.",
+      "study_hint": "Review p.338-342, p.350-351 for the olfactory membrane, olfactory bulb and olfactory tract.",
+      "evidence": [
+        {
+          "lecture_id": 18,
+          "page_start": 350,
+          "page_end": 351,
+          "quote": "...The olfactory nerve fibers leading backward from the bulb are called cranial nerve I, or the olfactory tract. In reality, both the tract and...",
+          "chunk_id": 460
+        },
+        {
+          "lecture_id": 18,
+          "page_start": 338,
+          "page_end": 342,
+          "quote": "...Organization of the olfactory membrane and olfactory bulb and connections to the olfactory tract. STIMULATION OF THE OLFACTORY CELLS Mechanism of Excitation of the...",
+          "chunk_id": 456
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:57.381335"
+  },
+  "888:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 13,
+      "confidence": 0.9,
+      "reason": "문제에서 microcirculation에 대한 설명을 묻고 있으며, 강의 ID 13 (생리학2차 > 자율신경계)의 chunk_id 255에 'The Microcirculation'이 명시적으로 언급되어 있어 가장 관련성이 높습니다.",
+      "study_hint": "미세 순환의 정의와 특징을 p.1-5에서 복습하고, 관련 개념과 비교하십시오.",
+      "evidence": [
+        {
+          "lecture_id": 13,
+          "page_start": 1,
+          "page_end": 5,
+          "quote": "Overview of the Circulation; Biophysics of Pressure, Flow, and Resistance 15. Vascular Distensibility and Functions of the Arterial and Venous Systems 16. The Microcirculation...",
+          "chunk_id": 255
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:58.087064"
+  },
+  "887:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 13,
+      "confidence": 0.9,
+      "reason": "문제에서 제시된 가까운/먼 거리에 따른 초점 조절은 자율신경계, 특히 oculomotor nerve와 관련되어 있으며, 수정체의 굴절과 관련됩니다. 강의 13은 자율신경계에서 동공 크기 조절과 수정체 초점 조절을 다루고 있습니다.",
+      "study_hint": "자율신경계 강의의 p.65-68에서 눈의 초점 조절 메커니즘을 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 13,
+          "page_start": 65,
+          "page_end": 68,
+          "quote": "system: (1) the pupillary opening and (2) the focus of the lens. 눈의...",
+          "chunk_id": 269
+        },
+        {
+          "lecture_id": 13,
+          "page_start": 34,
+          "page_end": 37,
+          "quote": "sympathetic nervous system. • 교감신경계의 ganglia는 2종류가 있습니다 척수있는멀리있는...",
+          "chunk_id": 259
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:11:58.411045"
+  },
+  "889:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851e2e930 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:02.844894"
+  },
+  "890:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851dc9340 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:03.136052"
+  },
+  "891:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28853e648f0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:03.537684"
+  },
+  "892:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28853e719d0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:03.971381"
+  },
+  "893:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28853e90b00 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:04.229015"
+  },
+  "894:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28853e71e80 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:04.230043"
+  },
+  "895:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28853ea0d40 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:04.862653"
+  },
+  "896:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847c4d6a0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:05.341548"
+  },
+  "897:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 19,
+      "confidence": 0.9,
+      "reason": "문제는 thick ascending limb에서의 능동적인 나트륨 수송 차단 시 발생하는 결과를 묻고 있으며, 강의 19는 thick ascending limb에서의 NaCl 재흡수와 medullary osmotic gradient 형성에 대한 내용을 다루고 있어 가장 관련성이 높습니다.",
+      "study_hint": "신장 생리학 강의 19의 p.18-21을 참조하여 thick ascending limb의 기능과 medullary osmotic gradient에 미치는 영향을 복습하십시오.",
+      "evidence": [
+        {
+          "lecture_id": 19,
+          "page_start": 18,
+          "page_end": 21,
+          "quote": "...high osmotic water permeability * Thick ascending limb: water impermeable, active NaCl reabsorption * horhicomedulanposmoticgrabiant b 39 Countercurrent Multiplier system Active transport fX of NaCl–generation...",
+          "chunk_id": 481
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:06.096554"
+  },
+  "898:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851dc9700 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:10.145984"
+  },
+  "899:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28847b98050 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:10.577792"
+  },
+  "900:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x2883d00aff0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:11.142552"
+  },
+  "902:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851e42090 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:11.348634"
+  },
+  "901:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851e42d80 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:11.379523"
+  },
+  "903:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28853e73530 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:11.867482"
+  },
+  "904:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28844c0e660 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:12.315565"
+  },
+  "905:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x28851e15310 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T15:12:13.078708"
+  }
+}

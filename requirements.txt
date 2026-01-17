@@ -8,4 +8,5 @@ PyMuPDF
 google-genai
 tenacity
 scikit-learn
-numpy
+numpy<2
+sentence-transformers

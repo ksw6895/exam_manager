@@ -1,0 +1,371 @@
+{
+  "576:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 19,
+      "confidence": 0.9,
+      "reason": "문제에서 묻는 phagocytosis와 pinocytosis의 차이점에 대한 내용이 강의자료에 직접적으로 언급되어 있음.",
+      "study_hint": "p.25-32에서 phagocytosis, pinocytosis, endocytosis의 차이점을 확인하세요.",
+      "evidence": [
+        {
+          "lecture_id": 19,
+          "page_start": 25,
+          "page_end": 32,
+          "quote": "Special phagocytosis, pinocytosis, endocytosis solvent drag 54 27 Figure 11-1 Molecular Biology of the Cell(© Garland Science 2008) 55 Membrane transport – transport of...",
+          "chunk_id": 467
+        },
+        {
+          "lecture_id": 19,
+          "page_start": 19,
+          "page_end": 24,
+          "quote": "Special phagocytosis, pinocytosis, endocytosis solvent drag 48 24",
+          "chunk_id": 466
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:34.393614"
+  },
+  "577:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 5,
+      "confidence": 0.95,
+      "reason": "문제에서 ATP 분해 기능을 가진 구조물을 묻고 있으며, 생리학1차 > 근육 강의에서 myosin head의 ATP 분해 과정을 설명하고 있습니다.",
+      "study_hint": "p.29-39에서 근육 수축의 분자적 메커니즘과 ATP의 역할을 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 5,
+          "page_start": 29,
+          "page_end": 39,
+          "quote": "...Molecular mechanism of muscle contraction ⑤ Contraction의 energy source = ATP head & ATP + myosin activitEld# > 아까 앞에서 설명하신 myosin head에서 ATP를 분해해서 꺾이고 - 엑틴을 당기고...",
+          "chunk_id": 34
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:34.398773"
+  },
+  "578:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 5,
+      "confidence": 0.95,
+      "reason": "문제에서 링거액이 개구리 심장 박동에 미치는 영향과 관련하여 묻고 있으며, 강의 '생리학1차 > 근육'에서 링거액의 발명과 칼슘의 심장 박동 유지 필요성에 대한 내용이 직접적으로 언급되어 있습니다.",
+      "study_hint": "Review p.12-21 for the discovery of Ringer's solution and the role of calcium in heart muscle contraction.",
+      "evidence": [
+        {
+          "lecture_id": 5,
+          "page_start": 12,
+          "page_end": 21,
+          "quote": "실제로 수축하는 과정 - 링거 링거의 링거액 발명(개구리 심장을 뛰게하는 용액) 이후 칼슘이 심장박동 유지에 필요하다는 것을 밝혀냄 * 2. General mechanism of muscle contraction...",
+          "chunk_id": 31
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:34.695212"
+  },
+  "579:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 1,
+      "confidence": 0.95,
+      "reason": "제시된 문항은 세포 내외 물질 이동 방식에 대한 이해를 묻고 있으며, 선택지들은 능동 수송, 촉진 확산, 단순 확산, 세포외배출 등 다양한 수송 방식을 포함합니다. '생리학1차 > 물질이동' 강의는 이러한 다양한 물질 이동 방식을 포괄적으로 다루고 있어 가장 적합합니다. 특히, 해당 강의에서 Na+, K+의 이동 방식에 대한 설명이 있어 문제 해결에 직접적인 도움을 줄 수 있습니다.",
+      "study_hint": "p.48-64에서 다양한 수동/능동 수송 방식의 정의와 차이점을 복습하고, p.102-119에서 Na+, K+의 구체적인 이동 메커니즘을 확인하세요.",
+      "evidence": [
+        {
+          "lecture_id": 1,
+          "page_start": 48,
+          "page_end": 64,
+          "quote": "것은 facilitated 안쪽으로 들어가는 것은 active 수동이동 - 단순확산 항상 열려있으면 simple diffusion pore이 열었다가 닫으면 촉진확산 water pore (aquaporin) - water은 hydrophilic하므로, 그냥 세포안팎 으로...",
+          "chunk_id": 6
+        },
+        {
+          "lecture_id": 1,
+          "page_start": 102,
+          "page_end": 119,
+          "quote": "K+ channel blocker Na+ channel • Na channel – facilitated diffusion • Na –K pump – 1st active transport • Na-co transport – 2nd active transport – Na-glucose – Na...",
+          "chunk_id": 9
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:36.099482"
+  },
+  "582:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "제시된 강의들은 문제에서 묻는 신경근 접합부 질환(아세틸콜린 수용체 자가항체)과 관련된 내용을 포함하지 않습니다.",
+      "study_hint": "신경근 접합부, 아세틸콜린 수용체, 자가면역 질환 관련 내용을 학습하십시오.",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:37.335121"
+  },
+  "580:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 5,
+      "confidence": 0.95,
+      "reason": "문제에서 종판전위(end-plate potential)를 묻고 있으며, 강의 '생리학1차 > 근육'에서 종판전위에 대한 설명이 있습니다.",
+      "study_hint": "근육 생리학 강의의 p.57-59에서 종판전위(end plate potential)의 정의와 생성 과정을 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 5,
+          "page_start": 57,
+          "page_end": 59,
+          "quote": "...내로 들어옴 → muscle fiber의 membrane potential이 50-70 mV까지 증가함 (end plate potential) - Muscle AP의 threshold: resting membrane potential보다 20-30 mV 높다 - Threshold...",
+          "chunk_id": 38
+        },
+        {
+          "lecture_id": 5,
+          "page_start": 51,
+          "page_end": 56,
+          "quote": "...potential E Na +50 0 -50 E K millisecond inside outside Na+ K+ 5. Secretion of acetylcholine by the nerve terminals ③ End plate...",
+          "chunk_id": 37
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:38.529738"
+  },
+  "581:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 1,
+      "confidence": 0.9,
+      "reason": "제시된 문제는 물질의 농도에 따른 확산 속도와 관련된 통로의 특징을 묻고 있습니다. 생리학1차 > 물질이동 강의에서는 촉진 확산과 이온 통로에 대한 설명이 있으며, 이는 문제에서 제시된 통로의 특징과 관련이 깊습니다. 특히, 이온 통로가 열리고 닫힘에 따라 막 전위가 달라지고 신호 전달이 이루어진다는 내용은 문제의 선택지들과 연관됩니다.",
+      "study_hint": "물질이동 강의 p.65-76에서 촉진 확산과 이온 통로의 특징을 복습하고, p.38-47에서 농도에 따른 확산의 한계를 확인하세요.",
+      "evidence": [
+        {
+          "lecture_id": 1,
+          "page_start": 65,
+          "page_end": 76,
+          "quote": "촉진 확산 – 이온통로 같은 말 다른 그림 Where is 촉진확산 important? 열리고 닫히고에 따라서 membrane potential이 달라지면서 신호전달이 된다 이온 농도에 따른 평형전위 • Nernst...",
+          "chunk_id": 7
+        },
+        {
+          "lecture_id": 1,
+          "page_start": 38,
+          "page_end": 47,
+          "quote": "같은 기체들 hydrophobic하긴 하지만 열린 통로에 따라 왔다갔다 통로를 열었다 닫았다로 조절 hydrophobic하니까 통로가 필요 농도가 높아지더라도 어느 지점에서는 한계가 존재 Diffusion (확산) Diffusion...",
+          "chunk_id": 5
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:39.072160"
+  },
+  "583:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 9,
+      "confidence": 0.8,
+      "reason": "제시된 문제는 근육 약화와 관련된 증상을 다루고 있으며, 이는 운동 생리학 강의에서 근육의 기능, 운동 시 근육의 변화, 그리고 신경계의 조절에 대한 내용을 포함하므로 가장 관련성이 높습니다.",
+      "study_hint": "운동 생리학 강의의 근육의 기본적인 특성, 운동으로 인한 근육의 에너지 대사 시스템 변화, 훈련을 통해 근육이 어떻게 변할 수 있는지에 대한 부분을 검토하십시오.",
+      "evidence": [
+        {
+          "lecture_id": 9,
+          "page_start": 1,
+          "page_end": 9,
+          "quote": "운동의 주된 기관 • Respiratory system: 근육에 필요한 산소와 이산화탄소 교환 • Cardiovascular system: 근육에 필요한 영양분과 산소 공급 • Nervous system: 근육 조절 및 기관들의 조율...",
+          "chunk_id": 53
+        },
+        {
+          "lecture_id": 9,
+          "page_start": 10,
+          "page_end": 12,
+          "quote": "Muscles in Exercise 먼저 근육에 대해 알아봅니다. • 골격근의 기본적인 특성 • 운동으로 인한 근육의 에너지 대사 시스템 변화 • 훈련을 통해 근육이 어떻게 변할 수 있는지에...",
+          "chunk_id": 54
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:40.166017"
+  },
+  "586:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 5,
+      "confidence": 0.9,
+      "reason": "문제에서 신장 혈관 조직의 면역형광 염색 사진을 제시하고, 녹색으로 염색된 조직 구성 물질 중 칼슘 이온과 결합하는 것을 묻고 있습니다. 녹색으로 염색된 조직은 α-smooth muscle actin이므로, 평활근의 수축과 관련된 칼슘 결합 단백질을 찾는 문제입니다. 선택지 중 트로포닌, 칼모듈린, 마이오신 경쇄 카이네이즈가 칼슘과 결합하여 평활근 수축에 관여합니다. 강의 '생리학1차 > 근육'에서는 평활근의 수축 기전에 대해 다루므로 가장 적절한 강의입니다.",
+      "study_hint": "평활근 수축 기전과 관련된 칼슘 이온의 역할, 그리고 칼슘 결합 단백질(칼모듈린, 트로포닌 등)의 종류와 기능을 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 5,
+          "page_start": 105,
+          "page_end": 108,
+          "quote": "...Contraction of smooth muscle ① Skeletal muscle vs Smooth muscle vs Cardiac muscle 골격근 평활근 심근 골격에 부착되어 있음 내장기관 벽, 혈관, 피부 심장에...",
+          "chunk_id": 47
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:41.449165"
+  },
+  "588:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 2,
+      "confidence": 0.95,
+      "reason": "제시된 강의 '생리학1차 > 전기적현상'은 휴지 막 전위 형성에 대한 직접적인 설명을 제공하며, 특히 Na+/K+ 펌프의 역할과 이온 농도 차이에 대한 언급이 있어 문제의 핵심 개념과 일치합니다.",
+      "study_hint": "Review p.18-25 for the mechanisms of resting membrane potential formation, focusing on the roles of sodium, potassium, and the Na+/K+ pump.",
+      "evidence": [
+        {
+          "lecture_id": 2,
+          "page_start": 22,
+          "page_end": 25,
+          "quote": "...membrane potential is caused by diffusion of both sodium and potassium ions plus pumping of both these ions by the Na+-K+ pump. (-90mV...",
+          "chunk_id": 14
+        },
+        {
+          "lecture_id": 2,
+          "page_start": 18,
+          "page_end": 21,
+          "quote": "...Na+ - K+ Pump Main • 막 양쪽의 이온 농도 차이로 인해 resting membrane potential 이 발생하는데 이온 농도 차이가 만들어지는 기전에는 2가지가 있습니다 ① Na...",
+          "chunk_id": 13
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:42.475771"
+  },
+  "589:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": 2,
+      "confidence": 0.9,
+      "reason": "문제에서 action potential의 propagation 방향과 관련된 기전을 묻고 있으며, 강의 '생리학1차 > 전기적현상'에서는 action potential의 전파와 관련된 내용과 voltage-gated ion channels에 대한 설명이 포함되어 있어 가장 관련성이 높습니다.",
+      "study_hint": "전기적현상 강의의 p.42-43에서 action potential의 propagation에 대한 설명을, p.29-33에서 voltage-gated ion channels에 대한 설명을 복습하세요.",
+      "evidence": [
+        {
+          "lecture_id": 2,
+          "page_start": 42,
+          "page_end": 43,
+          "quote": "Propagation 그렇지만 실제 신경세포에서는 한 방향으로만 Action Potential이 퍼져나간다. • As demonstrated in Figure 5-11, an excitable membrane has no single direction of propagation...",
+          "chunk_id": 20
+        },
+        {
+          "lecture_id": 2,
+          "page_start": 29,
+          "page_end": 33,
+          "quote": "Voltage gated ion channels are involved Action potential stages & voltage gated ion channels 뉴런에서 AP의 Stage와, 관련된 Voltage gated ion channel을 보여주는 그림 φ...",
+          "chunk_id": 16
+        }
+      ],
+      "no_match": false,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:42.958034"
+  },
+  "590:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x1c4f98fcb60 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:47.214484"
+  },
+  "591:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x1c4f9780ef0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:48.478635"
+  },
+  "592:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x1c4f9640ec0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:49.614755"
+  },
+  "593:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x1c4f994ef30 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:49.995668"
+  },
+  "594:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x1c4f9a23110 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:54.235165"
+  },
+  "595:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x1c4f9a90320 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:55.481555"
+  },
+  "596:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x1c4f9a921e0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:56.644800"
+  },
+  "597:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x1c4f9a21d60 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:48:56.987101"
+  },
+  "598:454b992c04941ec73816913d2d1a01afe5dad82b:gemini-2.0-flash-exp": {
+    "result": {
+      "lecture_id": null,
+      "confidence": 0.0,
+      "reason": "Error: RetryError[<Future at 0x1c4f9a93fb0 state=finished raised ClientError>]",
+      "study_hint": "",
+      "evidence": [],
+      "no_match": true,
+      "model_name": "gemini-2.0-flash-exp"
+    },
+    "cached_at": "2026-01-16T14:49:01.250265"
+  }
+}

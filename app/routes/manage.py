@@ -373,7 +373,161 @@ def delete_exam(exam_id):
     exam = PreviousExam.query.get_or_404(exam_id)
     delete_exam_with_assets(exam)
     flash('기출 시험이 삭제되었습니다.', 'success')
+<<<<<<< HEAD
     return redirect(url_for('manage.list_exams'))
+=======
+    return redirect(url_for('manage.list_exams'))
+
+
+# ===== Evaluation labeling =====
+
+@manage_bp.route('/eval')
+def eval_labeler():
+    """Evaluation labeling UI (BM25 top-5 candidates)."""
+    question_id = request.args.get('question_id', type=int)
+    exam_id_filter = request.args.get('exam_id', type=int)
+
+    question = None
+    if question_id:
+        question = Question.query.get(question_id)
+    if not question:
+        query = Question.query.outerjoin(
+            EvaluationLabel, EvaluationLabel.question_id == Question.id
+        ).filter(EvaluationLabel.id.is_(None))
+        if exam_id_filter:
+            query = query.filter(Question.exam_id == exam_id_filter)
+        question = query.order_by(Question.exam_id, Question.question_number).first()
+
+    label = None
+    candidates = []
+    retrieval_mode = current_app.config.get('RETRIEVAL_MODE', 'bm25')
+
+    if question:
+        label = EvaluationLabel.query.filter_by(question_id=question.id).first()
+        if retrieval_mode == 'bm25':
+            question_text = _build_question_text(question)
+            chunks = retrieval.search_chunks_bm25(
+                question_text,
+                top_n=80,
+                question_id=question.id,
+            )
+            candidates = retrieval.aggregate_candidates(
+                chunks,
+                top_k_lectures=5,
+                evidence_per_lecture=2,
+            )
+
+    exams = PreviousExam.query.order_by(PreviousExam.created_at.desc()).all()
+    total_questions = Question.query.count()
+    labeled_count = EvaluationLabel.query.count()
+
+    return render_template(
+        'manage/eval_label.html',
+        question=question,
+        candidates=candidates,
+        label=label,
+        retrieval_mode=retrieval_mode,
+        exams=exams,
+        exam_id_filter=exam_id_filter,
+        total_questions=total_questions,
+        labeled_count=labeled_count,
+    )
+
+
+@manage_bp.route('/eval/label', methods=['POST'])
+def save_eval_label():
+    """Save evaluation label and move to next."""
+    question_id = request.form.get('question_id', type=int)
+    if not question_id:
+        flash('question_id가 필요합니다.', 'error')
+        return redirect(url_for('manage.eval_labeler'))
+
+    question = Question.query.get_or_404(question_id)
+    raw_lecture_id = (request.form.get('gold_lecture_id') or '').strip().lower()
+    if raw_lecture_id in {'', 'none', 'unknown'}:
+        gold_lecture_id = None
+    else:
+        try:
+            gold_lecture_id = int(raw_lecture_id)
+        except ValueError:
+            gold_lecture_id = None
+
+    gold_pages = (request.form.get('gold_pages') or '').strip() or None
+    note = (request.form.get('note') or '').strip() or None
+    is_ambiguous = request.form.get('is_ambiguous') == '1'
+
+    label = EvaluationLabel.query.filter_by(question_id=question.id).first()
+    if not label:
+        label = EvaluationLabel(
+            question_id=question.id,
+            exam_id=question.exam_id,
+            question_number=question.question_number,
+        )
+        db.session.add(label)
+
+    label.gold_lecture_id = gold_lecture_id
+    label.gold_pages = gold_pages
+    label.note = note
+    label.is_ambiguous = is_ambiguous
+    label.updated_at = datetime.utcnow()
+
+    db.session.commit()
+    session['eval_prev_question_id'] = question.id
+    session['eval_prev_exam_id'] = question.exam_id
+
+    exam_id_filter = request.form.get('exam_id_filter', type=int)
+    redirect_args = {'exam_id': exam_id_filter} if exam_id_filter else None
+    return redirect(url_for('manage.eval_labeler', **(redirect_args or {})))
+
+
+@manage_bp.route('/eval/previous')
+def eval_previous():
+    """Go back to the previously labeled question."""
+    prev_question_id = session.get('eval_prev_question_id')
+    if not prev_question_id:
+        flash('이전 문제가 없습니다.', 'error')
+        return redirect(url_for('manage.eval_labeler'))
+
+    args = {'question_id': prev_question_id}
+    prev_exam_id = session.get('eval_prev_exam_id')
+    if prev_exam_id:
+        args['exam_id'] = prev_exam_id
+    return redirect(url_for('manage.eval_labeler', **args))
+
+
+@manage_bp.route('/eval/lecture-search')
+def search_lectures():
+    """Search lectures for manual labeling."""
+    query = (request.args.get('q') or '').strip()
+    if not query:
+        return jsonify({'items': []})
+
+    q = f"%{query}%"
+    lecture_query = (
+        Lecture.query.join(Block)
+        .filter(or_(Lecture.title.ilike(q), Block.name.ilike(q)))
+        .order_by(Block.order, Lecture.order)
+    )
+    try:
+        lecture_id = int(query)
+        lecture_query = lecture_query.union(
+            Lecture.query.join(Block)
+            .filter(Lecture.id == lecture_id)
+            .order_by(Block.order, Lecture.order)
+        )
+    except ValueError:
+        pass
+
+    lectures = lecture_query.limit(20).all()
+    items = [
+        {
+            'id': lecture.id,
+            'full_path': f"{lecture.block.name} > {lecture.title}" if lecture.block else lecture.title,
+        }
+        for lecture in lectures
+    ]
+    return jsonify({'items': items})
+>>>>>>> 56f8c31 (WIP: Ai classifier update)
 
 
 # ===== 문제 관리 =====

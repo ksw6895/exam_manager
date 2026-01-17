@@ -474,3 +474,56 @@ class ClassificationJob(db.Model):
     @property
     def is_complete(self):
         return self.status in (self.STATUS_COMPLETED, self.STATUS_FAILED)
+
+
+class EvaluationLabel(db.Model):
+    """Evaluation labels for retrieval/classification."""
+    __tablename__ = 'evaluation_labels'
+
+    id = db.Column(db.Integer, primary_key=True)
+    question_id = db.Column(
+        db.Integer, db.ForeignKey('questions.id', ondelete='CASCADE'), nullable=False
+    )
+    exam_id = db.Column(db.Integer, nullable=False)
+    question_number = db.Column(db.Integer, nullable=False)
+    gold_lecture_id = db.Column(db.Integer, db.ForeignKey('lectures.id'))
+    gold_pages = db.Column(db.Text)
+    note = db.Column(db.Text)
+    is_ambiguous = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    question = db.relationship(
+        'Question',
+        backref=db.backref('evaluation_label', uselist=False, cascade='all, delete-orphan'),
+        foreign_keys=[question_id],
+    )
+    gold_lecture = db.relationship('Lecture', foreign_keys=[gold_lecture_id])
+
+    def __repr__(self):
+        return f'<EvaluationLabel Q{self.question_id} -> {self.gold_lecture_id}>'
+
+
+class QuestionQuery(db.Model):
+    """Cached query transformations for retrieval (HyDE-lite)."""
+    __tablename__ = 'question_queries'
+
+    question_id = db.Column(
+        db.Integer,
+        db.ForeignKey('questions.id', ondelete='CASCADE'),
+        primary_key=True,
+    )
+    prompt_version = db.Column(db.String(20), primary_key=True)
+    lecture_style_query = db.Column(db.Text, nullable=False)
+    keywords_json = db.Column(db.Text, nullable=False)
+    negative_keywords_json = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    question = db.relationship(
+        'Question',
+        backref=db.backref('query_versions', lazy='dynamic', cascade='all, delete-orphan'),
+        foreign_keys=[question_id],
+    )
+
+    def __repr__(self):
+        return f'<QuestionQuery Q{self.question_id} {self.prompt_version}>'

@@ -119,12 +119,15 @@ def _fallback_parse_result(text: str) -> Dict:
     if m:
         data['no_match'] = m.group(1).lower() == 'true'
 
-    m = re.search(r'confidence\s*[:=]\s*([0-9]+(?:\.[0-9]+)?)', cleaned, re.IGNORECASE)
-    if m:
-        try:
-            data['confidence'] = float(m.group(1))
-        except ValueError:
-            pass
+    # Try multiple confidence-related keys: confidence, score, certainty, probability
+    for conf_key in ('confidence', 'score', 'certainty', 'probability'):
+        m = re.search(rf'{conf_key}\s*[:=]\s*([0-9]+(?:\.[0-9]+)?)', cleaned, re.IGNORECASE)
+        if m:
+            try:
+                data['confidence'] = float(m.group(1))
+                break
+            except ValueError:
+                continue
 
     for key in ('reason', 'study_hint'):
         m = re.search(rf'"?{key}"?\s*[:=]\s*"(.*?)"', cleaned, re.IGNORECASE | re.DOTALL)
@@ -180,22 +183,40 @@ class LectureRetriever:
                 'full_path': f"{lecture.block.name} > {lecture.title}"
             })
     
-    def find_candidates(
-        self,
-        question_text: str,
-        top_k: int = 8,
-        lecture_ids: Optional[List[int]] = None,
-    ) -> List[Dict]:
-        """FTS5 BM25 기반 후보 강의 검색"""
-        mode = current_app.config.get('RETRIEVAL_MODE', 'bm25')
-        if mode != 'bm25':
-            return []
+def find_candidates(
+    self,
+    question_text: str,
+    top_k: int = 8,
+    *,
+    question_id: int | None = None,
+    lecture_ids: Optional[List[int]] = None,
+) -> List[Dict]:
+    """FTS5 BM25/Hybrid 기반 후보 강의 검색"""
+    mode = current_app.config.get("RETRIEVAL_MODE", "bm25")
+
+    if mode == "bm25":
         chunks = retrieval.search_chunks_bm25(
             question_text,
             top_n=80,
+            question_id=question_id,
             lecture_ids=lecture_ids,
         )
-        return retrieval.aggregate_candidates(chunks, top_k_lectures=top_k, evidence_per_lecture=3)
+        return retrieval.aggregate_candidates(
+            chunks, top_k_lectures=top_k, evidence_per_lecture=3
+        )
+
+    if mode == "hybrid_rrf":
+        chunks = retrieval.search_chunks_hybrid_rrf(
+            question_text,
+            top_n=80,
+            question_id=question_id,
+            lecture_ids=lecture_ids,  # 함수가 받게 만들어두는 게 좋음
+        )
+        return retrieval.aggregate_candidates_rrf(
+            chunks, top_k_lectures=top_k, evidence_per_lecture=3
+        )
+
+    return []
 
 
 # ============================================================
@@ -214,7 +235,7 @@ class GeminiClassifier:
             raise RuntimeError("GEMINI_API_KEY가 설정되지 않았습니다. .env 파일을 확인하세요.")
         
         self.client = genai.Client(api_key=api_key)
-        self.model_name = current_app.config.get('GEMINI_MODEL_NAME', 'gemini-1.5-flash-002')
+        self.model_name = current_app.config.get('GEMINI_MODEL_NAME', 'gemini-2.5-flash')
         self.confidence_threshold = current_app.config.get('AI_CONFIDENCE_THRESHOLD', 0.7)
         self.auto_apply_margin = current_app.config.get('AI_AUTO_APPLY_MARGIN', 0.2)
     
@@ -222,23 +243,45 @@ class GeminiClassifier:
         """Build the classification prompt."""
         candidate_lines = []
         for c in candidates:
-            evidence_lines = []
-            for e in c.get('evidence', []) or []:
-                page_start = e.get('page_start')
-                page_end = e.get('page_end')
-                if page_start is None or page_end is None:
-                    page_label = "p.?"
-                else:
-                    page_label = f"p.{page_start}" if page_start == page_end else f"p.{page_start}-{page_end}"
-                snippet = e.get('snippet') or ''
-                evidence_lines.append(
-                    f'  - {page_label}: "{snippet}" (chunk_id: {e.get("chunk_id")})'
+            # Use expanded context if available
+            parent_text = c.get('parent_text')
+            
+            if parent_text:
+                # Expanded context mode
+                range_info = ""
+                ranges = c.get('parent_page_ranges', [])
+                if ranges:
+                    # summarize ranges
+                    min_p = min(r[0] for r in ranges if r[0] is not None)
+                    max_p = max(r[1] for r in ranges if r[1] is not None)
+                    range_info = f" (Pages {min_p}-{max_p})"
+                
+                candidate_lines.append(
+                    f"- ID: {c['id']}, Lecture: {c['full_path']}{range_info}\n"
+                    f"  [Expanded Context Start]\n"
+                    f"{parent_text}\n"
+                    f"  [Expanded Context End]"
                 )
-            if not evidence_lines:
-                evidence_lines.append("  - evidence: none")
-            candidate_lines.append(
-                f"- ID: {c['id']}, Lecture: {c['full_path']}\n" + "\n".join(evidence_lines)
-            )
+            else:
+                # Fallback to snippets
+                evidence_lines = []
+                for e in c.get('evidence', []) or []:
+                    page_start = e.get('page_start')
+                    page_end = e.get('page_end')
+                    if page_start is None or page_end is None:
+                        page_label = "p.?"
+                    else:
+                        page_label = f"p.{page_start}" if page_start == page_end else f"p.{page_start}-{page_end}"
+                    snippet = e.get('snippet') or ''
+                    evidence_lines.append(
+                        f'  - {page_label}: "{snippet}" (chunk_id: {e.get("chunk_id")})'
+                    )
+                if not evidence_lines:
+                    evidence_lines.append("  - evidence: none")
+                candidate_lines.append(
+                    f"- ID: {c['id']}, Lecture: {c['full_path']}\n" + "\n".join(evidence_lines)
+                )
+
         candidates_text = "\n".join(candidate_lines) if candidate_lines else "(no candidates)"
 
         choices_text = "\n".join([f"  {i + 1}. {c}" for i, c in enumerate(choices)]) if choices else "(no choices)"
@@ -258,7 +301,7 @@ class GeminiClassifier:
 1. Identify the key concept of the question.
 2. Select only a lecture that clearly matches.
 3. If none match, set no_match = true and lecture_id = null.
-4. evidence.quote must be copied from the provided snippets only.
+4. If using Expanded Context, cite the relevant text in evidence.quote.
 5. study_hint must point to the exact pages to review.
 6. Output JSON only, following the schema below.
 
@@ -357,7 +400,7 @@ class GeminiClassifier:
     )
     def classify_single(self, question: Question, candidates: List[Dict]) -> Dict:
         """
-        ?? ?? ??
+        단일 문제 분류 (LLM 호출)
 
         Returns:
             {
@@ -393,7 +436,8 @@ class GeminiClassifier:
                 config=types.GenerateContentConfig(
                     temperature=0.2,
                     top_p=0.8,
-                    max_output_tokens=650,
+                    max_output_tokens=current_app.config.get('GEMINI_MAX_OUTPUT_TOKENS', 2048),
+                    thinking_config=types.ThinkingConfig(include_thoughts=False),
                     response_mime_type="application/json",
                 )
             )
@@ -405,7 +449,22 @@ class GeminiClassifier:
                 result = json.loads(json_text)
             except json.JSONDecodeError:
                 result = _fallback_parse_result(result_text)
-
+            # [DEBUG INSERT] 여기에 로그 추가
+            import logging
+            logger = logging.getLogger(__name__)
+            
+            # 파싱된 키 목록과 중요 값 확인
+            debug_info = {
+                "event": "LLM_PARSE_CHECK",
+                "qid": question.id if question else "unknown",
+                "model": self.model_name,
+                "raw_keys": list(result.keys()),  # 키 목록 확인 (confidence vs certainty)
+                "conf_value": result.get('confidence'),
+                "conf_type": str(type(result.get('confidence'))), # 타입 확인 (float vs str)
+                "lecture_id": result.get('lecture_id')
+            }
+            logger.info(f"AUTOCONFIRM_DEBUG_PARSE: {json.dumps(debug_info)}")
+            # [END DEBUG INSERT]
             lecture_id = result.get('lecture_id')
             no_match = bool(result.get('no_match', False))
             if no_match:
@@ -416,7 +475,12 @@ class GeminiClassifier:
                     lecture_id = None
                     no_match = True
 
-            confidence = float(result.get('confidence', 0.0))
+            # Support multiple confidence keys: confidence, score, certainty, probability
+            raw_conf = result.get('confidence') or result.get('score') or result.get('certainty') or result.get('probability') or 0.0
+            try:
+                confidence = float(raw_conf)
+            except (TypeError, ValueError):
+                confidence = 0.0
             reason = result.get('reason', '')
             study_hint = result.get('study_hint', '')
             evidence_raw = result.get('evidence') if isinstance(result.get('evidence'), list) else []
@@ -553,12 +617,41 @@ class AsyncBatchProcessor:
                         candidates = retriever.find_candidates(
                             question_text,
                             top_k=8,
+                            question_id=question.id,
                             lecture_ids=lecture_ids,
                         )
+
+                        # Expand context only when unstable
+                        if current_app.config.get('PARENT_ENABLED', False):
+                            from app.services.context_expander import expand_candidates
+                            from app.services import retrieval_features
+
+                            artifacts = retrieval_features.build_retrieval_artifacts(
+                                question_text,
+                                question.id,
+                            )
+                            features = artifacts.features
+                            auto_confirm = False
+                            if current_app.config.get('AUTO_CONFIRM_V2_ENABLED', True):
+                                auto_confirm = retrieval_features.auto_confirm_v2(
+                                    features,
+                                    delta=float(current_app.config.get('AUTO_CONFIRM_V2_DELTA', 0.05)),
+                                    max_bm25_rank=int(current_app.config.get('AUTO_CONFIRM_V2_MAX_BM25_RANK', 5)),
+                                )
+                            uncertain = retrieval_features.is_uncertain(
+                                features,
+                                delta_uncertain=float(current_app.config.get('AUTO_CONFIRM_V2_DELTA_UNCERTAIN', 0.03)),
+                                min_chunk_len=int(current_app.config.get('AUTO_CONFIRM_V2_MIN_CHUNK_LEN', 200)),
+                                auto_confirm=auto_confirm,
+                            )
+                            if uncertain:
+                                candidates = expand_candidates(candidates)
 
                         result = classifier.classify_single(question, candidates)
                         result['question_content'] = question.content or ''
                         result['question_choices'] = choices
+                        result['candidate_ids'] = [c.get('id') for c in candidates if c.get('id') is not None]
+                        result['candidate_top_id'] = result['candidate_ids'][0] if result['candidate_ids'] else None
 
                         
                         # 결과 저장 (DB에는 아직 반영하지 않음 - preview용)
@@ -648,34 +741,39 @@ class AsyncBatchProcessor:
 # 유틸리티 함수
 # ============================================================
 
-def apply_classification_results(
-    question_ids: List[int],
-    job_id: int,
-    apply_mode: str = "all",
-) -> int:
+def apply_classification_results(question_ids: List[int], job_id: int) -> int:
     """
     분류 결과를 실제 DB에 적용
-    
+
     Args:
         question_ids: 적용할 문제 ID 목록
         job_id: 분류 작업 ID
-    
+
     Returns:
         적용된 문제 수
     """
     job = ClassificationJob.query.get(job_id)
     if not job or not job.result_json:
         return 0
-    
+
     _, results = parse_job_payload(job.result_json)
     if not results:
         return 0
-    results_map = {r['question_id']: r for r in results}
-    
+
+    # results: List[dict] with keys like question_id, lecture_id, confidence, evidence, ...
+    results_map = {r.get("question_id"): r for r in results if r.get("question_id") is not None}
+
     applied_count = 0
-    apply_mode = (apply_mode or "all").lower()
-    if apply_mode not in {"all", "only_unclassified", "only_changes"}:
-        apply_mode = "all"
+
+    auto_apply = current_app.config.get("AI_AUTO_APPLY", False)
+    threshold = float(current_app.config.get("AI_CONFIDENCE_THRESHOLD", 0.7))
+    margin = float(current_app.config.get("AI_AUTO_APPLY_MARGIN", 0.2))
+    auto_apply_min = threshold + margin
+
+    hard_action = current_app.config.get("HARD_CANDIDATE_ACTION", "needs_review")
+
+    import logging
+    logger = logging.getLogger(__name__)
 
     for qid in question_ids:
         result = results_map.get(qid)
@@ -686,100 +784,147 @@ def apply_classification_results(
         if not question:
             continue
 
-        lecture_id = result.get('lecture_id')
-        lecture = Lecture.query.get(lecture_id) if lecture_id else None
-        no_match = bool(result.get('no_match', False))
+        lecture_id = result.get("lecture_id")
+        candidate_ids = result.get("candidate_ids") or []
+        out_of_candidates = (
+            lecture_id is not None
+            and bool(candidate_ids)
+            and lecture_id not in candidate_ids
+        )
+
+        no_match = bool(result.get("no_match", False))
         try:
-            confidence = float(result.get('confidence', 0.0))
+            confidence = float(result.get("confidence", 0.0))
         except (TypeError, ValueError):
             confidence = 0.0
 
-        # AI 제안 정보는 항상 저장
+        lecture = Lecture.query.get(lecture_id) if lecture_id else None
+
+        # --- Always persist AI suggested info ---
         if lecture and not no_match:
             question.ai_suggested_lecture_id = lecture.id
             question.ai_suggested_lecture_title_snapshot = f"{lecture.block.name} > {lecture.title}"
             if not question.is_classified:
-                question.classification_status = 'ai_suggested'
+                question.classification_status = "ai_suggested"
         else:
             question.ai_suggested_lecture_id = None
             question.ai_suggested_lecture_title_snapshot = None
             if not question.is_classified:
-                question.classification_status = 'manual'
+                question.classification_status = "manual"
 
         question.ai_confidence = confidence
-        question.ai_reason = result.get('reason', '')
-        question.ai_model_name = result.get('model_name', '')
+        question.ai_reason = result.get("reason", "") or ""
+        question.ai_model_name = result.get("model_name", "") or ""
         question.ai_classified_at = datetime.utcnow()
 
-        should_apply = True
-        if apply_mode == "only_unclassified" and question.is_classified:
-            should_apply = False
-        elif apply_mode == "only_changes":
-            if not lecture or lecture.id == question.lecture_id:
-                should_apply = False
+        # --- Hard candidate constraint (out-of-candidate handling) ---
+        final_lecture_id = lecture_id
+        if out_of_candidates:
+            if hard_action == "clamp_top1" and candidate_ids:
+                final_lecture_id = candidate_ids[0]
+            else:
+                final_lecture_id = None
+            question.classification_status = "needs_review"
 
-        if should_apply and lecture and not no_match:
-            question.lecture_id = lecture.id
+        question.ai_final_lecture_id = final_lecture_id
+
+        # --- Always persist evidence (QuestionChunkMatch) ---
+        QuestionChunkMatch.query.filter_by(question_id=question.id).delete(
+            synchronize_session=False
+        )
+
+        evidence_list = result.get("evidence") or []
+        if isinstance(evidence_list, list) and evidence_list:
+            chunk_ids = [e.get("chunk_id") for e in evidence_list if e.get("chunk_id")]
+            chunk_map = {}
+            if chunk_ids:
+                chunk_rows = LectureChunk.query.filter(LectureChunk.id.in_(chunk_ids)).all()
+                chunk_map = {row.id: row for row in chunk_rows}
+
+            matches: List[QuestionChunkMatch] = []
+            for idx, evidence in enumerate(evidence_list):
+                chunk_id = evidence.get("chunk_id")
+                if not chunk_id:
+                    continue
+
+                chunk = chunk_map.get(chunk_id)
+
+                evidence_lecture_id = (
+                    evidence.get("lecture_id")
+                    or (lecture.id if lecture else None)
+                    or (chunk.lecture_id if chunk else None)
+                )
+                if not evidence_lecture_id:
+                    continue
+
+                snippet = (
+                    evidence.get("quote")
+                    or evidence.get("snippet")
+                    or (chunk.content if chunk else "")
+                )
+                snippet = (snippet or "").strip()
+                if len(snippet) > 500:
+                    snippet = snippet[:497] + "..."
+
+                matches.append(
+                    QuestionChunkMatch(
+                        question_id=question.id,
+                        lecture_id=evidence_lecture_id,
+                        chunk_id=chunk_id,
+                        material_id=(chunk.material_id if chunk else None),
+                        page_start=evidence.get("page_start") or (chunk.page_start if chunk else None),
+                        page_end=evidence.get("page_end") or (chunk.page_end if chunk else None),
+                        snippet=snippet,
+                        score=evidence.get("score") or confidence,
+                        source="ai",
+                        job_id=job_id,
+                        is_primary=(idx == 0),
+                    )
+                )
+
+            if matches:
+                db.session.add_all(matches)
+
+        # --- If out-of-candidates, never auto-apply; keep for review ---
+        if out_of_candidates:
+            continue
+
+        # --- Auto-confirm decision logging ---
+        is_pass = (
+            auto_apply
+            and final_lecture_id
+            and (not no_match)
+            and confidence >= auto_apply_min
+        )
+        fail_reason = []
+        if not auto_apply:
+            fail_reason.append("config_disabled")
+        if not final_lecture_id:
+            fail_reason.append("no_final_id")
+        if no_match:
+            fail_reason.append("is_no_match")
+        if confidence < auto_apply_min:
+            fail_reason.append(f"low_conf({confidence:.2f}<{auto_apply_min:.2f})")
+
+        logger.info(
+            "AUTOCONFIRM_DEBUG_DECISION: qid=%s, model=%s, conf=%.2f, threshold=%.2f, pass=%s, reason=%s",
+            qid,
+            result.get("model_name"),
+            confidence,
+            auto_apply_min,
+            is_pass,
+            ",".join(fail_reason) or "none",
+        )
+
+        # --- Apply to question only when all conditions satisfied ---
+        if is_pass:
+            final_lecture = Lecture.query.get(final_lecture_id)
+            if not final_lecture:
+                continue
+            question.lecture_id = final_lecture.id
             question.is_classified = True
-            question.classification_status = 'ai_confirmed'
+            question.classification_status = "ai_confirmed"
             applied_count += 1
-
-        if should_apply:
-            QuestionChunkMatch.query.filter_by(question_id=question.id).delete(
-                synchronize_session=False
-            )
-            evidence_list = result.get('evidence') or []
-            if isinstance(evidence_list, list) and evidence_list:
-                chunk_ids = [
-                    e.get('chunk_id') for e in evidence_list if e.get('chunk_id')
-                ]
-                chunk_map = {}
-                if chunk_ids:
-                    chunk_rows = (
-                        LectureChunk.query.filter(LectureChunk.id.in_(chunk_ids)).all()
-                    )
-                    chunk_map = {row.id: row for row in chunk_rows}
-
-                matches = []
-                for idx, evidence in enumerate(evidence_list):
-                    chunk_id = evidence.get('chunk_id')
-                    if not chunk_id:
-                        continue
-                    chunk = chunk_map.get(chunk_id)
-                    evidence_lecture_id = (
-                        evidence.get('lecture_id')
-                        or (lecture.id if lecture else None)
-                        or (chunk.lecture_id if chunk else None)
-                    )
-                    if not evidence_lecture_id:
-                        continue
-                    snippet = (
-                        evidence.get('quote')
-                        or evidence.get('snippet')
-                        or (chunk.content if chunk else '')
-                    )
-                    snippet = (snippet or '').strip()
-                    if len(snippet) > 500:
-                        snippet = snippet[:497] + '...'
-                    matches.append(
-                        QuestionChunkMatch(
-                            question_id=question.id,
-                            lecture_id=evidence_lecture_id,
-                            chunk_id=chunk_id,
-                            material_id=chunk.material_id if chunk else None,
-                            page_start=evidence.get('page_start')
-                            or (chunk.page_start if chunk else None),
-                            page_end=evidence.get('page_end')
-                            or (chunk.page_end if chunk else None),
-                            snippet=snippet,
-                            score=evidence.get('score') or confidence,
-                            source='ai',
-                            job_id=job_id,
-                            is_primary=(idx == 0),
-                        )
-                    )
-                if matches:
-                    db.session.add_all(matches)
 
     db.session.commit()
     return applied_count
