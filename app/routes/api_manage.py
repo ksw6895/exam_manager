@@ -1,4 +1,5 @@
 """JSON API for manage screens (blocks/lectures/exams)."""
+
 from datetime import datetime
 
 from flask import Blueprint, request, jsonify, current_app, abort, url_for
@@ -19,15 +20,15 @@ from app.services.folder_scope import (
     build_folder_tree,
 )
 
-api_manage_bp = Blueprint('api_manage', __name__, url_prefix='/api/manage')
+api_manage_bp = Blueprint("api_manage", __name__, url_prefix="/api/manage")
 
 
 @api_manage_bp.before_request
 def restrict_to_local_admin():
-    if not current_app.config.get('LOCAL_ADMIN_ONLY'):
+    if not current_app.config.get("LOCAL_ADMIN_ONLY"):
         return None
-    remote_addr = request.remote_addr or ''
-    if remote_addr not in {'127.0.0.1', '::1'}:
+    remote_addr = request.remote_addr or ""
+    if remote_addr not in {"127.0.0.1", "::1"}:
         abort(404)
     return None
 
@@ -41,13 +42,13 @@ def guard_read_only():
 
 
 def ok(data=None, status=200):
-    return jsonify({'ok': True, 'data': data}), status
+    return jsonify({"ok": True, "data": data}), status
 
 
-def error_response(message, code='BAD_REQUEST', status=400, details=None):
-    payload = {'ok': False, 'code': code, 'message': message}
+def error_response(message, code="BAD_REQUEST", status=400, details=None):
+    payload = {"ok": False, "code": code, "message": message}
     if details is not None:
-        payload['details'] = details
+        payload["details"] = details
     return jsonify(payload), status
 
 
@@ -58,7 +59,7 @@ def _parse_date(value):
         return value.date()
     if isinstance(value, str):
         try:
-            return datetime.strptime(value, '%Y-%m-%d').date()
+            return datetime.strptime(value, "%Y-%m-%d").date()
         except ValueError:
             return None
     return None
@@ -70,176 +71,188 @@ def _format_date(value):
 
 def _block_payload(block):
     return {
-        'id': block.id,
-        'name': block.name,
-        'description': block.description,
-        'order': block.order,
-        'lectureCount': block.lecture_count,
-        'questionCount': block.question_count,
-        'createdAt': block.created_at.isoformat() if block.created_at else None,
-        'updatedAt': block.updated_at.isoformat() if block.updated_at else None,
+        "id": block.id,
+        "name": block.name,
+        "description": block.description,
+        "order": block.order,
+        "lectureCount": block.lecture_count,
+        "questionCount": block.question_count,
+        "createdAt": block.created_at.isoformat() if block.created_at else None,
+        "updatedAt": block.updated_at.isoformat() if block.updated_at else None,
     }
 
 
 def _lecture_payload(lecture):
     return {
-        'id': lecture.id,
-        'blockId': lecture.block_id,
-        'blockName': lecture.block.name if lecture.block else None,
-        'folderId': lecture.folder_id,
-        'title': lecture.title,
-        'professor': lecture.professor,
-        'order': lecture.order,
-        'description': lecture.description,
-        'questionCount': lecture.question_count,
-        'classifiedCount': lecture.classified_question_count,
-        'createdAt': lecture.created_at.isoformat() if lecture.created_at else None,
-        'updatedAt': lecture.updated_at.isoformat() if lecture.updated_at else None,
+        "id": lecture.id,
+        "blockId": lecture.block_id,
+        "blockName": lecture.block.name if lecture.block else None,
+        "folderId": lecture.folder_id,
+        "title": lecture.title,
+        "professor": lecture.professor,
+        "order": lecture.order,
+        "description": lecture.description,
+        "questionCount": lecture.question_count,
+        "classifiedCount": lecture.classified_question_count,
+        "createdAt": lecture.created_at.isoformat() if lecture.created_at else None,
+        "updatedAt": lecture.updated_at.isoformat() if lecture.updated_at else None,
     }
 
 
 def _exam_payload(exam):
     return {
-        'id': exam.id,
-        'title': exam.title,
-        'examDate': _format_date(exam.exam_date),
-        'subject': exam.subject,
-        'year': exam.year,
-        'term': exam.term,
-        'description': exam.description,
-        'questionCount': exam.question_count,
-        'classifiedCount': exam.classified_count,
-        'unclassifiedCount': exam.unclassified_count,
-        'createdAt': exam.created_at.isoformat() if exam.created_at else None,
-        'updatedAt': exam.updated_at.isoformat() if exam.updated_at else None,
+        "id": exam.id,
+        "title": exam.title,
+        "examDate": _format_date(exam.exam_date),
+        "subject": exam.subject,
+        "year": exam.year,
+        "term": exam.term,
+        "description": exam.description,
+        "questionCount": exam.question_count,
+        "classifiedCount": exam.classified_count,
+        "unclassifiedCount": exam.unclassified_count,
+        "createdAt": exam.created_at.isoformat() if exam.created_at else None,
+        "updatedAt": exam.updated_at.isoformat() if exam.updated_at else None,
     }
 
 
 def _folder_payload(folder):
     return {
-        'id': folder.id,
-        'blockId': folder.block_id,
-        'parentId': folder.parent_id,
-        'name': folder.name,
-        'order': folder.order,
-        'description': folder.description,
-        'createdAt': folder.created_at.isoformat() if folder.created_at else None,
-        'updatedAt': folder.updated_at.isoformat() if folder.updated_at else None,
+        "id": folder.id,
+        "blockId": folder.block_id,
+        "parentId": folder.parent_id,
+        "name": folder.name,
+        "order": folder.order,
+        "description": folder.description,
+        "createdAt": folder.created_at.isoformat() if folder.created_at else None,
+        "updatedAt": folder.updated_at.isoformat() if folder.updated_at else None,
     }
 
 
 def _question_payload(question):
     return {
-        'id': question.id,
-        'questionNumber': question.question_number,
-        'type': question.q_type,
-        'lectureId': question.lecture_id,
-        'lectureTitle': question.lecture.title if question.lecture else None,
-        'isClassified': question.is_classified,
-        'classificationStatus': question.classification_status,
-        'hasImage': bool(question.image_path),
+        "id": question.id,
+        "questionNumber": question.question_number,
+        "type": question.q_type,
+        "lectureId": question.lecture_id,
+        "lectureTitle": question.lecture.title if question.lecture else None,
+        "isClassified": question.is_classified,
+        "classificationStatus": question.classification_status,
+        "hasImage": bool(question.image_path),
     }
 
 
 def _choice_payload(choice):
     return {
-        'id': choice.id,
-        'number': choice.choice_number,
-        'content': choice.content,
-        'imagePath': choice.image_path,
-        'isCorrect': choice.is_correct,
+        "id": choice.id,
+        "number": choice.choice_number,
+        "content": choice.content,
+        "imagePath": choice.image_path,
+        "isCorrect": choice.is_correct,
     }
 
 
 def _question_detail_payload(question):
     original_image_url = None
     try:
-        from app.services.pdf_cropper import find_question_crop_image, to_static_relative
+        from app.services.pdf_cropper import (
+            find_question_crop_image,
+            to_static_relative,
+        )
+
         crop_path = find_question_crop_image(question.exam_id, question.question_number)
         if crop_path:
-            relative_path = to_static_relative(crop_path, static_root=current_app.static_folder)
+            relative_path = to_static_relative(
+                crop_path, static_root=current_app.static_folder
+            )
             if relative_path:
-                original_image_url = url_for('static', filename=relative_path)
+                original_image_url = url_for("static", filename=relative_path)
     except Exception:
         original_image_url = None
     return {
-        'id': question.id,
-        'examId': question.exam_id,
-        'examTitle': question.exam.title if question.exam else None,
-        'questionNumber': question.question_number,
-        'type': question.q_type,
-        'lectureId': question.lecture_id,
-        'lectureTitle': question.lecture.title if question.lecture else None,
-        'content': question.content,
-        'explanation': question.explanation,
-        'imagePath': question.image_path,
-        'originalImageUrl': original_image_url,
-        'answer': question.answer,
-        'correctAnswerText': question.correct_answer_text,
-        'choices': [_choice_payload(choice) for choice in question.choices.order_by(Choice.choice_number)],
+        "id": question.id,
+        "examId": question.exam_id,
+        "examTitle": question.exam.title if question.exam else None,
+        "questionNumber": question.question_number,
+        "type": question.q_type,
+        "lectureId": question.lecture_id,
+        "lectureTitle": question.lecture.title if question.lecture else None,
+        "content": question.content,
+        "explanation": question.explanation,
+        "imagePath": question.image_path,
+        "originalImageUrl": original_image_url,
+        "answer": question.answer,
+        "correctAnswerText": question.correct_answer_text,
+        "choices": [
+            _choice_payload(choice)
+            for choice in question.choices.order_by(Choice.choice_number)
+        ],
     }
 
 
-@api_manage_bp.get('/summary')
+@api_manage_bp.get("/summary")
 def manage_summary():
     block_count = Block.query.count()
     lecture_count = Lecture.query.count()
     exam_count = PreviousExam.query.count()
     question_count = Question.query.count()
     unclassified_count = Question.query.filter_by(is_classified=False).count()
-    recent_exams = PreviousExam.query.order_by(PreviousExam.created_at.desc()).limit(5).all()
+    recent_exams = (
+        PreviousExam.query.order_by(PreviousExam.created_at.desc()).limit(5).all()
+    )
 
     return ok(
         {
-            'counts': {
-                'blocks': block_count,
-                'lectures': lecture_count,
-                'exams': exam_count,
-                'questions': question_count,
-                'unclassified': unclassified_count,
+            "counts": {
+                "blocks": block_count,
+                "lectures": lecture_count,
+                "exams": exam_count,
+                "questions": question_count,
+                "unclassified": unclassified_count,
             },
-            'recentExams': [_exam_payload(exam) for exam in recent_exams],
+            "recentExams": [_exam_payload(exam) for exam in recent_exams],
         }
     )
 
 
-@api_manage_bp.get('/blocks')
+@api_manage_bp.get("/blocks")
 def list_blocks():
     blocks = Block.query.order_by(Block.order).all()
     return ok([_block_payload(block) for block in blocks])
 
 
-@api_manage_bp.post('/blocks')
+@api_manage_bp.post("/blocks")
 def create_block():
     data = request.get_json(silent=True) or {}
-    name = data.get('name')
+    name = data.get("name")
     if not name:
-        return error_response('Block name is required.', code='BLOCK_NAME_REQUIRED')
+        return error_response("Block name is required.", code="BLOCK_NAME_REQUIRED")
 
     block = Block(
         name=str(name),
-        description=data.get('description'),
-        order=int(data.get('order') or 0),
+        description=data.get("description"),
+        order=int(data.get("order") or 0),
     )
     db.session.add(block)
     db.session.commit()
     return ok(_block_payload(block), status=201)
 
 
-@api_manage_bp.get('/blocks/<int:block_id>')
+@api_manage_bp.get("/blocks/<int:block_id>")
 def get_block(block_id):
     block = Block.query.get_or_404(block_id)
     return ok(_block_payload(block))
 
 
-@api_manage_bp.get('/blocks/<int:block_id>/workspace')
+@api_manage_bp.get("/blocks/<int:block_id>/workspace")
 def get_block_workspace(block_id):
     block = Block.query.get_or_404(block_id)
     folder_tree = build_folder_tree(block_id)
 
-    folder_id = request.args.get('folderId') or request.args.get('folder_id')
+    folder_id = request.args.get("folderId") or request.args.get("folder_id")
     include_descendants = parse_bool(
-        request.args.get('includeDescendants') or request.args.get('include_descendants'),
+        request.args.get("includeDescendants")
+        or request.args.get("include_descendants"),
         True,
     )
     folder_id_value = None
@@ -247,7 +260,9 @@ def get_block_workspace(block_id):
         try:
             folder_id_value = int(folder_id)
         except ValueError:
-            return error_response('Invalid folder id.', code='INVALID_FOLDER_ID', status=400)
+            return error_response(
+                "Invalid folder id.", code="INVALID_FOLDER_ID", status=400
+            )
 
     lecture_ids = resolve_lecture_ids(block_id, folder_id_value, include_descendants)
     lecture_query = Lecture.query.filter(Lecture.block_id == block_id)
@@ -259,7 +274,7 @@ def get_block_workspace(block_id):
 
     lectures = lecture_query.order_by(Lecture.order).all()
 
-    subject = request.args.get('subject')
+    subject = request.args.get("subject")
     exam_query = PreviousExam.query
     if subject:
         exam_query = exam_query.filter(PreviousExam.subject == subject)
@@ -267,128 +282,137 @@ def get_block_workspace(block_id):
 
     return ok(
         {
-            'block': _block_payload(block),
-            'folderTree': folder_tree,
-            'lectures': [_lecture_payload(lecture) for lecture in lectures],
-            'exams': [_exam_payload(exam) for exam in exams],
-            'scope': {
-                'blockId': block_id,
-                'folderId': folder_id_value,
-                'includeDescendants': include_descendants,
-                'lectureIds': lecture_ids,
+            "block": _block_payload(block),
+            "folderTree": folder_tree,
+            "lectures": [_lecture_payload(lecture) for lecture in lectures],
+            "exams": [_exam_payload(exam) for exam in exams],
+            "scope": {
+                "blockId": block_id,
+                "folderId": folder_id_value,
+                "includeDescendants": include_descendants,
+                "lectureIds": lecture_ids,
             },
         }
     )
 
 
-@api_manage_bp.post('/blocks/<int:block_id>/folders')
+@api_manage_bp.post("/blocks/<int:block_id>/folders")
 def create_folder(block_id):
     Block.query.get_or_404(block_id)
     data = request.get_json(silent=True) or {}
-    name = data.get('name')
+    name = data.get("name")
     if not name:
-        return error_response('Folder name is required.', code='FOLDER_NAME_REQUIRED')
+        return error_response("Folder name is required.", code="FOLDER_NAME_REQUIRED")
 
-    parent_id = data.get('parentId') or data.get('parent_id')
+    parent_id = data.get("parentId") or data.get("parent_id")
     parent_id_value = None
     if parent_id is not None:
         try:
             parent_id_value = int(parent_id)
         except ValueError:
-            return error_response('Invalid parent id.', code='INVALID_PARENT_ID')
+            return error_response("Invalid parent id.", code="INVALID_PARENT_ID")
         parent = BlockFolder.query.get(parent_id_value)
         if not parent or parent.block_id != block_id:
-            return error_response('Parent folder not found.', code='PARENT_NOT_FOUND', status=404)
+            return error_response(
+                "Parent folder not found.", code="PARENT_NOT_FOUND", status=404
+            )
 
     folder = BlockFolder(
         block_id=block_id,
         parent_id=parent_id_value,
         name=str(name),
-        order=int(data.get('order') or 0),
-        description=data.get('description'),
+        order=int(data.get("order") or 0),
+        description=data.get("description"),
     )
     db.session.add(folder)
     db.session.commit()
     return ok(_folder_payload(folder), status=201)
 
 
-@api_manage_bp.patch('/folders/<int:folder_id>')
+@api_manage_bp.patch("/folders/<int:folder_id>")
 def update_folder(folder_id):
     folder = BlockFolder.query.get_or_404(folder_id)
     data = request.get_json(silent=True) or {}
-    if 'name' in data and data['name'] is not None:
-        folder.name = str(data['name'])
-    if 'description' in data:
-        folder.description = data.get('description')
-    if 'order' in data and data['order'] is not None:
-        folder.order = int(data['order'])
+    if "name" in data and data["name"] is not None:
+        folder.name = str(data["name"])
+    if "description" in data:
+        folder.description = data.get("description")
+    if "order" in data and data["order"] is not None:
+        folder.order = int(data["order"])
 
-    if 'parentId' in data or 'parent_id' in data:
-        parent_id = data.get('parentId') or data.get('parent_id')
+    if "parentId" in data or "parent_id" in data:
+        parent_id = data.get("parentId") or data.get("parent_id")
         if parent_id is None:
             folder.parent_id = None
         else:
             try:
                 parent_id_value = int(parent_id)
             except ValueError:
-                return error_response('Invalid parent id.', code='INVALID_PARENT_ID')
+                return error_response("Invalid parent id.", code="INVALID_PARENT_ID")
             if parent_id_value == folder.id:
-                return error_response('Folder cannot be its own parent.', code='INVALID_PARENT_ID')
+                return error_response(
+                    "Folder cannot be its own parent.", code="INVALID_PARENT_ID"
+                )
             parent = BlockFolder.query.get(parent_id_value)
             if not parent or parent.block_id != folder.block_id:
-                return error_response('Parent folder not found.', code='PARENT_NOT_FOUND', status=404)
+                return error_response(
+                    "Parent folder not found.", code="PARENT_NOT_FOUND", status=404
+                )
             folder.parent_id = parent_id_value
 
     db.session.commit()
     return ok(_folder_payload(folder))
 
 
-@api_manage_bp.delete('/folders/<int:folder_id>')
+@api_manage_bp.delete("/folders/<int:folder_id>")
 def delete_folder(folder_id):
     folder = BlockFolder.query.get_or_404(folder_id)
     folder_ids = resolve_folder_ids(folder.id, True, folder.block_id)
     if not folder_ids:
-        return ok({'id': folder_id})
+        return ok({"id": folder_id})
 
     Lecture.query.filter(Lecture.folder_id.in_(folder_ids)).update(
-        {'folder_id': None},
+        {"folder_id": None},
         synchronize_session=False,
     )
     BlockFolder.query.filter(BlockFolder.id.in_(folder_ids)).delete(
         synchronize_session=False
     )
     db.session.commit()
-    return ok({'id': folder_id})
+    return ok({"id": folder_id})
 
 
-@api_manage_bp.put('/blocks/<int:block_id>')
+@api_manage_bp.put("/blocks/<int:block_id>")
 def update_block(block_id):
-    block = Block.query.get_or_404(block_id)
     data = request.get_json(silent=True) or {}
-    if 'name' in data and data['name'] is not None:
-        block.name = str(data['name'])
-    if 'description' in data:
-        block.description = data.get('description')
-    if 'order' in data and data['order'] is not None:
-        block.order = int(data['order'])
-    db.session.commit()
+    block_id = data.get("id")
+    if not block_id:
+        return error_response("Block ID is required", code=400)
+
+    block = update_block(
+        block_id=block_id,
+        name=data.get("name"),
+        description=data.get("description"),
+        order=int(data.get("order", 0)),
+    )
     return ok(_block_payload(block))
 
 
-@api_manage_bp.delete('/blocks/<int:block_id>')
+@api_manage_bp.delete("/blocks/<int:block_id>")
 def delete_block(block_id):
     block = Block.query.get_or_404(block_id)
     db.session.delete(block)
     db.session.commit()
-    return ok({'id': block_id})
+    return ok({"id": block_id})
 
 
-@api_manage_bp.get('/blocks/<int:block_id>/lectures')
+@api_manage_bp.get("/blocks/<int:block_id>/lectures")
 def list_lectures(block_id):
     block = Block.query.get_or_404(block_id)
-    folder_id = request.args.get('folderId') or request.args.get('folder_id')
+    folder_id = request.args.get("folderId") or request.args.get("folder_id")
     include_descendants = parse_bool(
-        request.args.get('includeDescendants') or request.args.get('include_descendants'),
+        request.args.get("includeDescendants")
+        or request.args.get("include_descendants"),
         True,
     )
     folder_id_value = None
@@ -396,7 +420,9 @@ def list_lectures(block_id):
         try:
             folder_id_value = int(folder_id)
         except ValueError:
-            return error_response('Invalid folder id.', code='INVALID_FOLDER_ID', status=400)
+            return error_response(
+                "Invalid folder id.", code="INVALID_FOLDER_ID", status=400
+            )
 
     lecture_ids = resolve_lecture_ids(block_id, folder_id_value, include_descendants)
     query = Lecture.query.filter(Lecture.block_id == block_id)
@@ -406,189 +432,210 @@ def list_lectures(block_id):
         else:
             return ok(
                 {
-                    'block': _block_payload(block),
-                    'lectures': [],
-                    'scope': {
-                        'blockId': block_id,
-                        'folderId': folder_id_value,
-                        'includeDescendants': include_descendants,
-                        'lectureIds': [],
+                    "block": _block_payload(block),
+                    "lectures": [],
+                    "scope": {
+                        "blockId": block_id,
+                        "folderId": folder_id_value,
+                        "includeDescendants": include_descendants,
+                        "lectureIds": [],
                     },
                 }
             )
     lectures = query.order_by(Lecture.order).all()
     return ok(
         {
-            'block': _block_payload(block),
-            'lectures': [_lecture_payload(lecture) for lecture in lectures],
-            'scope': {
-                'blockId': block_id,
-                'folderId': folder_id_value,
-                'includeDescendants': include_descendants,
-                'lectureIds': lecture_ids,
+            "block": _block_payload(block),
+            "lectures": [_lecture_payload(lecture) for lecture in lectures],
+            "scope": {
+                "blockId": block_id,
+                "folderId": folder_id_value,
+                "includeDescendants": include_descendants,
+                "lectureIds": lecture_ids,
             },
         }
     )
 
 
-@api_manage_bp.post('/blocks/<int:block_id>/lectures')
+@api_manage_bp.post("/blocks/<int:block_id>/lectures")
 def create_lecture(block_id):
     Block.query.get_or_404(block_id)
     data = request.get_json(silent=True) or {}
-    title = data.get('title')
+    title = data.get("title")
     if not title:
-        return error_response('Lecture title is required.', code='LECTURE_TITLE_REQUIRED')
+        return error_response(
+            "Lecture title is required.", code="LECTURE_TITLE_REQUIRED"
+        )
 
-    folder_id = data.get('folderId') or data.get('folder_id')
+    folder_id = data.get("folderId") or data.get("folder_id")
     folder_id_value = None
     if folder_id is not None:
         try:
             folder_id_value = int(folder_id)
         except ValueError:
-            return error_response('Invalid folder id.', code='INVALID_FOLDER_ID')
+            return error_response("Invalid folder id.", code="INVALID_FOLDER_ID")
         folder = BlockFolder.query.get(folder_id_value)
         if not folder or folder.block_id != block_id:
-            return error_response('Folder not found.', code='FOLDER_NOT_FOUND', status=404)
+            return error_response(
+                "Folder not found.", code="FOLDER_NOT_FOUND", status=404
+            )
 
     lecture = Lecture(
         block_id=block_id,
         folder_id=folder_id_value,
         title=str(title),
-        professor=data.get('professor'),
-        order=int(data.get('order') or 1),
-        description=data.get('description'),
+        professor=data.get("professor"),
+        order=int(data.get("order") or 1),
+        description=data.get("description"),
     )
     db.session.add(lecture)
     db.session.commit()
     return ok(_lecture_payload(lecture), status=201)
 
 
-@api_manage_bp.get('/lectures/<int:lecture_id>')
+@api_manage_bp.get("/lectures/<int:lecture_id>")
 def get_lecture(lecture_id):
     lecture = Lecture.query.get_or_404(lecture_id)
     return ok(_lecture_payload(lecture))
 
 
-@api_manage_bp.get('/lectures')
+@api_manage_bp.get("/lectures")
 def list_all_lectures():
     lectures = Lecture.query.order_by(Lecture.order).all()
     return ok([_lecture_payload(lecture) for lecture in lectures])
 
 
-@api_manage_bp.put('/lectures/<int:lecture_id>')
+@api_manage_bp.put("/lectures/<int:lecture_id>")
 def update_lecture(lecture_id):
     lecture = Lecture.query.get_or_404(lecture_id)
     data = request.get_json(silent=True) or {}
-    if 'title' in data and data['title'] is not None:
-        lecture.title = str(data['title'])
-    if 'professor' in data:
-        lecture.professor = data.get('professor')
-    if 'order' in data and data['order'] is not None:
-        lecture.order = int(data['order'])
-    if 'description' in data:
-        lecture.description = data.get('description')
-    if 'folderId' in data or 'folder_id' in data:
-        folder_id = data.get('folderId') or data.get('folder_id')
+    if "title" in data and data["title"] is not None:
+        lecture.title = str(data["title"])
+    if "professor" in data:
+        lecture.professor = data.get("professor")
+    if "order" in data and data["order"] is not None:
+        lecture.order = int(data["order"])
+    if "description" in data:
+        lecture.description = data.get("description")
+    if "folderId" in data or "folder_id" in data:
+        folder_id = data.get("folderId") or data.get("folder_id")
         if folder_id is None:
             lecture.folder_id = None
         else:
             try:
                 folder_id_value = int(folder_id)
             except ValueError:
-                return error_response('Invalid folder id.', code='INVALID_FOLDER_ID')
+                return error_response("Invalid folder id.", code="INVALID_FOLDER_ID")
             folder = BlockFolder.query.get(folder_id_value)
             if not folder or folder.block_id != lecture.block_id:
-                return error_response('Folder not found.', code='FOLDER_NOT_FOUND', status=404)
+                return error_response(
+                    "Folder not found.", code="FOLDER_NOT_FOUND", status=404
+                )
             lecture.folder_id = folder_id_value
     db.session.commit()
     return ok(_lecture_payload(lecture))
 
 
-@api_manage_bp.delete('/lectures/<int:lecture_id>')
+@api_manage_bp.delete("/lectures/<int:lecture_id>")
 def delete_lecture(lecture_id):
     lecture = Lecture.query.get_or_404(lecture_id)
     db.session.delete(lecture)
     db.session.commit()
-    return ok({'id': lecture_id})
+    return ok({"id": lecture_id})
 
 
-@api_manage_bp.get('/exams')
+@api_manage_bp.get("/exams")
 def list_exams():
     exams = PreviousExam.query.order_by(PreviousExam.exam_date.desc()).all()
     return ok([_exam_payload(exam) for exam in exams])
 
 
-@api_manage_bp.post('/upload-pdf')
+@api_manage_bp.post("/upload-pdf")
 def upload_pdf():
-    if 'pdf_file' not in request.files:
-        return error_response('PDF file is required.', code='PDF_REQUIRED', status=400)
+    if "pdf_file" not in request.files:
+        return error_response("PDF file is required.", code="PDF_REQUIRED", status=400)
 
-    file = request.files['pdf_file']
-    if file.filename == '':
-        return error_response('PDF filename is missing.', code='PDF_NAME_REQUIRED', status=400)
+    file = request.files["pdf_file"]
+    if file.filename == "":
+        return error_response(
+            "PDF filename is missing.", code="PDF_NAME_REQUIRED", status=400
+        )
 
-    if not file.filename.lower().endswith('.pdf'):
-        return error_response('Only PDF files are allowed.', code='PDF_INVALID_TYPE', status=400)
+    if not file.filename.lower().endswith(".pdf"):
+        return error_response(
+            "Only PDF files are allowed.", code="PDF_INVALID_TYPE", status=400
+        )
 
-    title = (request.form.get('title') or '').strip()
+    title = (request.form.get("title") or "").strip()
     if not title:
-        return error_response('Exam title is required.', code='EXAM_TITLE_REQUIRED', status=400)
+        return error_response(
+            "Exam title is required.", code="EXAM_TITLE_REQUIRED", status=400
+        )
 
     try:
-        parser_mode = current_app.config.get('PDF_PARSER_MODE', 'legacy')
-        if parser_mode == 'experimental':
-            from app.services.pdf_parser_experimental import parse_pdf_to_questions
-        else:
-            from app.services.pdf_parser import parse_pdf_to_questions
+        from app.services.pdf_parser_factory import parse_pdf
 
+        parser_mode = current_app.config.get("PDF_PARSER_MODE", "legacy")
         tmp_path = None
         crop_dir = None
         crop_question_count = 0
         crop_image_count = 0
         crop_meta_url = None
         import tempfile
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp:
+
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
             file.save(tmp.name)
             tmp_path = tmp.name
 
-        exam_prefix = secure_filename(title.replace(' ', '_'))[:20]
-        upload_folder = current_app.config['UPLOAD_FOLDER']
-        questions_data = parse_pdf_to_questions(tmp_path, upload_folder, exam_prefix)
+        exam_prefix = secure_filename(title.replace(" ", "_"))[:20]
+        upload_folder = current_app.config["UPLOAD_FOLDER"]
+        questions_data = parse_pdf(
+            tmp_path, upload_folder, exam_prefix, mode=parser_mode
+        )
         if not questions_data:
             return error_response(
-                'No questions extracted. Check PDF formatting.',
-                code='PDF_PARSE_EMPTY',
+                "No questions extracted. Check PDF formatting.",
+                code="PDF_PARSE_EMPTY",
                 status=400,
             )
 
         exam = PreviousExam(
             title=title,
-            subject=request.form.get('subject'),
-            year=int(request.form.get('year')) if request.form.get('year') else None,
-            term=request.form.get('term'),
+            subject=request.form.get("subject"),
+            year=int(request.form.get("year")) if request.form.get("year") else None,
+            term=request.form.get("term"),
             source_file=secure_filename(file.filename),
         )
         db.session.add(exam)
         db.session.flush()
 
-        from app.services.pdf_cropper import crop_pdf_to_questions, get_exam_crop_dir, to_static_relative
+        from app.services.pdf_cropper import (
+            crop_pdf_to_questions,
+            get_exam_crop_dir,
+            to_static_relative,
+        )
+
         crop_dir = get_exam_crop_dir(exam.id, upload_folder)
-        crop_result = crop_pdf_to_questions(tmp_path, exam.id, upload_folder=upload_folder)
-        crop_meta = crop_result.get('meta') or {}
-        crop_question_count = len(crop_meta.get('questions', []))
-        crop_image_count = len(crop_result.get('question_images', {}))
-        meta_path = crop_result.get('meta_path')
+        crop_result = crop_pdf_to_questions(
+            tmp_path, exam.id, upload_folder=upload_folder
+        )
+        crop_meta = crop_result.get("meta") or {}
+        crop_question_count = len(crop_meta.get("questions", []))
+        crop_image_count = len(crop_result.get("question_images", {}))
+        meta_path = crop_result.get("meta_path")
         if meta_path:
-            relative_path = to_static_relative(meta_path, static_root=current_app.static_folder)
+            relative_path = to_static_relative(
+                meta_path, static_root=current_app.static_folder
+            )
             if relative_path:
-                crop_meta_url = url_for('static', filename=relative_path)
+                crop_meta_url = url_for("static", filename=relative_path)
 
         question_count = 0
         choice_count = 0
 
         for q_data in questions_data:
-            answer_count = len(q_data.get('answer_options', []))
-            has_options = len(q_data.get('options', [])) > 0
+            answer_count = len(q_data.get("answer_options", []))
+            has_options = len(q_data.get("options", [])) > 0
 
             if not has_options:
                 q_type = Question.TYPE_SHORT_ANSWER
@@ -599,15 +646,15 @@ def upload_pdf():
 
             question = Question(
                 exam_id=exam.id,
-                question_number=q_data['question_number'],
-                content=q_data.get('content', ''),
-                image_path=q_data.get('image_path'),
+                question_number=q_data["question_number"],
+                content=q_data.get("content", ""),
+                image_path=q_data.get("image_path"),
                 q_type=q_type,
-                answer=','.join(map(str, q_data.get('answer_options', []))),
-                correct_answer_text=q_data.get('answer_text')
+                answer=",".join(map(str, q_data.get("answer_options", []))),
+                correct_answer_text=q_data.get("answer_text")
                 if q_type == Question.TYPE_SHORT_ANSWER
                 else None,
-                explanation=q_data.get('answer_text')
+                explanation=q_data.get("answer_text")
                 if q_type != Question.TYPE_SHORT_ANSWER
                 else None,
                 is_classified=False,
@@ -616,14 +663,14 @@ def upload_pdf():
             db.session.add(question)
             db.session.flush()
 
-            for opt in q_data.get('options', []):
-                if opt.get('content') or opt.get('image_path'):
+            for opt in q_data.get("options", []):
+                if opt.get("content") or opt.get("image_path"):
                     choice = Choice(
                         question_id=question.id,
-                        choice_number=opt['number'],
-                        content=opt.get('content', ''),
-                        image_path=opt.get('image_path'),
-                        is_correct=opt.get('is_correct', False),
+                        choice_number=opt["number"],
+                        content=opt.get("content", ""),
+                        image_path=opt.get("image_path"),
+                        is_correct=opt.get("is_correct", False),
                     )
                     db.session.add(choice)
                     choice_count += 1
@@ -633,12 +680,12 @@ def upload_pdf():
         db.session.commit()
         return ok(
             {
-                'examId': exam.id,
-                'questionCount': question_count,
-                'choiceCount': choice_count,
-                'cropImageCount': crop_image_count,
-                'cropQuestionCount': crop_question_count,
-                'cropMetaUrl': crop_meta_url,
+                "examId": exam.id,
+                "questionCount": question_count,
+                "choiceCount": choice_count,
+                "cropImageCount": crop_image_count,
+                "cropQuestionCount": crop_question_count,
+                "cropMetaUrl": crop_meta_url,
             },
             status=201,
         )
@@ -647,8 +694,8 @@ def upload_pdf():
         if crop_dir:
             shutil.rmtree(crop_dir, ignore_errors=True)
         return error_response(
-            f'PDF parser import failed: {exc}',
-            code='PDF_PARSER_IMPORT',
+            f"PDF parser import failed: {exc}",
+            code="PDF_PARSER_IMPORT",
             status=500,
         )
     except RuntimeError as exc:
@@ -656,75 +703,79 @@ def upload_pdf():
         if crop_dir:
             shutil.rmtree(crop_dir, ignore_errors=True)
         return error_response(
-            f'PDF crop error: {exc}',
-            code='PDF_CROP_ERROR',
+            f"PDF crop error: {exc}",
+            code="PDF_CROP_ERROR",
             status=500,
         )
     except Exception as exc:
         db.session.rollback()
         if crop_dir:
             shutil.rmtree(crop_dir, ignore_errors=True)
-        return error_response(f'PDF parsing error: {exc}', code='PDF_PARSE_ERROR', status=500)
+        return error_response(
+            f"PDF parsing error: {exc}", code="PDF_PARSE_ERROR", status=500
+        )
     finally:
         if tmp_path and os.path.exists(tmp_path):
             os.unlink(tmp_path)
 
 
-@api_manage_bp.post('/exams')
+@api_manage_bp.post("/exams")
 def create_exam():
     data = request.get_json(silent=True) or {}
-    title = data.get('title')
+    title = data.get("title")
     if not title:
-        return error_response('Exam title is required.', code='EXAM_TITLE_REQUIRED')
+        return error_response("Exam title is required.", code="EXAM_TITLE_REQUIRED")
 
     exam = PreviousExam(
         title=str(title),
-        exam_date=_parse_date(data.get('examDate') or data.get('exam_date')),
-        subject=data.get('subject'),
-        year=int(data['year']) if data.get('year') is not None else None,
-        term=data.get('term'),
-        description=data.get('description'),
+        exam_date=_parse_date(data.get("examDate") or data.get("exam_date")),
+        subject=data.get("subject"),
+        year=int(data["year"]) if data.get("year") is not None else None,
+        term=data.get("term"),
+        description=data.get("description"),
     )
     db.session.add(exam)
     db.session.commit()
     return ok(_exam_payload(exam), status=201)
 
 
-@api_manage_bp.get('/exams/<int:exam_id>')
+@api_manage_bp.get("/exams/<int:exam_id>")
 def get_exam(exam_id):
     exam = PreviousExam.query.get_or_404(exam_id)
     questions = exam.questions.order_by(Question.question_number).all()
     return ok(
         {
-            'exam': _exam_payload(exam),
-            'questions': [_question_payload(question) for question in questions],
+            "exam": _exam_payload(exam),
+            "questions": [_question_payload(question) for question in questions],
         }
     )
 
 
-@api_manage_bp.get('/questions/<int:question_id>')
+@api_manage_bp.get("/questions/<int:question_id>")
 def get_question(question_id):
     question = Question.query.get_or_404(question_id)
     return ok(_question_detail_payload(question))
 
 
-@api_manage_bp.put('/questions/<int:question_id>')
+@api_manage_bp.put("/questions/<int:question_id>")
 def update_question(question_id):
     question = Question.query.get_or_404(question_id)
     data = request.get_json(silent=True) or {}
 
-    raw_content = data.get('content') or ''
-    uploaded_image = (data.get('uploadedImage') or '').strip()
-    remove_image = bool(data.get('removeImage'))
+    raw_content = data.get("content") or ""
+    uploaded_image = (data.get("uploadedImage") or "").strip()
+    remove_image = bool(data.get("removeImage"))
 
-    upload_folder = current_app.config.get('UPLOAD_FOLDER') or os.path.join(
-        current_app.static_folder, 'uploads'
+    upload_folder = current_app.config.get("UPLOAD_FOLDER") or os.path.join(
+        current_app.static_folder, "uploads"
     )
-    upload_relative = os.path.relpath(
-        os.fspath(upload_folder), os.fspath(current_app.static_folder)
-    ).replace('\\', '/').strip('/')
-    if upload_relative == '.':
-        upload_relative = ''
+    upload_relative = (
+        os.path.relpath(os.fspath(upload_folder), os.fspath(current_app.static_folder))
+        .replace("\\", "/")
+        .strip("/")
+    )
+    if upload_relative == ".":
+        upload_relative = ""
 
     if uploaded_image:
         cleaned_content, markdown_filename = strip_markdown_images(
@@ -736,8 +787,8 @@ def update_question(question_id):
         )
 
     question.content = cleaned_content
-    question.explanation = data.get('explanation') or ''
-    q_type = data.get('type') or question.q_type
+    question.explanation = data.get("explanation") or ""
+    q_type = data.get("type") or question.q_type
     question.q_type = q_type
 
     if uploaded_image:
@@ -747,8 +798,8 @@ def update_question(question_id):
     elif markdown_filename:
         question.image_path = markdown_filename
 
-    if 'lectureId' in data:
-        lecture_id = data.get('lectureId')
+    if "lectureId" in data:
+        lecture_id = data.get("lectureId")
         if lecture_id:
             lecture = Lecture.query.get(int(lecture_id))
             if lecture:
@@ -757,32 +808,32 @@ def update_question(question_id):
             question.lecture_id = None
 
     if q_type == Question.TYPE_SHORT_ANSWER:
-        correct_text = data.get('correctAnswerText') or ''
+        correct_text = data.get("correctAnswerText") or ""
         question.correct_answer_text = correct_text
         question.answer = correct_text
         for choice in question.choices.all():
             db.session.delete(choice)
     else:
-        choices_payload = data.get('choices') or []
+        choices_payload = data.get("choices") or []
         correct_numbers = []
         for choice in choices_payload:
-            if choice.get('isCorrect'):
-                correct_numbers.append(str(choice.get('number')))
-        question.answer = ','.join(correct_numbers)
+            if choice.get("isCorrect"):
+                correct_numbers.append(str(choice.get("number")))
+        question.answer = ",".join(correct_numbers)
         question.correct_answer_text = None
         for choice in question.choices.all():
             db.session.delete(choice)
         db.session.flush()
         for choice in choices_payload:
-            content = choice.get('content', '')
+            content = choice.get("content", "")
             if content is None:
-                content = ''
+                content = ""
             new_choice = Choice(
                 question_id=question.id,
-                choice_number=int(choice.get('number') or 0),
+                choice_number=int(choice.get("number") or 0),
                 content=content,
-                image_path=choice.get('imagePath'),
-                is_correct=bool(choice.get('isCorrect')),
+                image_path=choice.get("imagePath"),
+                is_correct=bool(choice.get("isCorrect")),
             )
             db.session.add(new_choice)
 
@@ -790,28 +841,28 @@ def update_question(question_id):
     return ok(_question_detail_payload(question))
 
 
-@api_manage_bp.put('/exams/<int:exam_id>')
+@api_manage_bp.put("/exams/<int:exam_id>")
 def update_exam(exam_id):
     exam = PreviousExam.query.get_or_404(exam_id)
     data = request.get_json(silent=True) or {}
-    if 'title' in data and data['title'] is not None:
-        exam.title = str(data['title'])
-    if 'examDate' in data or 'exam_date' in data:
-        exam.exam_date = _parse_date(data.get('examDate') or data.get('exam_date'))
-    if 'subject' in data:
-        exam.subject = data.get('subject')
-    if 'year' in data:
-        exam.year = int(data['year']) if data.get('year') is not None else None
-    if 'term' in data:
-        exam.term = data.get('term')
-    if 'description' in data:
-        exam.description = data.get('description')
+    if "title" in data and data["title"] is not None:
+        exam.title = str(data["title"])
+    if "examDate" in data or "exam_date" in data:
+        exam.exam_date = _parse_date(data.get("examDate") or data.get("exam_date"))
+    if "subject" in data:
+        exam.subject = data.get("subject")
+    if "year" in data:
+        exam.year = int(data["year"]) if data.get("year") is not None else None
+    if "term" in data:
+        exam.term = data.get("term")
+    if "description" in data:
+        exam.description = data.get("description")
     db.session.commit()
     return ok(_exam_payload(exam))
 
 
-@api_manage_bp.delete('/exams/<int:exam_id>')
+@api_manage_bp.delete("/exams/<int:exam_id>")
 def delete_exam(exam_id):
     exam = PreviousExam.query.get_or_404(exam_id)
     delete_exam_with_assets(exam)
-    return ok({'id': exam_id})
+    return ok({"id": exam_id})
