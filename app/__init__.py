@@ -86,6 +86,7 @@ def create_app(
     from app.routes.practice import practice_bp
     from app.routes.api_practice import api_practice_bp
     from app.routes.api_exam import api_exam_bp
+    from app.routes.api_questions import api_questions_bp
     
     app.register_blueprint(main_bp)
     app.register_blueprint(exam_bp, url_prefix='/exam')
@@ -95,6 +96,7 @@ def create_app(
     app.register_blueprint(practice_bp, url_prefix='/practice')
     app.register_blueprint(api_practice_bp, url_prefix='/api/practice')
     app.register_blueprint(api_exam_bp)
+    app.register_blueprint(api_questions_bp)
 
     app.jinja_env.filters['md_image'] = render_markdown_images
     

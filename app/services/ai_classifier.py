@@ -23,8 +23,16 @@ except ImportError:
     GENAI_AVAILABLE = False
 
 from app import db
-from app.models import Question, Lecture, Block, ClassificationJob
+from app.models import (
+    Question,
+    Lecture,
+    Block,
+    ClassificationJob,
+    LectureChunk,
+    QuestionChunkMatch,
+)
 from app.services import retrieval
+from app.services.folder_scope import parse_bool, resolve_lecture_ids
 
 # ============================================================
 # Job payload helpers (idempotency + compatibility)
@@ -172,12 +180,21 @@ class LectureRetriever:
                 'full_path': f"{lecture.block.name} > {lecture.title}"
             })
     
-    def find_candidates(self, question_text: str, top_k: int = 8) -> List[Dict]:
+    def find_candidates(
+        self,
+        question_text: str,
+        top_k: int = 8,
+        lecture_ids: Optional[List[int]] = None,
+    ) -> List[Dict]:
         """FTS5 BM25 기반 후보 강의 검색"""
         mode = current_app.config.get('RETRIEVAL_MODE', 'bm25')
         if mode != 'bm25':
             return []
-        chunks = retrieval.search_chunks_bm25(question_text, top_n=80)
+        chunks = retrieval.search_chunks_bm25(
+            question_text,
+            top_n=80,
+            lecture_ids=lecture_ids,
+        )
         return retrieval.aggregate_candidates(chunks, top_k_lectures=top_k, evidence_per_lecture=3)
 
 
@@ -488,10 +505,30 @@ class AsyncBatchProcessor:
             request_meta, _ = parse_job_payload(job.result_json)
             job.status = ClassificationJob.STATUS_PROCESSING
             db.session.commit()
-            
+
             retriever = LectureRetriever()
             retriever.refresh_cache()
-            
+
+            scope = request_meta.get('scope') or {}
+            block_id = scope.get('block_id') or scope.get('blockId')
+            folder_id = scope.get('folder_id') or scope.get('folderId')
+            include_descendants = scope.get('include_descendants')
+            if include_descendants is None:
+                include_descendants = scope.get('includeDescendants')
+            include_descendants = parse_bool(include_descendants, True)
+            lecture_ids = scope.get('lecture_ids') or scope.get('lectureIds')
+            if lecture_ids is not None:
+                try:
+                    lecture_ids = [int(lid) for lid in lecture_ids]
+                except (TypeError, ValueError):
+                    lecture_ids = None
+            if lecture_ids is None and (block_id or folder_id):
+                lecture_ids = resolve_lecture_ids(
+                    int(block_id) if block_id is not None else None,
+                    int(folder_id) if folder_id is not None else None,
+                    include_descendants,
+                )
+
             results = []
             
             try:
@@ -515,7 +552,8 @@ class AsyncBatchProcessor:
 
                         candidates = retriever.find_candidates(
                             question_text,
-                            top_k=8
+                            top_k=8,
+                            lecture_ids=lecture_ids,
                         )
 
                         result = classifier.classify_single(question, candidates)
@@ -527,6 +565,17 @@ class AsyncBatchProcessor:
                         result['question_id'] = qid
                         result['question_number'] = question.question_number
                         result['exam_title'] = question.exam.title if question.exam else ''
+
+                        current_lecture = question.lecture
+                        result['current_lecture_id'] = question.lecture_id
+                        result['current_lecture_title'] = (
+                            f"{current_lecture.block.name} > {current_lecture.title}"
+                            if current_lecture
+                            else None
+                        )
+                        result['current_block_name'] = (
+                            current_lecture.block.name if current_lecture else None
+                        )
                         
                         if result['lecture_id']:
                             lecture = Lecture.query.get(result['lecture_id'])
@@ -536,6 +585,11 @@ class AsyncBatchProcessor:
                             else:
                                 result['lecture_title'] = None
                                 result['block_name'] = None
+
+                        suggested_id = result.get('lecture_id')
+                        result['will_change'] = bool(
+                            suggested_id and suggested_id != question.lecture_id
+                        )
                         
                         results.append(result)
                         job.success_count += 1
@@ -547,13 +601,23 @@ class AsyncBatchProcessor:
                             'exam_title': question.exam.title if question.exam else '',
                             'question_content': question.content or '',
                             'question_choices': choices,
+                            'current_lecture_id': question.lecture_id,
+                            'current_lecture_title': (
+                                f"{question.lecture.block.name} > {question.lecture.title}"
+                                if question.lecture
+                                else None
+                            ),
+                            'current_block_name': (
+                                question.lecture.block.name if question.lecture else None
+                            ),
                             'lecture_id': None,
                             'confidence': 0.0,
                             'reason': f'Error: {str(e)}',
                             'study_hint': '',
                             'evidence': [],
                             'no_match': True,
-                            'error': True
+                            'error': True,
+                            'will_change': False,
                         })
                         job.failed_count += 1
                     
@@ -584,7 +648,11 @@ class AsyncBatchProcessor:
 # 유틸리티 함수
 # ============================================================
 
-def apply_classification_results(question_ids: List[int], job_id: int) -> int:
+def apply_classification_results(
+    question_ids: List[int],
+    job_id: int,
+    apply_mode: str = "all",
+) -> int:
     """
     분류 결과를 실제 DB에 적용
     
@@ -605,19 +673,19 @@ def apply_classification_results(question_ids: List[int], job_id: int) -> int:
     results_map = {r['question_id']: r for r in results}
     
     applied_count = 0
-    auto_apply = current_app.config.get('AI_AUTO_APPLY', False)
-    threshold = float(current_app.config.get('AI_CONFIDENCE_THRESHOLD', 0.7))
-    margin = float(current_app.config.get('AI_AUTO_APPLY_MARGIN', 0.2))
-    auto_apply_min = threshold + margin
+    apply_mode = (apply_mode or "all").lower()
+    if apply_mode not in {"all", "only_unclassified", "only_changes"}:
+        apply_mode = "all"
+
     for qid in question_ids:
         result = results_map.get(qid)
         if not result:
             continue
-        
+
         question = Question.query.get(qid)
         if not question:
             continue
-        
+
         lecture_id = result.get('lecture_id')
         lecture = Lecture.query.get(lecture_id) if lecture_id else None
         no_match = bool(result.get('no_match', False))
@@ -625,7 +693,7 @@ def apply_classification_results(question_ids: List[int], job_id: int) -> int:
             confidence = float(result.get('confidence', 0.0))
         except (TypeError, ValueError):
             confidence = 0.0
-        
+
         # AI 제안 정보는 항상 저장
         if lecture and not no_match:
             question.ai_suggested_lecture_id = lecture.id
@@ -643,12 +711,75 @@ def apply_classification_results(question_ids: List[int], job_id: int) -> int:
         question.ai_model_name = result.get('model_name', '')
         question.ai_classified_at = datetime.utcnow()
 
-        # 자동 반영은 플래그 + confidence 기준을 모두 만족할 때만
-        if auto_apply and lecture and not no_match and confidence >= auto_apply_min:
+        should_apply = True
+        if apply_mode == "only_unclassified" and question.is_classified:
+            should_apply = False
+        elif apply_mode == "only_changes":
+            if not lecture or lecture.id == question.lecture_id:
+                should_apply = False
+
+        if should_apply and lecture and not no_match:
             question.lecture_id = lecture.id
             question.is_classified = True
             question.classification_status = 'ai_confirmed'
             applied_count += 1
-    
+
+        if should_apply:
+            QuestionChunkMatch.query.filter_by(question_id=question.id).delete(
+                synchronize_session=False
+            )
+            evidence_list = result.get('evidence') or []
+            if isinstance(evidence_list, list) and evidence_list:
+                chunk_ids = [
+                    e.get('chunk_id') for e in evidence_list if e.get('chunk_id')
+                ]
+                chunk_map = {}
+                if chunk_ids:
+                    chunk_rows = (
+                        LectureChunk.query.filter(LectureChunk.id.in_(chunk_ids)).all()
+                    )
+                    chunk_map = {row.id: row for row in chunk_rows}
+
+                matches = []
+                for idx, evidence in enumerate(evidence_list):
+                    chunk_id = evidence.get('chunk_id')
+                    if not chunk_id:
+                        continue
+                    chunk = chunk_map.get(chunk_id)
+                    evidence_lecture_id = (
+                        evidence.get('lecture_id')
+                        or (lecture.id if lecture else None)
+                        or (chunk.lecture_id if chunk else None)
+                    )
+                    if not evidence_lecture_id:
+                        continue
+                    snippet = (
+                        evidence.get('quote')
+                        or evidence.get('snippet')
+                        or (chunk.content if chunk else '')
+                    )
+                    snippet = (snippet or '').strip()
+                    if len(snippet) > 500:
+                        snippet = snippet[:497] + '...'
+                    matches.append(
+                        QuestionChunkMatch(
+                            question_id=question.id,
+                            lecture_id=evidence_lecture_id,
+                            chunk_id=chunk_id,
+                            material_id=chunk.material_id if chunk else None,
+                            page_start=evidence.get('page_start')
+                            or (chunk.page_start if chunk else None),
+                            page_end=evidence.get('page_end')
+                            or (chunk.page_end if chunk else None),
+                            snippet=snippet,
+                            score=evidence.get('score') or confidence,
+                            source='ai',
+                            job_id=job_id,
+                            is_primary=(idx == 0),
+                        )
+                    )
+                if matches:
+                    db.session.add_all(matches)
+
     db.session.commit()
     return applied_count

@@ -8,10 +8,16 @@ import os
 import shutil
 from werkzeug.utils import secure_filename
 
-from app.models import Block, Lecture, PreviousExam, Question, Choice
+from app.models import Block, Lecture, PreviousExam, Question, Choice, BlockFolder
 from app.services.exam_cleanup import delete_exam_with_assets
 from app.services.markdown_images import strip_markdown_images
 from app.services.db_guard import guard_write_request
+from app.services.folder_scope import (
+    parse_bool,
+    resolve_folder_ids,
+    resolve_lecture_ids,
+    build_folder_tree,
+)
 
 api_manage_bp = Blueprint('api_manage', __name__, url_prefix='/api/manage')
 
@@ -80,6 +86,7 @@ def _lecture_payload(lecture):
         'id': lecture.id,
         'blockId': lecture.block_id,
         'blockName': lecture.block.name if lecture.block else None,
+        'folderId': lecture.folder_id,
         'title': lecture.title,
         'professor': lecture.professor,
         'order': lecture.order,
@@ -105,6 +112,19 @@ def _exam_payload(exam):
         'unclassifiedCount': exam.unclassified_count,
         'createdAt': exam.created_at.isoformat() if exam.created_at else None,
         'updatedAt': exam.updated_at.isoformat() if exam.updated_at else None,
+    }
+
+
+def _folder_payload(folder):
+    return {
+        'id': folder.id,
+        'blockId': folder.block_id,
+        'parentId': folder.parent_id,
+        'name': folder.name,
+        'order': folder.order,
+        'description': folder.description,
+        'createdAt': folder.created_at.isoformat() if folder.created_at else None,
+        'updatedAt': folder.updated_at.isoformat() if folder.updated_at else None,
     }
 
 
@@ -212,6 +232,135 @@ def get_block(block_id):
     return ok(_block_payload(block))
 
 
+@api_manage_bp.get('/blocks/<int:block_id>/workspace')
+def get_block_workspace(block_id):
+    block = Block.query.get_or_404(block_id)
+    folder_tree = build_folder_tree(block_id)
+
+    folder_id = request.args.get('folderId') or request.args.get('folder_id')
+    include_descendants = parse_bool(
+        request.args.get('includeDescendants') or request.args.get('include_descendants'),
+        True,
+    )
+    folder_id_value = None
+    if folder_id:
+        try:
+            folder_id_value = int(folder_id)
+        except ValueError:
+            return error_response('Invalid folder id.', code='INVALID_FOLDER_ID', status=400)
+
+    lecture_ids = resolve_lecture_ids(block_id, folder_id_value, include_descendants)
+    lecture_query = Lecture.query.filter(Lecture.block_id == block_id)
+    if lecture_ids is not None:
+        if lecture_ids:
+            lecture_query = lecture_query.filter(Lecture.id.in_(lecture_ids))
+        else:
+            lecture_query = lecture_query.filter(Lecture.id.is_(None))
+
+    lectures = lecture_query.order_by(Lecture.order).all()
+
+    subject = request.args.get('subject')
+    exam_query = PreviousExam.query
+    if subject:
+        exam_query = exam_query.filter(PreviousExam.subject == subject)
+    exams = exam_query.order_by(PreviousExam.created_at.desc()).all()
+
+    return ok(
+        {
+            'block': _block_payload(block),
+            'folderTree': folder_tree,
+            'lectures': [_lecture_payload(lecture) for lecture in lectures],
+            'exams': [_exam_payload(exam) for exam in exams],
+            'scope': {
+                'blockId': block_id,
+                'folderId': folder_id_value,
+                'includeDescendants': include_descendants,
+                'lectureIds': lecture_ids,
+            },
+        }
+    )
+
+
+@api_manage_bp.post('/blocks/<int:block_id>/folders')
+def create_folder(block_id):
+    Block.query.get_or_404(block_id)
+    data = request.get_json(silent=True) or {}
+    name = data.get('name')
+    if not name:
+        return error_response('Folder name is required.', code='FOLDER_NAME_REQUIRED')
+
+    parent_id = data.get('parentId') or data.get('parent_id')
+    parent_id_value = None
+    if parent_id is not None:
+        try:
+            parent_id_value = int(parent_id)
+        except ValueError:
+            return error_response('Invalid parent id.', code='INVALID_PARENT_ID')
+        parent = BlockFolder.query.get(parent_id_value)
+        if not parent or parent.block_id != block_id:
+            return error_response('Parent folder not found.', code='PARENT_NOT_FOUND', status=404)
+
+    folder = BlockFolder(
+        block_id=block_id,
+        parent_id=parent_id_value,
+        name=str(name),
+        order=int(data.get('order') or 0),
+        description=data.get('description'),
+    )
+    db.session.add(folder)
+    db.session.commit()
+    return ok(_folder_payload(folder), status=201)
+
+
+@api_manage_bp.patch('/folders/<int:folder_id>')
+def update_folder(folder_id):
+    folder = BlockFolder.query.get_or_404(folder_id)
+    data = request.get_json(silent=True) or {}
+    if 'name' in data and data['name'] is not None:
+        folder.name = str(data['name'])
+    if 'description' in data:
+        folder.description = data.get('description')
+    if 'order' in data and data['order'] is not None:
+        folder.order = int(data['order'])
+
+    if 'parentId' in data or 'parent_id' in data:
+        parent_id = data.get('parentId') or data.get('parent_id')
+        if parent_id is None:
+            folder.parent_id = None
+        else:
+            try:
+                parent_id_value = int(parent_id)
+            except ValueError:
+                return error_response('Invalid parent id.', code='INVALID_PARENT_ID')
+            if parent_id_value == folder.id:
+                return error_response('Folder cannot be its own parent.', code='INVALID_PARENT_ID')
+            parent = BlockFolder.query.get(parent_id_value)
+            if not parent or parent.block_id != folder.block_id:
+                return error_response('Parent folder not found.', code='PARENT_NOT_FOUND', status=404)
+            folder.parent_id = parent_id_value
+
+    db.session.commit()
+    return ok(_folder_payload(folder))
+
+
+@api_manage_bp.delete('/folders/<int:folder_id>')
+def delete_folder(folder_id):
+    folder = BlockFolder.query.get_or_404(folder_id)
+    folder_ids = resolve_folder_ids(folder.id, True, folder.block_id)
+    if not folder_ids:
+        return ok({'id': folder_id})
+
+    Lecture.query.filter(Lecture.folder_id.in_(folder_ids)).update(
+        {'folder_id': None},
+        synchronize_session=False,
+    )
+    BlockFolder.query.filter(BlockFolder.id.in_(folder_ids)).delete(
+        synchronize_session=False
+    )
+    db.session.commit()
+    return ok({'id': folder_id})
+
+
 @api_manage_bp.put('/blocks/<int:block_id>')
 def update_block(block_id):
     block = Block.query.get_or_404(block_id)
@@ -237,11 +386,47 @@ def delete_block(block_id):
 @api_manage_bp.get('/blocks/<int:block_id>/lectures')
 def list_lectures(block_id):
     block = Block.query.get_or_404(block_id)
-    lectures = block.lectures.order_by(Lecture.order).all()
+    folder_id = request.args.get('folderId') or request.args.get('folder_id')
+    include_descendants = parse_bool(
+        request.args.get('includeDescendants') or request.args.get('include_descendants'),
+        True,
+    )
+    folder_id_value = None
+    if folder_id:
+        try:
+            folder_id_value = int(folder_id)
+        except ValueError:
+            return error_response('Invalid folder id.', code='INVALID_FOLDER_ID', status=400)
+
+    lecture_ids = resolve_lecture_ids(block_id, folder_id_value, include_descendants)
+    query = Lecture.query.filter(Lecture.block_id == block_id)
+    if lecture_ids is not None:
+        if lecture_ids:
+            query = query.filter(Lecture.id.in_(lecture_ids))
+        else:
+            return ok(
+                {
+                    'block': _block_payload(block),
+                    'lectures': [],
+                    'scope': {
+                        'blockId': block_id,
+                        'folderId': folder_id_value,
+                        'includeDescendants': include_descendants,
+                        'lectureIds': [],
+                    },
+                }
+            )
+    lectures = query.order_by(Lecture.order).all()
     return ok(
         {
             'block': _block_payload(block),
             'lectures': [_lecture_payload(lecture) for lecture in lectures],
+            'scope': {
+                'blockId': block_id,
+                'folderId': folder_id_value,
+                'includeDescendants': include_descendants,
+                'lectureIds': lecture_ids,
+            },
         }
     )
 
@@ -254,8 +439,20 @@ def create_lecture(block_id):
     if not title:
         return error_response('Lecture title is required.', code='LECTURE_TITLE_REQUIRED')
 
+    folder_id = data.get('folderId') or data.get('folder_id')
+    folder_id_value = None
+    if folder_id is not None:
+        try:
+            folder_id_value = int(folder_id)
+        except ValueError:
+            return error_response('Invalid folder id.', code='INVALID_FOLDER_ID')
+        folder = BlockFolder.query.get(folder_id_value)
+        if not folder or folder.block_id != block_id:
+            return error_response('Folder not found.', code='FOLDER_NOT_FOUND', status=404)
+
     lecture = Lecture(
         block_id=block_id,
+        folder_id=folder_id_value,
         title=str(title),
         professor=data.get('professor'),
         order=int(data.get('order') or 1),
@@ -290,6 +487,19 @@ def update_lecture(lecture_id):
         lecture.order = int(data['order'])
     if 'description' in data:
         lecture.description = data.get('description')
+    if 'folderId' in data or 'folder_id' in data:
+        folder_id = data.get('folderId') or data.get('folder_id')
+        if folder_id is None:
+            lecture.folder_id = None
+        else:
+            try:
+                folder_id_value = int(folder_id)
+            except ValueError:
+                return error_response('Invalid folder id.', code='INVALID_FOLDER_ID')
+            folder = BlockFolder.query.get(folder_id_value)
+            if not folder or folder.block_id != lecture.block_id:
+                return error_response('Folder not found.', code='FOLDER_NOT_FOUND', status=404)
+            lecture.folder_id = folder_id_value
     db.session.commit()
     return ok(_lecture_payload(lecture))
 

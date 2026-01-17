@@ -13,6 +13,7 @@ from app.services.ai_classifier import (
     GENAI_AVAILABLE,
     parse_job_payload
 )
+from app.services.folder_scope import parse_bool, resolve_lecture_ids
 from app.services.db_guard import guard_write_request
 
 # Google GenAI SDK (for text correction)
@@ -34,10 +35,12 @@ def guard_read_only():
         return blocked
     return None
 
-def _build_request_signature(question_ids, idempotency_key=None):
+def _build_request_signature(question_ids, idempotency_key=None, scope=None):
     payload = {'question_ids': question_ids}
     if idempotency_key:
         payload['idempotency_key'] = str(idempotency_key)
+    if scope:
+        payload['scope'] = scope
     raw = json.dumps(payload, separators=(',', ':'), sort_keys=True)
     return hashlib.sha256(raw.encode('utf-8')).hexdigest()
 
@@ -82,7 +85,46 @@ def start_classification():
     idempotency_key = data.get('idempotency_key') or data.get('idempotencyKey')
     force = bool(data.get('force'))
     retry_failed = bool(data.get('retry') or data.get('retry_failed') or data.get('retryFailed'))
-    signature = _build_request_signature(valid_ids, idempotency_key)
+
+    raw_scope = data.get('scope') or {}
+    block_id = raw_scope.get('block_id') or raw_scope.get('blockId')
+    folder_id = raw_scope.get('folder_id') or raw_scope.get('folderId')
+    include_descendants = raw_scope.get('include_descendants')
+    if include_descendants is None:
+        include_descendants = raw_scope.get('includeDescendants')
+    include_descendants = parse_bool(include_descendants, True)
+    lecture_ids = raw_scope.get('lecture_ids') or raw_scope.get('lectureIds')
+
+    if lecture_ids is not None:
+        try:
+            lecture_ids = [int(lid) for lid in lecture_ids]
+        except (TypeError, ValueError):
+            lecture_ids = None
+
+    if lecture_ids is None and (block_id or folder_id):
+        lecture_ids = resolve_lecture_ids(
+            int(block_id) if block_id is not None else None,
+            int(folder_id) if folder_id is not None else None,
+            include_descendants,
+        )
+
+    scope = {}
+    if block_id is not None:
+        try:
+            scope['block_id'] = int(block_id)
+        except (TypeError, ValueError):
+            scope['block_id'] = block_id
+    if folder_id is not None:
+        try:
+            scope['folder_id'] = int(folder_id)
+        except (TypeError, ValueError):
+            scope['folder_id'] = folder_id
+    if block_id is not None or folder_id is not None:
+        scope['include_descendants'] = include_descendants
+    if lecture_ids is not None:
+        scope['lecture_ids'] = sorted(set(lecture_ids))
+
+    signature = _build_request_signature(valid_ids, idempotency_key, scope or None)
 
     existing_job = None
     if not force:
@@ -108,6 +150,8 @@ def start_classification():
         request_meta['idempotency_key'] = str(idempotency_key)
     if existing_job and existing_job.status == ClassificationJob.STATUS_FAILED and retry_failed:
         request_meta['retry_of_job_id'] = existing_job.id
+    if scope:
+        request_meta['scope'] = scope
     
     try:
         job_id = AsyncBatchProcessor.start_classification_job(valid_ids, request_meta=request_meta)
@@ -239,7 +283,8 @@ def apply_classification():
         return jsonify({'success': False, 'error': '적용할 문제가 없습니다.'}), 400
     
     try:
-        applied_count = apply_classification_results(question_ids, job_id)
+        apply_mode = data.get('apply_mode') or data.get('applyMode') or 'all'
+        applied_count = apply_classification_results(question_ids, job_id, apply_mode=apply_mode)
         return jsonify({
             'success': True,
             'applied_count': applied_count

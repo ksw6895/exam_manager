@@ -40,14 +40,32 @@ def _build_fts_query(normalized: str, max_terms: int = 16) -> str:
     return " OR ".join(deduped)
 
 
-def search_chunks_bm25(query: str, top_n: int = 80) -> List[Dict]:
+def search_chunks_bm25(
+    query: str,
+    top_n: int = 80,
+    lecture_ids: List[int] | None = None,
+) -> List[Dict]:
     normalized = _normalize_query(query)
     fts_query = _build_fts_query(normalized)
     if not fts_query:
         return []
 
+    if lecture_ids is not None and not lecture_ids:
+        return []
+
+    where_clause = "WHERE lecture_chunks_fts MATCH :query"
+    params: Dict[str, object] = {"query": fts_query, "top_n": top_n}
+
+    if lecture_ids is not None:
+        placeholders = []
+        for idx, lecture_id in enumerate(lecture_ids):
+            key = f"lecture_id_{idx}"
+            placeholders.append(f":{key}")
+            params[key] = lecture_id
+        where_clause += f" AND lecture_id IN ({', '.join(placeholders)})"
+
     sql = text(
-        """
+        f"""
         SELECT
             chunk_id,
             lecture_id,
@@ -56,12 +74,12 @@ def search_chunks_bm25(query: str, top_n: int = 80) -> List[Dict]:
             snippet(lecture_chunks_fts, 0, '', '', '...', 24) AS snippet,
             bm25(lecture_chunks_fts) AS bm25_score
         FROM lecture_chunks_fts
-        WHERE lecture_chunks_fts MATCH :query
+        {where_clause}
         ORDER BY bm25_score
         LIMIT :top_n
         """
     )
-    rows = db.session.execute(sql, {"query": fts_query, "top_n": top_n}).mappings().all()
+    rows = db.session.execute(sql, params).mappings().all()
     results = []
     for row in rows:
         snippet_text = (row.get("snippet") or "").replace("\n", " ").strip()

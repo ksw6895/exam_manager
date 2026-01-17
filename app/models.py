@@ -17,6 +17,8 @@ class Block(db.Model):
     # 관계: 블록 → 강의들
     lectures = db.relationship('Lecture', backref='block', lazy='dynamic', 
                                cascade='all, delete-orphan', order_by='Lecture.order')
+    folders = db.relationship('BlockFolder', backref='block', lazy='dynamic',
+                              cascade='all, delete-orphan', order_by='BlockFolder.order')
     
     def __repr__(self):
         return f'<Block {self.name}>'
@@ -31,12 +33,38 @@ class Block(db.Model):
         return sum(lecture.question_count for lecture in self.lectures)
 
 
+class BlockFolder(db.Model):
+    """블록 하위 폴더(디렉토리) 모델"""
+    __tablename__ = 'block_folders'
+
+    id = db.Column(db.Integer, primary_key=True)
+    block_id = db.Column(db.Integer, db.ForeignKey('blocks.id'), nullable=False)
+    parent_id = db.Column(db.Integer, db.ForeignKey('block_folders.id'), nullable=True)
+    name = db.Column(db.String(200), nullable=False)
+    order = db.Column(db.Integer, default=0)
+    description = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    children = db.relationship(
+        'BlockFolder',
+        backref=db.backref('parent', remote_side=[id]),
+        lazy='dynamic',
+        cascade='all, delete-orphan',
+        order_by='BlockFolder.order'
+    )
+
+    def __repr__(self):
+        return f'<BlockFolder {self.id}:{self.name}>'
+
+
 class Lecture(db.Model):
     """강의 모델 - 학습의 최소 단위"""
     __tablename__ = 'lectures'
     
     id = db.Column(db.Integer, primary_key=True)
     block_id = db.Column(db.Integer, db.ForeignKey('blocks.id'), nullable=False)
+    folder_id = db.Column(db.Integer, db.ForeignKey('block_folders.id'), nullable=True)
     title = db.Column(db.String(300), nullable=False)  # 예: 심전도의 원리
     professor = db.Column(db.String(100))  # 교수명
     order = db.Column(db.Integer, default=0)  # 강의 순서 (1강, 2강...)
@@ -50,6 +78,7 @@ class Lecture(db.Model):
                                foreign_keys='Question.lecture_id',
                                backref='lecture', 
                                lazy='dynamic')
+    folder = db.relationship('BlockFolder', backref=db.backref('lectures', lazy='dynamic'))
     
     materials = db.relationship(
         'LectureMaterial',
@@ -214,6 +243,12 @@ class Question(db.Model):
     # 관계: 문제 → 사용자 노트
     notes = db.relationship('UserNote', backref='question', lazy='dynamic',
                            cascade='all, delete-orphan')
+    chunk_matches = db.relationship(
+        'QuestionChunkMatch',
+        backref='question',
+        lazy='dynamic',
+        cascade='all, delete-orphan',
+    )
     
     def __repr__(self):
         status = "분류됨" if self.is_classified else "미분류"
@@ -223,11 +258,13 @@ class Question(db.Model):
         """문제를 특정 강의로 분류"""
         self.lecture_id = lecture_id
         self.is_classified = True
+        self.classification_status = 'manual'
     
     def unclassify(self):
         """문제 분류 해제"""
         self.lecture_id = None
         self.is_classified = False
+        self.classification_status = 'manual'
     
     @property
     def correct_choice_numbers(self):
@@ -258,25 +295,25 @@ class Question(db.Model):
             # 주관식: 텍스트 비교 (공백 제거, 대소문자 무시)
             if not self.correct_answer_text:
                 return None, None  # 자동 채점 불가
-            
+
             user_text = str(user_answer).strip().lower().replace(' ', '')
             correct_text = self.correct_answer_text.strip().lower().replace(' ', '')
-            
+
             return user_text == correct_text, self.correct_answer_text
+
+        # 객관식: 선택지 번호 비교
+        correct_numbers = set(self.correct_choice_numbers)
+
+        # user_answer를 set으로 변환
+        if isinstance(user_answer, (list, tuple)):
+            user_numbers = set(user_answer)
         else:
-            # 객관식: 선택지 번호 비교
-            correct_numbers = set(self.correct_choice_numbers)
-            
-            # user_answer를 set으로 변환
-            if isinstance(user_answer, (list, tuple)):
-                user_numbers = set(user_answer)
-            else:
-                user_numbers = {int(user_answer)} if user_answer else set()
-            
-            # 복수 정답: 모든 정답을 선택해야 정답
-            is_correct = user_numbers == correct_numbers
-            
-            return is_correct, list(correct_numbers)
+            user_numbers = {int(user_answer)} if user_answer else set()
+
+        # 복수 정답: 모든 정답을 선택해야 정답
+        is_correct = user_numbers == correct_numbers
+
+        return is_correct, list(correct_numbers)
     
     def determine_type(self):
         """선택지 기반으로 문제 유형 자동 결정"""
@@ -290,6 +327,36 @@ class Question(db.Model):
                 self.q_type = self.TYPE_MULTIPLE_RESPONSE
             else:
                 self.q_type = self.TYPE_MULTIPLE_CHOICE
+
+
+class QuestionChunkMatch(db.Model):
+    """문제-강의 청크 매칭(증거) 저장"""
+    __tablename__ = 'question_chunk_matches'
+
+    id = db.Column(db.Integer, primary_key=True)
+    question_id = db.Column(db.Integer, db.ForeignKey('questions.id'), nullable=False)
+    lecture_id = db.Column(db.Integer, db.ForeignKey('lectures.id'), nullable=False)
+    chunk_id = db.Column(db.Integer, db.ForeignKey('lecture_chunks.id'), nullable=False)
+    material_id = db.Column(db.Integer, db.ForeignKey('lecture_materials.id'))
+    page_start = db.Column(db.Integer)
+    page_end = db.Column(db.Integer)
+    snippet = db.Column(db.Text)
+    score = db.Column(db.Float)
+    source = db.Column(db.String(20), default='ai')
+    job_id = db.Column(db.Integer, db.ForeignKey('classification_jobs.id'))
+    is_primary = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    lecture = db.relationship('Lecture')
+    chunk = db.relationship(
+        'LectureChunk',
+        backref=db.backref('question_matches', lazy='dynamic', cascade='all, delete-orphan'),
+    )
+    material = db.relationship('LectureMaterial')
+    job = db.relationship('ClassificationJob', backref=db.backref('question_matches', lazy='dynamic'))
+
+    def __repr__(self):
+        return f'<QuestionChunkMatch Q{self.question_id} C{self.chunk_id}>'
 
 
 class Choice(db.Model):

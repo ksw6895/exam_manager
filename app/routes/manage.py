@@ -728,7 +728,7 @@ def move_questions():
         
     try:
         Question.query.filter(Question.id.in_(question_ids)).update(
-            {'lecture_id': target_lecture_id},
+            {'lecture_id': target_lecture_id, 'is_classified': True, 'classification_status': 'manual'},
             synchronize_session=False
         )
         db.session.commit()
@@ -751,7 +751,7 @@ def reset_questions():
         
     try:
         Question.query.filter(Question.id.in_(question_ids)).update(
-            {'lecture_id': None},
+            {'lecture_id': None, 'is_classified': False, 'classification_status': 'manual'},
             synchronize_session=False
         )
         db.session.commit()
