@@ -7,14 +7,12 @@ from typing import Optional
 
 from flask import current_app
 
-from config import UPLOAD_FOLDER
-
 
 def get_upload_folder(admin: bool = False) -> Path:
     """Get upload folder path."""
     if admin:
         return Path(current_app.static_folder) / "uploads_admin"
-    return UPLOAD_FOLDER
+    return Path(current_app.config["UPLOAD_FOLDER"])
 
 
 def get_pdf_crop_folder(upload_folder: Optional[Path] = None) -> Path:

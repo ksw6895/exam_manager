@@ -95,40 +95,15 @@ def list_blocks():
 def create_block():
     """새 블록 생성"""
     if request.method == "POST":
-        block = create_block(
+        block = Block(
             name=request.form.get("name"),
             description=request.form.get("description"),
             order=int(request.form.get("order", 0)),
         )
+        db.session.add(block)
+        db.session.commit()
         flash("블록이 생성되었습니다.", "success")
         return redirect(url_for("manage.list_blocks"))
-    return render_template("manage/block_form.html", block=None)
-
-
-@manage_bp.route("/block/<int:block_id>/edit", methods=["GET", "POST"])
-def edit_block(block_id):
-    """블록 수정"""
-    block = Block.query.get_or_404(block_id)
-    if request.method == "POST":
-        block = update_block(
-            block_id=block_id,
-            name=request.form.get("name"),
-            description=request.form.get("description"),
-            order=int(request.form.get("order", 0)),
-        )
-        flash("블록이 수정되었습니다.", "success")
-        return redirect(url_for("manage.list_blocks"))
-    return render_template("manage/block_form.html", block=block)
-
-
-@manage_bp.route("/block/<int:block_id>/delete", methods=["POST"])
-def delete_block():
-    """블록 삭제"""
-    block_id = request.form.get("block_id")
-    if block_id:
-        delete_block(block_id)
-        flash("블록이 삭제되었습니다.", "success")
-    return redirect(url_for("manage.list_blocks"))
     return render_template("manage/block_form.html", block=None)
 
 

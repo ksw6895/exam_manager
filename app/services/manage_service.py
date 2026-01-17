@@ -34,8 +34,9 @@ def get_dashboard_stats() -> dict:
                 "title": e.title,
                 "subject": e.subject,
                 "year": e.year,
-                "professor": e.professor,
+                "term": e.term,
                 "question_count": e.question_count,
+                "unclassified_count": e.unclassified_count,
             }
             for e in PreviousExam.query.order_by(PreviousExam.created_at.desc())
             .limit(5)
