@@ -15,6 +15,10 @@
 - 변경 전후에 검증 가능한 최소 체크리스트 유지
 
 ## 시작 전 준비
+0) 리팩토링 전 검증 ( 필수)
+- `python scripts/verify_repo.py` 실행해 기본 컴파일 체크 통과 확인
+- DB 관련 리팩토링 시 `python scripts/verify_repo.py --all` 또는 `--db data/dev.db` 실행
+
 1) 데이터 백업
 - `data/exam.db`를 복사해 스냅샷 확보
 
