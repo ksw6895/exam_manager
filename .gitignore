@@ -25,6 +25,11 @@ data/**/*.db
 data/**/*.db-*
 backups/
 
+# Cache and reports
+data/cache/
+data/classifier_cache.json
+reports/
+
 # Uploaded assets
 app/static/uploads/*
 !app/static/uploads/.gitkeep

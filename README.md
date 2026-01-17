@@ -209,7 +209,8 @@ python run_local_admin.py
 두 파일 모두 경로가 하드코딩되어 있으므로 본인 환경에 맞게 `cd /d` 경로를 수정해야 합니다.
 
 ## 환경변수(.env) 요약
-자세한 설명은 `docs/setup/env.md`를 참고하세요.
+자세한 설명은 `docs/setup/env.md`를 참고하세요.  
+전체 설정 레퍼런스는 `docs/setup/config-reference.md`를 참고하세요.
 
 ### Flask (.env)
 | 키 | 필수 | 설명 | 기본값/비고 |
@@ -331,11 +332,17 @@ python run_local_admin.py
 
 ## 문서
 - 문서 인덱스: `docs/README.md`
-- 실행/환경 설정: `docs/setup/wsl.md`, `docs/setup/windows.md`, `docs/setup/env.md`
-- 아키텍처 요약: `docs/architecture/overview.md`
-- 운영/스크립트: `docs/operations/scripts.md`
+- 실행/환경 설정: `docs/setup/wsl.md`, `docs/setup/windows.md`, `docs/setup/env.md`, `docs/setup/config-reference.md`
+- 아키텍처 요약: `docs/architecture/overview.md`, `docs/architecture/map.md`
+- 운영/스크립트: `docs/operations/scripts.md`, `docs/operations/cache-policy.md`
 - 리팩토링 가이드(상세): `docs/refactoring/README.md`
 - 리팩토링 체크리스트: `docs/refactoring/checklists.md`
+
+## 라우트/서비스 경계
+- **라우트 (routes/)**: HTTP 요청/응답 변환만 담당
+- **서비스 (services/)**: 비즈니스 로직/DB 접근을 담당
+- 목표: 리팩토링 시 라우트에서 로직 분리를 단계적으로 수행
+- 현재 상태: manage.py는 레거시 레거티스 UI, api_manage.py는 JSON API
 
 ## 트러블슈팅
 - `ModuleNotFoundError` 발생: `pip install -r requirements.txt` 재실행
