@@ -1266,8 +1266,25 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    alert(`${data.applied_count}개 문제가 분류되었습니다.`);
-                    window.location.href = '{{ url_for("exam.unclassified_questions") }}';
+                    const isSingleApply = questionIds.length === 1;
+                    if (isSingleApply) {
+                        showToast(`${data.applied_count}개 문제가 분류되었습니다.`, 'success');
+                        const appliedId = questionIds[0];
+                        allItems = allItems.filter(item => item.question_id !== appliedId);
+                        filteredItems = filteredItems.filter(item => item.question_id !== appliedId);
+                        selectedIds.delete(appliedId);
+                        if (currentIndex >= filteredItems.length) {
+                            currentIndex = Math.max(0, filteredItems.length - 1);
+                        }
+                        updateSelectedCount();
+                        renderCard();
+                        if (filteredItems.length === 0) {
+                            showToast('모든 문제가 처리되었습니다!', 'success');
+                        }
+                    } else {
+                        alert(`${data.applied_count}개 문제가 분류되었습니다.`);
+                        window.location.href = '{{ url_for("exam.unclassified_questions") }}';
+                    }
                 } else {
                     alert('적용 실패: ' + data.error);
                 }

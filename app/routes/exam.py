@@ -1,8 +1,12 @@
 """시험 관련 Blueprint - 기출 시험 및 문제 조회"""
+import time
+import logging
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from app import db
 from app.models import PreviousExam, Question, Block, Lecture
 from app.services.db_guard import guard_write_request
+
+logger = logging.getLogger(__name__)
 
 exam_bp = Blueprint('exam', __name__)
 
@@ -59,13 +63,23 @@ def view_question(exam_id, question_number):
 
 @exam_bp.route('/unclassified')
 def unclassified_questions():
-    """분류 대기소 페이지 - 미분류/분류된 문제 모두 표시"""
-    # 모든 문제 조회 (기본적으로 미분류 우선)
-    questions = Question.query.order_by(
+    """분류 대기소 페이지 - 미분류/분류된 문제 모두 표시 (paginated)"""
+    t_start = time.perf_counter()
+    
+    # Pagination parameters
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 50, type=int)
+    per_page = min(per_page, 100)  # Cap at 100
+    
+    # 문제 조회 (기본적으로 미분류 우선) - 페이지네이션
+    t_db_start = time.perf_counter()
+    pagination = Question.query.order_by(
         Question.is_classified,  # False(미분류)가 먼저
         Question.exam_id,
         Question.question_number
-    ).all()
+    ).paginate(page=page, per_page=per_page, error_out=False)
+    questions = pagination.items
+    t_db = time.perf_counter() - t_db_start
     
     # 블록 목록 (강의 포함)
     blocks = Block.query.order_by(Block.order).all()
@@ -76,11 +90,22 @@ def unclassified_questions():
     # 미분류 문제 수
     unclassified_count = Question.query.filter_by(is_classified=False).count()
     
-    return render_template('exam/unclassified.html', 
+    t_render_start = time.perf_counter()
+    result = render_template('exam/unclassified.html', 
                          questions=questions,
+                         pagination=pagination,
                          blocks=blocks,
                          exams=exams,
                          unclassified_count=unclassified_count)
+    t_render = time.perf_counter() - t_render_start
+    
+    t_total = time.perf_counter() - t_start
+    logger.info(
+        "PERF: unclassified total=%.0fms db=%.0fms render=%.0fms count=%d page=%d",
+        t_total * 1000, t_db * 1000, t_render * 1000, len(questions), page
+    )
+    
+    return result
 
 
 @exam_bp.route('/question/<int:question_id>/classify', methods=['POST'])

@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import re
 import threading
+import logging
 from typing import List, Dict
 
 import numpy as np
-from flask import current_app
 from sqlalchemy import text, bindparam
 
+from config import get_config
 from app import db
 from app.models import Lecture, Block
 from app.services.embedding_utils import (
@@ -22,9 +23,25 @@ from app.services.query_transformer import get_query_payload
 # FTS5 reserved operators (case-insensitive)
 _FTS_RESERVED = {"OR", "AND", "NOT", "NEAR"}
 _BM25_STOPWORDS = {
-    "다음", "중", "옳은", "틀린", "아닌", "것", "가장", "맞는",
-    "고른", "고르시오", "선지", "문항", "보기", "위", "아래",
-    "다음중", "해당", "설명", "것은",
+    "다음",
+    "중",
+    "옳은",
+    "틀린",
+    "아닌",
+    "것",
+    "가장",
+    "맞는",
+    "고른",
+    "고르시오",
+    "선지",
+    "문항",
+    "보기",
+    "위",
+    "아래",
+    "다음중",
+    "해당",
+    "설명",
+    "것은",
 }
 
 # Token patterns:
@@ -46,8 +63,47 @@ _TOKEN_RE = re.compile(
 )
 
 
-def _build_fts_query(normalized: str, max_terms: int = 16) -> str:
-    tokens = [t for t in normalized.split() if t]
+def _needs_quote(token: str) -> bool:
+    """Check if token needs double quotes for FTS5 escaping.
+
+    Tokens need quotes if they contain:
+    - Special characters: -, *, ", (, ), {, }, [, ]
+    - Are single character (can confuse parser)
+    - Start with a digit (can be ambiguous)
+    """
+    if not token:
+        return False
+    if len(token) == 1:
+        return True
+    if token.startswith(("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")):
+        return True
+    special_chars = {"-", "+", "/", "*", '"', "(", ")", "{", "}", "[", "]", ":"}
+    return any(c in special_chars for c in token)
+
+
+def _normalize_query(text: str) -> str:
+    """Normalize query text for FTS5 search."""
+    if not text:
+        return ""
+    # Extract tokens using regex
+    tokens = _TOKEN_RE.findall(text)
+    # Filter out stopwords and reserved FTS operators
+    filtered = []
+    for t in tokens:
+        if t.upper() in _FTS_RESERVED:
+            continue
+        if t in _BM25_STOPWORDS:
+            continue
+        filtered.append(t)
+    return " ".join(filtered)
+
+
+def _build_fts_query(tokens_or_str, max_terms: int = 16, mode: str = "OR") -> str:
+    # Accept either string (space-separated) or list of tokens
+    if isinstance(tokens_or_str, str):
+        tokens = [t for t in tokens_or_str.split() if t]
+    else:
+        tokens = list(tokens_or_str) if tokens_or_str else []
     if not tokens:
         return ""
     seen = set()
@@ -60,8 +116,13 @@ def _build_fts_query(normalized: str, max_terms: int = 16) -> str:
         if len(deduped) >= max_terms:
             break
     if len(deduped) == 1:
-        return deduped[0]
-    return " OR ".join(deduped)
+        token = deduped[0]
+        return f'"{token}"' if _needs_quote(token) else token
+    quoted_tokens = [
+        f'"{token}"' if _needs_quote(token) else token for token in deduped
+    ]
+    joiner = " OR " if str(mode).upper() == "OR" else " "
+    return joiner.join(quoted_tokens)
 
 
 def _filter_negative_terms(tokens: List[str], negatives: List[str]) -> List[str]:
@@ -96,9 +157,9 @@ def safe_match_query_variants(raw_question_text: str) -> List[str]:
 def _get_hyde_payload(question_id: int | None, question_text: str):
     if not question_id:
         return None
-    if not current_app.config.get("HYDE_ENABLED", False):
+    if not get_config().experiment.hyde_enabled:
         return None
-    allow_generate = current_app.config.get("HYDE_AUTO_GENERATE", False)
+    allow_generate = get_config().experiment.hyde_auto_generate
     return get_query_payload(
         question_id,
         question_text,
@@ -109,7 +170,7 @@ def _get_hyde_payload(question_id: int | None, question_text: str):
 def _normalize_embedding_text(text: str, max_chars: int = 4000) -> str:
     if not text:
         return ""
-    s = text.replace("\u00A0", " ")
+    s = text.replace("\u00a0", " ")
     s = re.sub(r"\s+", " ", s).strip()
     if len(s) > max_chars:
         s = s[:max_chars]
@@ -121,13 +182,13 @@ def search_chunks_bm25(
     top_n: int = 80,
     *,
     question_id: int | None = None,
-    lecture_ids: List[int] | None = None,    
+    lecture_ids: List[int] | None = None,
 ) -> List[Dict]:
     tokens = _normalize_query(query)
     fts_query = _build_fts_query(tokens, max_terms=16, mode="OR")
     payload = _get_hyde_payload(question_id, query)
     if payload:
-        variant = current_app.config.get("HYDE_BM25_VARIANT", "mixed_light")
+        variant = get_config().experiment.hyde_bm25_variant
         if variant == "orig_only":
             positive = tokens
         elif variant == "hyde_only":
@@ -135,12 +196,12 @@ def search_chunks_bm25(
         else:
             positive = payload.keywords + _clean_tokens(tokens)
 
-        negative_mode = current_app.config.get("HYDE_NEGATIVE_MODE", "stopwords")
+        negative_mode = get_config().experiment.hyde_negative_mode
         if negative_mode == "stopwords":
             positive = _filter_negative_terms(positive, payload.negative_keywords)
 
         if positive:
-            fts_query = _build_fts_query(positive, max_terms=16, mode="OR")
+            fts_query = _build_fts_query(positive, max_terms=16)
     if not fts_query:
         return []
 
@@ -205,10 +266,14 @@ def _fetch_embeddings_for_chunks(
           AND chunk_id IN :chunk_ids
         """
     ).bindparams(bindparam("chunk_ids", expanding=True))
-    rows = db.session.execute(
-        sql,
-        {"model": model_name, "chunk_ids": chunk_ids},
-    ).mappings().all()
+    rows = (
+        db.session.execute(
+            sql,
+            {"model": model_name, "chunk_ids": chunk_ids},
+        )
+        .mappings()
+        .all()
+    )
     embeddings = {}
     for row in rows:
         vec = decode_embedding(row.get("embedding"), dim)
@@ -242,21 +307,29 @@ class EmbeddingIndex:
         self._initialized = True
 
     def load(self, model_name: str, dim: int) -> None:
-        if self._model_name == model_name and self._dim == dim and self._embeddings is not None:
+        if (
+            self._model_name == model_name
+            and self._dim == dim
+            and self._embeddings is not None
+        ):
             return
         try:
-            rows = db.session.execute(
-                text(
-                    """
+            rows = (
+                db.session.execute(
+                    text(
+                        """
                     SELECT e.chunk_id, e.lecture_id, e.embedding,
                            c.page_start, c.page_end, c.content
                     FROM lecture_chunk_embeddings e
                     JOIN lecture_chunks c ON c.id = e.chunk_id
                     WHERE e.model_name = :model
                     """
-                ),
-                {"model": model_name},
-            ).mappings().all()
+                    ),
+                    {"model": model_name},
+                )
+                .mappings()
+                .all()
+            )
         except Exception:
             rows = []
 
@@ -309,12 +382,12 @@ def search_chunks_embedding(
     if not normalized:
         return []
 
-    model_name = current_app.config.get("EMBEDDING_MODEL_NAME", DEFAULT_EMBEDDING_MODEL_NAME)
-    dim = int(current_app.config.get("EMBEDDING_DIM", DEFAULT_EMBEDDING_DIM))
+    model_name = get_config().experiment.embedding_model_name
+    dim = get_config().experiment.embedding_dim
     payload = _get_hyde_payload(question_id, query)
-    strategy = current_app.config.get("HYDE_STRATEGY", "blend")
-    weight_hyde = float(current_app.config.get("HYDE_EMBED_WEIGHT", 0.7))
-    weight_orig = float(current_app.config.get("HYDE_EMBED_WEIGHT_ORIG", 0.3))
+    strategy = get_config().experiment.hyde_strategy
+    weight_hyde = get_config().experiment.hyde_embed_weight
+    weight_orig = get_config().experiment.hyde_embed_weight_orig
     try:
         orig_vec = embed_texts([normalized], model_name, dim, is_query=True)[0]
         query_vec = orig_vec
@@ -328,7 +401,7 @@ def search_chunks_embedding(
                     combined = combined / norm
                 query_vec = combined
     except Exception as exc:
-        current_app.logger.warning("Embedding query failed: %s", exc)
+        logging.warning("Embedding query failed: %s", exc)
         return []
 
     if candidate_chunks is not None:
@@ -340,7 +413,7 @@ def search_chunks_embedding(
         try:
             emb_map = _fetch_embeddings_for_chunks(chunk_ids, model_name, dim)
         except Exception as exc:
-            current_app.logger.warning("Embedding fetch failed: %s", exc)
+            logging.warning("Embedding fetch failed: %s", exc)
             return []
         if not emb_map:
             return []
@@ -404,10 +477,10 @@ def search_chunks_hybrid_rrf(
     question_id: int | None = None,
     lecture_ids: List[int] | None = None,
 ) -> List[Dict]:
-    rrf_k = int(current_app.config.get("RRF_K", 60))
-    embed_top_n = int(current_app.config.get("EMBEDDING_TOP_N", top_n))
+    rrf_k = get_config().experiment.rrf_k
+    embed_top_n = get_config().experiment.embedding_top_n
     bm25_top_n = max(top_n, embed_top_n)
-    strategy = current_app.config.get("HYDE_STRATEGY", "blend")
+    strategy = get_config().experiment.hyde_strategy
     bm25_chunks = search_chunks_bm25(
         query,
         top_n=bm25_top_n,
@@ -436,12 +509,16 @@ def search_chunks_hybrid_rrf(
                 if not chunks:
                     return -1.0
                 top1 = float(chunks[0].get("embedding_score") or 0.0)
-                top2 = float(chunks[1].get("embedding_score") or 0.0) if len(chunks) > 1 else 0.0
+                top2 = (
+                    float(chunks[1].get("embedding_score") or 0.0)
+                    if len(chunks) > 1
+                    else 0.0
+                )
                 return top1 - top2
 
             margin_orig = _margin(orig_chunks)
             margin_hyde = _margin(hyde_chunks)
-            eps = float(current_app.config.get("HYDE_MARGIN_EPS", 0.0))
+            eps = get_config().experiment.hyde_margin_eps
             if margin_hyde > (margin_orig + eps):
                 emb_chunks = hyde_chunks
             else:
@@ -543,13 +620,17 @@ def aggregate_candidates(
         lecture = lecture_map.get(lecture_id)
         if not lecture:
             continue
-        evidence = sorted(info["evidence"], key=lambda e: e["score"], reverse=True)[:evidence_per_lecture]
+        evidence = sorted(info["evidence"], key=lambda e: e["score"], reverse=True)[
+            :evidence_per_lecture
+        ]
         candidates.append(
             {
                 "id": lecture.id,
                 "title": lecture.title,
                 "block_name": lecture.block.name if lecture.block else "",
-                "full_path": f"{lecture.block.name} > {lecture.title}" if lecture.block else lecture.title,
+                "full_path": f"{lecture.block.name} > {lecture.title}"
+                if lecture.block
+                else lecture.title,
                 "score": info["score"],
                 "evidence": [
                     {

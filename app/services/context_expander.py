@@ -5,11 +5,12 @@ Semantic expansion within the same lecture using BM25 similarity to the
 candidate chunk text. Falls back to no expansion when semantic neighbors
 are unavailable.
 """
+
 from __future__ import annotations
 
 from typing import Dict, List, Optional
 
-from flask import current_app
+from config import get_config
 from sqlalchemy import text
 
 from app import db
@@ -54,10 +55,14 @@ def _semantic_neighbors(
         LIMIT :top_n
         """
     )
-    rows = db.session.execute(
-        sql,
-        {"query": match_query, "lecture_id": seed_chunk.lecture_id, "top_n": top_n},
-    ).mappings().all()
+    rows = (
+        db.session.execute(
+            sql,
+            {"query": match_query, "lecture_id": seed_chunk.lecture_id, "top_n": top_n},
+        )
+        .mappings()
+        .all()
+    )
     chunks = []
     for row in rows:
         chunk_id = row.get("chunk_id")
@@ -69,7 +74,9 @@ def _semantic_neighbors(
     return chunks
 
 
-def _assemble_parent_text(chunks: List[LectureChunk], max_chars: int) -> tuple[str, List[int]]:
+def _assemble_parent_text(
+    chunks: List[LectureChunk], max_chars: int
+) -> tuple[str, List[int]]:
     separator = "\n\n---\n\n"
     selected = []
     total = 0
@@ -106,13 +113,13 @@ def expand_candidates(candidates: List[Dict]) -> List[Dict]:
     if not candidates:
         return []
 
-    if not current_app.config.get("SEMANTIC_EXPANSION_ENABLED", True):
+    if not get_config().experiment.semantic_expansion_enabled:
         return candidates
 
-    max_chars = int(current_app.config.get("PARENT_MAX_CHARS", 3500))
-    top_n = int(current_app.config.get("SEMANTIC_EXPANSION_TOP_N", 6))
-    max_extra = int(current_app.config.get("SEMANTIC_EXPANSION_MAX_EXTRA", 2))
-    query_max_chars = int(current_app.config.get("SEMANTIC_EXPANSION_QUERY_MAX_CHARS", 1200))
+    max_chars = get_config().experiment.parent_max_chars
+    top_n = get_config().experiment.semantic_expansion_top_n
+    max_extra = get_config().experiment.semantic_expansion_max_extra
+    query_max_chars = get_config().experiment.semantic_expansion_query_max_chars
 
     for cand in candidates:
         evidence = cand.get("evidence") or []
@@ -149,7 +156,9 @@ def expand_candidates(candidates: List[Dict]) -> List[Dict]:
         cand["parent_text"] = parent_text
         cand["parent_chunk_ids"] = parent_chunk_ids
         cand["parent_page_ranges"] = [
-            (chunk.page_start, chunk.page_end) for chunk in unique_chunks if chunk.id in parent_chunk_ids
+            (chunk.page_start, chunk.page_end)
+            for chunk in unique_chunks
+            if chunk.id in parent_chunk_ids
         ]
 
     return candidates

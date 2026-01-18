@@ -1,9 +1,12 @@
 """
 Build HyDE-lite query transformations for questions.
 
+SAFETY: DESTRUCTIVE (if --force specified)
+
 Usage:
   python scripts/build_queries.py --provider gemini --concurrency 10 --skip-existing
 """
+
 from __future__ import annotations
 
 import argparse
@@ -35,8 +38,8 @@ def _normalize_db_uri(db_value: str | None) -> str | None:
 
 
 def _build_question_text(question: Question) -> str:
-    choices = [c.content for c in question.choices.order_by('choice_number').all()]
-    question_text = question.content or ''
+    choices = [c.content for c in question.choices.order_by("choice_number").all()]
+    question_text = question.content or ""
     if choices:
         question_text = f"{question_text}\n" + " ".join(choices)
     return question_text.strip()
@@ -81,14 +84,20 @@ def _collect_question_ids(
     return [row.id for row in query.all()]
 
 
-def _process_question(app, question_id: int, force: bool) -> bool:
+def _process_question(
+    app, question_id: int, force: bool, dry_run: bool = False
+) -> bool:
     with app.app_context():
         prompt_version = app.config.get("HYDE_PROMPT_VERSION", "hyde_v1")
         if force:
-            QuestionQuery.query.filter_by(
-                question_id=question_id, prompt_version=prompt_version
-            ).delete(synchronize_session=False)
-            db.session.commit()
+            if not dry_run:
+                QuestionQuery.query.filter_by(
+                    question_id=question_id, prompt_version=prompt_version
+                ).delete(synchronize_session=False)
+                db.session.commit()
+            else:
+                print(f"[DRY-RUN] Would delete query for Q{question_id}")
+            return False
 
         question = Question.query.get(question_id)
         if not question:
@@ -103,6 +112,15 @@ def _process_question(app, question_id: int, force: bool) -> bool:
 
 
 def main() -> None:
+    try:
+        from scripts._safety import (
+            SafetyLevel,
+            require_confirmation,
+            print_script_header,
+        )
+    except ModuleNotFoundError:
+        from _safety import SafetyLevel, require_confirmation, print_script_header
+
     parser = argparse.ArgumentParser(description="Build HyDE-lite queries.")
     parser.add_argument("--db", default="data/dev.db", help="SQLite db path.")
     parser.add_argument(
@@ -115,7 +133,28 @@ def main() -> None:
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--question-ids-file", default=None)
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be done without writing.",
+    )
+    parser.add_argument(
+        "--yes-i-really-mean-it",
+        action="store_true",
+        help="Confirm destructive operation.",
+    )
     args = parser.parse_args()
+
+    print_script_header("build_queries.py", _normalize_db_uri(args.db))
+
+    if not require_confirmation(
+        SafetyLevel.DESTRUCTIVE,
+        "overwrite existing HyDE queries with --force",
+        env_flag="ALLOW_DESTRUCTIVE",
+        cli_flag="--yes-i-really-mean-it" in sys.argv,
+        dry_run=args.dry_run,
+    ):
+        return
 
     if args.provider != "gemini":
         raise ValueError("Only gemini provider is supported.")
@@ -124,7 +163,7 @@ def main() -> None:
     if not db_uri:
         raise ValueError("DB path is required.")
 
-    app = create_app('default', db_uri_override=db_uri, skip_migration_check=True)
+    app = create_app("default", db_uri_override=db_uri, skip_migration_check=True)
 
     with app.app_context():
         question_ids = _collect_question_ids(
@@ -145,7 +184,7 @@ def main() -> None:
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = {
-            executor.submit(_process_question, app, qid, args.force): qid
+            executor.submit(_process_question, app, qid, args.force, args.dry_run): qid
             for qid in question_ids
         }
         for future in as_completed(futures):

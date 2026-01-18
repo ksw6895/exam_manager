@@ -3,6 +3,7 @@
 Google Gemini API를 활용한 문제-강의 자동 분류 서비스.
 2단계 분류 프로세스: 1) 텍스트 기반 후보 추출 2) LLM 정밀 분류
 """
+
 import json
 import os
 import re
@@ -12,12 +13,20 @@ from concurrent.futures import ThreadPoolExecutor
 import threading
 
 from flask import current_app
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+from tenacity import (
+    retry,
+    stop_after_attempt,
+    wait_exponential,
+    retry_if_exception_type,
+)
+
+from config import get_config
 
 # Google GenAI SDK
 try:
     from google import genai
     from google.genai import types
+
     GENAI_AVAILABLE = True
 except ImportError:
     GENAI_AVAILABLE = False
@@ -38,11 +47,15 @@ from app.services.folder_scope import parse_bool, resolve_lecture_ids
 # Job payload helpers (idempotency + compatibility)
 # ============================================================
 
-def build_job_payload(request_meta: Optional[Dict], results: Optional[List[Dict]] = None) -> Dict:
+
+def build_job_payload(
+    request_meta: Optional[Dict], results: Optional[List[Dict]] = None
+) -> Dict:
     return {
-        'request': request_meta or {},
-        'results': results or [],
+        "request": request_meta or {},
+        "results": results or [],
     }
+
 
 def parse_job_payload(result_json: Optional[str]) -> Tuple[Dict, List[Dict]]:
     if not result_json:
@@ -54,15 +67,15 @@ def parse_job_payload(result_json: Optional[str]) -> Tuple[Dict, List[Dict]]:
     if isinstance(payload, list):
         return {}, payload
     if isinstance(payload, dict):
-        results = payload.get('results')
+        results = payload.get("results")
         if isinstance(results, list):
-            return payload.get('request', {}) or {}, results
-        return payload.get('request', {}) or {}, []
+            return payload.get("request", {}) or {}, results
+        return payload.get("request", {}) or {}, []
     return {}, []
 
 
 def _extract_first_json_object(text: str) -> Optional[str]:
-    start = text.find('{')
+    start = text.find("{")
     if start == -1:
         return None
     depth = 0
@@ -73,7 +86,7 @@ def _extract_first_json_object(text: str) -> Optional[str]:
         if in_string:
             if escape:
                 escape = False
-            elif ch == '\\':
+            elif ch == "\\":
                 escape = True
             elif ch == '"':
                 in_string = False
@@ -81,28 +94,28 @@ def _extract_first_json_object(text: str) -> Optional[str]:
         if ch == '"':
             in_string = True
             continue
-        if ch == '{':
+        if ch == "{":
             depth += 1
-        elif ch == '}':
+        elif ch == "}":
             depth -= 1
             if depth == 0:
-                return text[start:i + 1]
+                return text[start : i + 1]
     return None
 
 
 def _sanitize_json_text(text: str) -> str:
     if not text:
         return text
-    text = re.sub(r'```(?:json)?', '', text, flags=re.IGNORECASE)
-    text = text.replace('```', '')
-    text = re.sub(r'[\x00-\x1F\x7F]', ' ', text)
+    text = re.sub(r"```(?:json)?", "", text, flags=re.IGNORECASE)
+    text = text.replace("```", "")
+    text = re.sub(r"[\x00-\x1F\x7F]", " ", text)
     text = (
-        text.replace('\u201c', '"')
-            .replace('\u201d', '"')
-            .replace('\u2018', "'")
-            .replace('\u2019', "'")
+        text.replace("\u201c", '"')
+        .replace("\u201d", '"')
+        .replace("\u2018", "'")
+        .replace("\u2019", "'")
     )
-    text = re.sub(r',\s*([}\]])', r'\1', text)
+    text = re.sub(r",\s*([}\]])", r"\1", text)
     return text.strip()
 
 
@@ -110,52 +123,105 @@ def _fallback_parse_result(text: str) -> Dict:
     cleaned = _sanitize_json_text(text)
     data: Dict = {}
 
-    m = re.search(r'lecture_id\s*[:=]\s*(null|\d+)', cleaned, re.IGNORECASE)
+    m = re.search(r"lecture_id\s*[:=]\s*(null|\d+)", cleaned, re.IGNORECASE)
     if m:
         raw = m.group(1).lower()
-        data['lecture_id'] = None if raw == 'null' else int(raw)
+        data["lecture_id"] = None if raw == "null" else int(raw)
 
-    m = re.search(r'no_match\s*[:=]\s*(true|false)', cleaned, re.IGNORECASE)
+    m = re.search(r"no_match\s*[:=]\s*(true|false)", cleaned, re.IGNORECASE)
     if m:
-        data['no_match'] = m.group(1).lower() == 'true'
+        data["no_match"] = m.group(1).lower() == "true"
 
     # Try multiple confidence-related keys: confidence, score, certainty, probability
-    for conf_key in ('confidence', 'score', 'certainty', 'probability'):
-        m = re.search(rf'{conf_key}\s*[:=]\s*([0-9]+(?:\.[0-9]+)?)', cleaned, re.IGNORECASE)
+    for conf_key in ("confidence", "score", "certainty", "probability"):
+        m = re.search(
+            rf"{conf_key}\s*[:=]\s*([0-9]+(?:\.[0-9]+)?)", cleaned, re.IGNORECASE
+        )
         if m:
             try:
-                data['confidence'] = float(m.group(1))
+                data["confidence"] = float(m.group(1))
                 break
             except ValueError:
                 continue
 
-    for key in ('reason', 'study_hint'):
-        m = re.search(rf'"?{key}"?\s*[:=]\s*"(.*?)"', cleaned, re.IGNORECASE | re.DOTALL)
+    for key in ("reason", "study_hint"):
+        m = re.search(
+            rf'"?{key}"?\s*[:=]\s*"(.*?)"', cleaned, re.IGNORECASE | re.DOTALL
+        )
         if not m:
             m = re.search(rf'"?{key}"?\s*[:=]\s*([^\n\r]+)', cleaned, re.IGNORECASE)
         if m:
             data[key] = m.group(1).strip().strip('"').strip()
 
-    data.setdefault('lecture_id', None)
-    if 'no_match' not in data:
-        data['no_match'] = data['lecture_id'] is None
-    data.setdefault('confidence', 0.0)
-    data.setdefault('reason', '')
-    data.setdefault('study_hint', '')
-    data.setdefault('evidence', [])
+    data.setdefault("lecture_id", None)
+    if "no_match" not in data:
+        data["no_match"] = data["lecture_id"] is None
+    data.setdefault("confidence", 0.0)
+    data.setdefault("reason", "")
+    data.setdefault("study_hint", "")
+    data.setdefault("evidence", [])
     return data
+
+
+def _extract_lecture_id_from_text(
+    text: Optional[str], valid_ids: Optional[set]
+) -> Optional[int]:
+    if not text:
+        return None
+    patterns = [
+        "\uac15\uc758\ub85d\\s*(\\d+)\\s*\ubc88",
+        r"lecture\s*#?\s*(\d+)",
+        r"id\s*[:=]?\s*(\d+)",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, text, re.IGNORECASE)
+        if not match:
+            continue
+        try:
+            lecture_id = int(match.group(1))
+        except (TypeError, ValueError):
+            continue
+        if valid_ids and lecture_id not in valid_ids:
+            continue
+        return lecture_id
+    return None
+
+
+def _coerce_confidence(value: object) -> float:
+    if value is None:
+        return 0.0
+    if isinstance(value, (int, float)):
+        return float(value)
+    if not isinstance(value, str):
+        return 0.0
+    raw = value.strip()
+    if not raw:
+        return 0.0
+    if "%" in raw:
+        match = re.search(r"([0-9]+(?:\.[0-9]+)?)", raw)
+        if not match:
+            return 0.0
+        try:
+            return float(match.group(1)) / 100.0
+        except (TypeError, ValueError):
+            return 0.0
+    try:
+        return float(raw)
+    except (TypeError, ValueError):
+        return 0.0
 
 
 # ============================================================
 # 1단계: 후보 강의 추출 (검색 기반)
 # ============================================================
 
+
 class LectureRetriever:
     """강의 후보 검색기 - 검색 기반 Top-K 추출"""
-    
+
     _instance = None
     _lock = threading.Lock()
-    
+
     def __new__(cls):
         """싱글톤 패턴"""
         if cls._instance is None:
@@ -164,25 +230,27 @@ class LectureRetriever:
                     cls._instance = super().__new__(cls)
                     cls._instance._initialized = False
         return cls._instance
-    
+
     def __init__(self):
         if self._initialized:
             return
         self._lectures_cache = []
         self._initialized = True
-    
+
     def refresh_cache(self):
         """강의 캐시 갱신 (앱 컨텍스트 내에서 호출)"""
         lectures = Lecture.query.join(Block).order_by(Block.order, Lecture.order).all()
         self._lectures_cache = []
         for lecture in lectures:
-            self._lectures_cache.append({
-                'id': lecture.id,
-                'title': lecture.title,
-                'block_name': lecture.block.name,
-                'full_path': f"{lecture.block.name} > {lecture.title}"
-            })
-    
+            self._lectures_cache.append(
+                {
+                    "id": lecture.id,
+                    "title": lecture.title,
+                    "block_name": lecture.block.name,
+                    "full_path": f"{lecture.block.name} > {lecture.title}",
+                }
+            )
+
     def find_candidates(
         self,
         question_text: str,
@@ -223,39 +291,49 @@ class LectureRetriever:
 # 2단계: LLM 기반 정밀 분류
 # ============================================================
 
+
 class GeminiClassifier:
     """Google Gemini API를 사용한 문제 분류기"""
-    
+
     def __init__(self):
         if not GENAI_AVAILABLE:
-            raise RuntimeError("google-genai 패키지가 설치되지 않았습니다. pip install google-genai 실행하세요.")
-        
-        api_key = current_app.config.get('GEMINI_API_KEY')
+            raise RuntimeError(
+                "google-genai 패키지가 설치되지 않았습니다. pip install google-genai 실행하세요."
+            )
+
+        cfg = get_config()
+        api_key = cfg.runtime.gemini_api_key
         if not api_key:
-            raise RuntimeError("GEMINI_API_KEY가 설정되지 않았습니다. .env 파일을 확인하세요.")
-        
+            raise RuntimeError(
+                "GEMINI_API_KEY가 설정되지 않았습니다. .env 파일을 확인하세요."
+            )
+
         self.client = genai.Client(api_key=api_key)
-        self.model_name = current_app.config.get('GEMINI_MODEL_NAME', 'gemini-2.5-flash')
-        self.confidence_threshold = current_app.config.get('AI_CONFIDENCE_THRESHOLD', 0.7)
-        self.auto_apply_margin = current_app.config.get('AI_AUTO_APPLY_MARGIN', 0.2)
-    
-    def _build_classification_prompt(self, question_content: str, choices: List[str], candidates: List[Dict]) -> str:
+        self.model_name = cfg.runtime.gemini_model_name or "gemini-2.5-flash"
+        self.confidence_threshold = current_app.config.get(
+            "AI_CONFIDENCE_THRESHOLD", 0.7
+        )
+        self.auto_apply_margin = current_app.config.get("AI_AUTO_APPLY_MARGIN", 0.2)
+
+    def _build_classification_prompt(
+        self, question_content: str, choices: List[str], candidates: List[Dict]
+    ) -> str:
         """Build the classification prompt."""
         candidate_lines = []
         for c in candidates:
             # Use expanded context if available
-            parent_text = c.get('parent_text')
-            
+            parent_text = c.get("parent_text")
+
             if parent_text:
                 # Expanded context mode
                 range_info = ""
-                ranges = c.get('parent_page_ranges', [])
+                ranges = c.get("parent_page_ranges", [])
                 if ranges:
                     # summarize ranges
                     min_p = min(r[0] for r in ranges if r[0] is not None)
                     max_p = max(r[1] for r in ranges if r[1] is not None)
                     range_info = f" (Pages {min_p}-{max_p})"
-                
+
                 candidate_lines.append(
                     f"- ID: {c['id']}, Lecture: {c['full_path']}{range_info}\n"
                     f"  [Expanded Context Start]\n"
@@ -265,26 +343,37 @@ class GeminiClassifier:
             else:
                 # Fallback to snippets
                 evidence_lines = []
-                for e in c.get('evidence', []) or []:
-                    page_start = e.get('page_start')
-                    page_end = e.get('page_end')
+                for e in c.get("evidence", []) or []:
+                    page_start = e.get("page_start")
+                    page_end = e.get("page_end")
                     if page_start is None or page_end is None:
                         page_label = "p.?"
                     else:
-                        page_label = f"p.{page_start}" if page_start == page_end else f"p.{page_start}-{page_end}"
-                    snippet = e.get('snippet') or ''
+                        page_label = (
+                            f"p.{page_start}"
+                            if page_start == page_end
+                            else f"p.{page_start}-{page_end}"
+                        )
+                    snippet = e.get("snippet") or ""
                     evidence_lines.append(
                         f'  - {page_label}: "{snippet}" (chunk_id: {e.get("chunk_id")})'
                     )
                 if not evidence_lines:
                     evidence_lines.append("  - evidence: none")
                 candidate_lines.append(
-                    f"- ID: {c['id']}, Lecture: {c['full_path']}\n" + "\n".join(evidence_lines)
+                    f"- ID: {c['id']}, Lecture: {c['full_path']}\n"
+                    + "\n".join(evidence_lines)
                 )
 
-        candidates_text = "\n".join(candidate_lines) if candidate_lines else "(no candidates)"
+        candidates_text = (
+            "\n".join(candidate_lines) if candidate_lines else "(no candidates)"
+        )
 
-        choices_text = "\n".join([f"  {i + 1}. {c}" for i, c in enumerate(choices)]) if choices else "(no choices)"
+        choices_text = (
+            "\n".join([f"  {i + 1}. {c}" for i, c in enumerate(choices)])
+            if choices
+            else "(no choices)"
+        )
 
         prompt = f"""You are a medical education expert. Analyze the exam question and choose the most relevant lecture.
 
@@ -325,25 +414,29 @@ class GeminiClassifier:
 """
         return prompt
 
-    def _normalize_evidence(self, lecture_id: int, candidates: List[Dict], evidence_raw: List[Dict]) -> List[Dict]:
-        selected = next((c for c in candidates if c.get('id') == lecture_id), None)
+    def _normalize_evidence(
+        self, lecture_id: int, candidates: List[Dict], evidence_raw: List[Dict]
+    ) -> List[Dict]:
+        selected = next((c for c in candidates if c.get("id") == lecture_id), None)
         if not selected:
             return []
         candidate_evidence = {
-            e.get('chunk_id'): e for e in (selected.get('evidence', []) or []) if e.get('chunk_id') is not None
+            e.get("chunk_id"): e
+            for e in (selected.get("evidence", []) or [])
+            if e.get("chunk_id") is not None
         }
         cleaned = []
         for item in evidence_raw or []:
             if not isinstance(item, dict):
                 continue
-            item_lecture_id = item.get('lecture_id')
+            item_lecture_id = item.get("lecture_id")
             if item_lecture_id is not None:
                 try:
                     if int(item_lecture_id) != lecture_id:
                         continue
                 except (TypeError, ValueError):
                     continue
-            chunk_id = item.get('chunk_id')
+            chunk_id = item.get("chunk_id")
             try:
                 chunk_id = int(chunk_id)
             except (TypeError, ValueError):
@@ -351,26 +444,26 @@ class GeminiClassifier:
             candidate_item = candidate_evidence.get(chunk_id)
             if not candidate_item:
                 continue
-            snippet = candidate_item.get('snippet') or ''
-            quote = str(item.get('quote') or '').strip()
+            snippet = candidate_item.get("snippet") or ""
+            quote = str(item.get("quote") or "").strip()
             if quote and quote in snippet:
                 cleaned.append(
                     {
-                        'lecture_id': lecture_id,
-                        'page_start': candidate_item.get('page_start'),
-                        'page_end': candidate_item.get('page_end'),
-                        'quote': quote,
-                        'chunk_id': chunk_id,
+                        "lecture_id": lecture_id,
+                        "page_start": candidate_item.get("page_start"),
+                        "page_end": candidate_item.get("page_end"),
+                        "quote": quote,
+                        "chunk_id": chunk_id,
                     }
                 )
             elif snippet:
                 cleaned.append(
                     {
-                        'lecture_id': lecture_id,
-                        'page_start': candidate_item.get('page_start'),
-                        'page_end': candidate_item.get('page_end'),
-                        'quote': snippet,
-                        'chunk_id': chunk_id,
+                        "lecture_id": lecture_id,
+                        "page_start": candidate_item.get("page_start"),
+                        "page_end": candidate_item.get("page_end"),
+                        "quote": snippet,
+                        "chunk_id": chunk_id,
                     }
                 )
 
@@ -378,25 +471,25 @@ class GeminiClassifier:
             return cleaned
 
         fallback = []
-        for candidate_item in (selected.get('evidence', []) or [])[:2]:
-            snippet = candidate_item.get('snippet') or ''
+        for candidate_item in (selected.get("evidence", []) or [])[:2]:
+            snippet = candidate_item.get("snippet") or ""
             if not snippet:
                 continue
             fallback.append(
                 {
-                    'lecture_id': lecture_id,
-                    'page_start': candidate_item.get('page_start'),
-                    'page_end': candidate_item.get('page_end'),
-                    'quote': snippet,
-                    'chunk_id': candidate_item.get('chunk_id'),
+                    "lecture_id": lecture_id,
+                    "page_start": candidate_item.get("page_start"),
+                    "page_end": candidate_item.get("page_end"),
+                    "quote": snippet,
+                    "chunk_id": candidate_item.get("chunk_id"),
                 }
             )
         return fallback
-    
+
     @retry(
         stop=stop_after_attempt(3),
         wait=wait_exponential(multiplier=2, min=2, max=30),
-        retry=retry_if_exception_type((Exception,))
+        retry=retry_if_exception_type((Exception,)),
     )
     def classify_single(self, question: Question, candidates: List[Dict]) -> Dict:
         """
@@ -413,18 +506,18 @@ class GeminiClassifier:
                 'model_name': str
             }
         """
-        choices = [c.content for c in question.choices.order_by('choice_number').all()]
+        choices = [c.content for c in question.choices.order_by("choice_number").all()]
         content = question.content or "(image-only question)"
 
         if not candidates:
             return {
-                'lecture_id': None,
-                'confidence': 0.0,
-                'reason': 'No lecture candidates available.',
-                'study_hint': '',
-                'evidence': [],
-                'no_match': True,
-                'model_name': self.model_name
+                "lecture_id": None,
+                "confidence": 0.0,
+                "reason": "No lecture candidates available.",
+                "study_hint": "",
+                "evidence": [],
+                "no_match": True,
+                "model_name": self.model_name,
             }
 
         prompt = self._build_classification_prompt(content, choices, candidates)
@@ -436,13 +529,15 @@ class GeminiClassifier:
                 config=types.GenerateContentConfig(
                     temperature=0.2,
                     top_p=0.8,
-                    max_output_tokens=current_app.config.get('GEMINI_MAX_OUTPUT_TOKENS', 2048),
+                    max_output_tokens=current_app.config.get(
+                        "GEMINI_MAX_OUTPUT_TOKENS", 2048
+                    ),
                     thinking_config=types.ThinkingConfig(include_thoughts=False),
                     response_mime_type="application/json",
-                )
+                ),
             )
 
-            result_text = (response.text or '').strip()
+            result_text = (response.text or "").strip()
             json_text = _extract_first_json_object(result_text) or result_text
             json_text = _sanitize_json_text(json_text)
             try:
@@ -451,65 +546,106 @@ class GeminiClassifier:
                 result = _fallback_parse_result(result_text)
             # [DEBUG INSERT] 여기에 로그 추가
             import logging
+
             logger = logging.getLogger(__name__)
-            
+
             # 파싱된 키 목록과 중요 값 확인
             debug_info = {
                 "event": "LLM_PARSE_CHECK",
                 "qid": question.id if question else "unknown",
                 "model": self.model_name,
-                "raw_keys": list(result.keys()),  # 키 목록 확인 (confidence vs certainty)
-                "conf_value": result.get('confidence'),
-                "conf_type": str(type(result.get('confidence'))), # 타입 확인 (float vs str)
-                "lecture_id": result.get('lecture_id')
+                "raw_keys": list(
+                    result.keys()
+                ),  # 키 목록 확인 (confidence vs certainty)
+                "conf_value": result.get("confidence"),
+                "conf_type": str(
+                    type(result.get("confidence"))
+                ),  # 타입 확인 (float vs str)
+                "lecture_id": result.get("lecture_id"),
             }
             logger.info(f"AUTOCONFIRM_DEBUG_PARSE: {json.dumps(debug_info)}")
             # [END DEBUG INSERT]
-            lecture_id = result.get('lecture_id')
-            no_match = bool(result.get('no_match', False))
+            lecture_id = result.get("lecture_id")
+            no_match = parse_bool(result.get("no_match"), False)
+            valid_ids = {
+                c["id"] for c in candidates if c.get("id") is not None
+            }
+            if lecture_id is not None:
+                try:
+                    lecture_id = int(lecture_id)
+                except (TypeError, ValueError):
+                    if isinstance(lecture_id, str):
+                        matches = re.findall(r"\d+", lecture_id)
+                        if len(matches) == 1:
+                            lecture_id = int(matches[0])
+                        else:
+                            lecture_id = None
+                    else:
+                        lecture_id = None
+                if lecture_id is None:
+                    no_match = True
+            if lecture_id is None:
+                lecture_id = _extract_lecture_id_from_text(
+                    result.get("reason"), valid_ids
+                )
+                if lecture_id is None:
+                    lecture_id = _extract_lecture_id_from_text(
+                        result.get("study_hint"), valid_ids
+                    )
+                if lecture_id is not None:
+                    no_match = False
             if no_match:
                 lecture_id = None
-            if lecture_id is not None:
-                valid_ids = {c['id'] for c in candidates}
-                if lecture_id not in valid_ids:
-                    lecture_id = None
-                    no_match = True
+            if lecture_id is not None and lecture_id not in valid_ids:
+                lecture_id = None
+                no_match = True
+            if lecture_id is None and not no_match:
+                no_match = True
 
             # Support multiple confidence keys: confidence, score, certainty, probability
-            raw_conf = result.get('confidence') or result.get('score') or result.get('certainty') or result.get('probability') or 0.0
-            try:
-                confidence = float(raw_conf)
-            except (TypeError, ValueError):
-                confidence = 0.0
-            reason = result.get('reason', '')
-            study_hint = result.get('study_hint', '')
-            evidence_raw = result.get('evidence') if isinstance(result.get('evidence'), list) else []
+            raw_conf = (
+                result.get("confidence")
+                or result.get("score")
+                or result.get("certainty")
+                or result.get("probability")
+                or 0.0
+            )
+            confidence = _coerce_confidence(raw_conf)
+            reason = result.get("reason", "")
+            study_hint = result.get("study_hint", "")
+            evidence_raw = (
+                result.get("evidence")
+                if isinstance(result.get("evidence"), list)
+                else []
+            )
             evidence = []
             if lecture_id and not no_match:
-                evidence = self._normalize_evidence(lecture_id, candidates, evidence_raw)
+                evidence = self._normalize_evidence(
+                    lecture_id, candidates, evidence_raw
+                )
 
             if no_match:
                 evidence = []
 
             return {
-                'lecture_id': lecture_id,
-                'confidence': confidence,
-                'reason': reason,
-                'study_hint': study_hint,
-                'evidence': evidence,
-                'no_match': no_match,
-                'model_name': self.model_name
+                "lecture_id": lecture_id,
+                "confidence": confidence,
+                "reason": reason,
+                "study_hint": study_hint,
+                "evidence": evidence,
+                "no_match": no_match,
+                "model_name": self.model_name,
             }
 
         except json.JSONDecodeError as e:
             return {
-                'lecture_id': None,
-                'confidence': 0.0,
-                'reason': f'JSON parse error: {str(e)}',
-                'study_hint': '',
-                'evidence': [],
-                'no_match': True,
-                'model_name': self.model_name
+                "lecture_id": None,
+                "confidence": 0.0,
+                "reason": f"JSON parse error: {str(e)}",
+                "study_hint": "",
+                "evidence": [],
+                "no_match": True,
+                "model_name": self.model_name,
             }
         except Exception as e:
             raise  # tenacity가 재시도 처리
@@ -519,11 +655,12 @@ class GeminiClassifier:
 # 비동기 배치 처리
 # ============================================================
 
+
 class AsyncBatchProcessor:
     """비동기 배치 분류 처리기"""
-    
+
     _executor = ThreadPoolExecutor(max_workers=2)
-    
+
     @classmethod
     def start_classification_job(
         cls,
@@ -532,14 +669,13 @@ class AsyncBatchProcessor:
     ) -> int:
         """
         분류 작업 시작 (비동기)
-        
+
         Returns:
             job_id: 생성된 작업 ID
         """
         # Job 생성
         job = ClassificationJob(
-            status=ClassificationJob.STATUS_PENDING,
-            total_count=len(question_ids)
+            status=ClassificationJob.STATUS_PENDING, total_count=len(question_ids)
         )
         job.result_json = json.dumps(
             build_job_payload(request_meta, []),
@@ -548,24 +684,25 @@ class AsyncBatchProcessor:
         db.session.add(job)
         db.session.commit()
         job_id = job.id
-        
+
         # 백그라운드 처리 시작
         cls._executor.submit(cls._process_job, job_id, question_ids)
-        
+
         return job_id
-    
+
     @classmethod
     def _process_job(cls, job_id: int, question_ids: List[int]):
         """백그라운드에서 분류 작업 수행"""
         from app import create_app
-        config_name = os.environ.get('FLASK_CONFIG') or 'default'
+
+        config_name = os.environ.get("FLASK_CONFIG") or "default"
         app = create_app(config_name)
-        
+
         with app.app_context():
             job = ClassificationJob.query.get(job_id)
             if not job:
                 return
-            
+
             request_meta, _ = parse_job_payload(job.result_json)
             job.status = ClassificationJob.STATUS_PROCESSING
             db.session.commit()
@@ -573,14 +710,14 @@ class AsyncBatchProcessor:
             retriever = LectureRetriever()
             retriever.refresh_cache()
 
-            scope = request_meta.get('scope') or {}
-            block_id = scope.get('block_id') or scope.get('blockId')
-            folder_id = scope.get('folder_id') or scope.get('folderId')
-            include_descendants = scope.get('include_descendants')
+            scope = request_meta.get("scope") or {}
+            block_id = scope.get("block_id") or scope.get("blockId")
+            folder_id = scope.get("folder_id") or scope.get("folderId")
+            include_descendants = scope.get("include_descendants")
             if include_descendants is None:
-                include_descendants = scope.get('includeDescendants')
+                include_descendants = scope.get("includeDescendants")
             include_descendants = parse_bool(include_descendants, True)
-            lecture_ids = scope.get('lecture_ids') or scope.get('lectureIds')
+            lecture_ids = scope.get("lecture_ids") or scope.get("lectureIds")
             if lecture_ids is not None:
                 try:
                     lecture_ids = [int(lid) for lid in lecture_ids]
@@ -594,20 +731,23 @@ class AsyncBatchProcessor:
                 )
 
             results = []
-            
+
             try:
                 classifier = GeminiClassifier()
-                
+
                 for qid in question_ids:
                     question = Question.query.get(qid)
                     if not question:
                         job.failed_count += 1
                         job.processed_count += 1
                         continue
-                    
+
                     try:
-                        choices = [c.content for c in question.choices.order_by('choice_number').all()]
-                        question_text = (question.content or '')
+                        choices = [
+                            c.content
+                            for c in question.choices.order_by("choice_number").all()
+                        ]
+                        question_text = question.content or ""
                         if choices:
                             question_text = f"{question_text}\n" + " ".join(choices)
                         question_text = question_text.strip()
@@ -622,7 +762,7 @@ class AsyncBatchProcessor:
                         )
 
                         # Expand context only when unstable
-                        if current_app.config.get('PARENT_ENABLED', False):
+                        if current_app.config.get("PARENT_ENABLED", False):
                             from app.services.context_expander import expand_candidates
                             from app.services import retrieval_features
 
@@ -632,91 +772,120 @@ class AsyncBatchProcessor:
                             )
                             features = artifacts.features
                             auto_confirm = False
-                            if current_app.config.get('AUTO_CONFIRM_V2_ENABLED', True):
+                            if current_app.config.get("AUTO_CONFIRM_V2_ENABLED", True):
                                 auto_confirm = retrieval_features.auto_confirm_v2(
                                     features,
-                                    delta=float(current_app.config.get('AUTO_CONFIRM_V2_DELTA', 0.05)),
-                                    max_bm25_rank=int(current_app.config.get('AUTO_CONFIRM_V2_MAX_BM25_RANK', 5)),
+                                    delta=float(
+                                        current_app.config.get(
+                                            "AUTO_CONFIRM_V2_DELTA", 0.05
+                                        )
+                                    ),
+                                    max_bm25_rank=int(
+                                        current_app.config.get(
+                                            "AUTO_CONFIRM_V2_MAX_BM25_RANK", 5
+                                        )
+                                    ),
                                 )
                             uncertain = retrieval_features.is_uncertain(
                                 features,
-                                delta_uncertain=float(current_app.config.get('AUTO_CONFIRM_V2_DELTA_UNCERTAIN', 0.03)),
-                                min_chunk_len=int(current_app.config.get('AUTO_CONFIRM_V2_MIN_CHUNK_LEN', 200)),
+                                delta_uncertain=float(
+                                    current_app.config.get(
+                                        "AUTO_CONFIRM_V2_DELTA_UNCERTAIN", 0.03
+                                    )
+                                ),
+                                min_chunk_len=int(
+                                    current_app.config.get(
+                                        "AUTO_CONFIRM_V2_MIN_CHUNK_LEN", 200
+                                    )
+                                ),
                                 auto_confirm=auto_confirm,
                             )
                             if uncertain:
                                 candidates = expand_candidates(candidates)
 
                         result = classifier.classify_single(question, candidates)
-                        result['question_content'] = question.content or ''
-                        result['question_choices'] = choices
-                        result['candidate_ids'] = [c.get('id') for c in candidates if c.get('id') is not None]
-                        result['candidate_top_id'] = result['candidate_ids'][0] if result['candidate_ids'] else None
+                        result["question_content"] = question.content or ""
+                        result["question_choices"] = choices
+                        result["candidate_ids"] = [
+                            c.get("id") for c in candidates if c.get("id") is not None
+                        ]
+                        result["candidate_top_id"] = (
+                            result["candidate_ids"][0]
+                            if result["candidate_ids"]
+                            else None
+                        )
 
-                        
                         # 결과 저장 (DB에는 아직 반영하지 않음 - preview용)
-                        result['question_id'] = qid
-                        result['question_number'] = question.question_number
-                        result['exam_title'] = question.exam.title if question.exam else ''
+                        result["question_id"] = qid
+                        result["question_number"] = question.question_number
+                        result["exam_title"] = (
+                            question.exam.title if question.exam else ""
+                        )
 
                         current_lecture = question.lecture
-                        result['current_lecture_id'] = question.lecture_id
-                        result['current_lecture_title'] = (
+                        result["current_lecture_id"] = question.lecture_id
+                        result["current_lecture_title"] = (
                             f"{current_lecture.block.name} > {current_lecture.title}"
                             if current_lecture
                             else None
                         )
-                        result['current_block_name'] = (
+                        result["current_block_name"] = (
                             current_lecture.block.name if current_lecture else None
                         )
-                        
-                        if result['lecture_id']:
-                            lecture = Lecture.query.get(result['lecture_id'])
-                            if lecture:
-                                result['lecture_title'] = lecture.title
-                                result['block_name'] = lecture.block.name
-                            else:
-                                result['lecture_title'] = None
-                                result['block_name'] = None
 
-                        suggested_id = result.get('lecture_id')
-                        result['will_change'] = bool(
+                        if result["lecture_id"]:
+                            lecture = Lecture.query.get(result["lecture_id"])
+                            if lecture:
+                                result["lecture_title"] = lecture.title
+                                result["block_name"] = lecture.block.name
+                            else:
+                                result["lecture_title"] = None
+                                result["block_name"] = None
+
+                        suggested_id = result.get("lecture_id")
+                        result["will_change"] = bool(
                             suggested_id and suggested_id != question.lecture_id
                         )
-                        
+
                         results.append(result)
                         job.success_count += 1
-                        
+
                     except Exception as e:
-                        results.append({
-                            'question_id': qid,
-                            'question_number': question.question_number,
-                            'exam_title': question.exam.title if question.exam else '',
-                            'question_content': question.content or '',
-                            'question_choices': choices,
-                            'current_lecture_id': question.lecture_id,
-                            'current_lecture_title': (
-                                f"{question.lecture.block.name} > {question.lecture.title}"
-                                if question.lecture
-                                else None
-                            ),
-                            'current_block_name': (
-                                question.lecture.block.name if question.lecture else None
-                            ),
-                            'lecture_id': None,
-                            'confidence': 0.0,
-                            'reason': f'Error: {str(e)}',
-                            'study_hint': '',
-                            'evidence': [],
-                            'no_match': True,
-                            'error': True,
-                            'will_change': False,
-                        })
+                        results.append(
+                            {
+                                "question_id": qid,
+                                "question_number": question.question_number,
+                                "exam_title": question.exam.title
+                                if question.exam
+                                else "",
+                                "question_content": question.content or "",
+                                "question_choices": choices,
+                                "current_lecture_id": question.lecture_id,
+                                "current_lecture_title": (
+                                    f"{question.lecture.block.name} > {question.lecture.title}"
+                                    if question.lecture
+                                    else None
+                                ),
+                                "current_block_name": (
+                                    question.lecture.block.name
+                                    if question.lecture
+                                    else None
+                                ),
+                                "lecture_id": None,
+                                "confidence": 0.0,
+                                "reason": f"Error: {str(e)}",
+                                "study_hint": "",
+                                "evidence": [],
+                                "no_match": True,
+                                "error": True,
+                                "will_change": False,
+                            }
+                        )
                         job.failed_count += 1
-                    
+
                     job.processed_count += 1
                     db.session.commit()
-                
+
                 # 완료
                 job.status = ClassificationJob.STATUS_COMPLETED
                 job.result_json = json.dumps(
@@ -724,7 +893,7 @@ class AsyncBatchProcessor:
                     ensure_ascii=False,
                 )
                 job.completed_at = datetime.utcnow()
-                
+
             except Exception as e:
                 job.status = ClassificationJob.STATUS_FAILED
                 job.error_message = str(e)
@@ -733,7 +902,7 @@ class AsyncBatchProcessor:
                     ensure_ascii=False,
                 )
                 job.completed_at = datetime.utcnow()
-            
+
             db.session.commit()
 
 
@@ -741,13 +910,17 @@ class AsyncBatchProcessor:
 # 유틸리티 함수
 # ============================================================
 
-def apply_classification_results(question_ids: List[int], job_id: int) -> int:
+
+def apply_classification_results(
+    question_ids: List[int], job_id: int, apply_mode: str = "all"
+) -> int:
     """
     분류 결과를 실제 DB에 적용
 
     Args:
         question_ids: 적용할 문제 ID 목록
         job_id: 분류 작업 ID
+        apply_mode: 적용 모드 ('all', 'changed', 'high_confidence' 등)
 
     Returns:
         적용된 문제 수
@@ -761,7 +934,9 @@ def apply_classification_results(question_ids: List[int], job_id: int) -> int:
         return 0
 
     # results: List[dict] with keys like question_id, lecture_id, confidence, evidence, ...
-    results_map = {r.get("question_id"): r for r in results if r.get("question_id") is not None}
+    results_map = {
+        r.get("question_id"): r for r in results if r.get("question_id") is not None
+    }
 
     applied_count = 0
 
@@ -773,6 +948,7 @@ def apply_classification_results(question_ids: List[int], job_id: int) -> int:
     hard_action = current_app.config.get("HARD_CANDIDATE_ACTION", "needs_review")
 
     import logging
+
     logger = logging.getLogger(__name__)
 
     for qid in question_ids:
@@ -803,7 +979,9 @@ def apply_classification_results(question_ids: List[int], job_id: int) -> int:
         # --- Always persist AI suggested info ---
         if lecture and not no_match:
             question.ai_suggested_lecture_id = lecture.id
-            question.ai_suggested_lecture_title_snapshot = f"{lecture.block.name} > {lecture.title}"
+            question.ai_suggested_lecture_title_snapshot = (
+                f"{lecture.block.name} > {lecture.title}"
+            )
             if not question.is_classified:
                 question.classification_status = "ai_suggested"
         else:
@@ -838,7 +1016,9 @@ def apply_classification_results(question_ids: List[int], job_id: int) -> int:
             chunk_ids = [e.get("chunk_id") for e in evidence_list if e.get("chunk_id")]
             chunk_map = {}
             if chunk_ids:
-                chunk_rows = LectureChunk.query.filter(LectureChunk.id.in_(chunk_ids)).all()
+                chunk_rows = LectureChunk.query.filter(
+                    LectureChunk.id.in_(chunk_ids)
+                ).all()
                 chunk_map = {row.id: row for row in chunk_rows}
 
             matches: List[QuestionChunkMatch] = []
@@ -872,8 +1052,10 @@ def apply_classification_results(question_ids: List[int], job_id: int) -> int:
                         lecture_id=evidence_lecture_id,
                         chunk_id=chunk_id,
                         material_id=(chunk.material_id if chunk else None),
-                        page_start=evidence.get("page_start") or (chunk.page_start if chunk else None),
-                        page_end=evidence.get("page_end") or (chunk.page_end if chunk else None),
+                        page_start=evidence.get("page_start")
+                        or (chunk.page_start if chunk else None),
+                        page_end=evidence.get("page_end")
+                        or (chunk.page_end if chunk else None),
                         snippet=snippet,
                         score=evidence.get("score") or confidence,
                         source="ai",
@@ -890,30 +1072,33 @@ def apply_classification_results(question_ids: List[int], job_id: int) -> int:
             continue
 
         # --- Auto-confirm decision logging ---
+        # When apply_mode is 'all', user explicitly clicked apply so bypass auto_apply config
+        force_apply = apply_mode == "all"
         is_pass = (
-            auto_apply
+            (force_apply or auto_apply)
             and final_lecture_id
             and (not no_match)
-            and confidence >= auto_apply_min
+            and (force_apply or confidence >= auto_apply_min)
         )
         fail_reason = []
-        if not auto_apply:
+        if not force_apply and not auto_apply:
             fail_reason.append("config_disabled")
         if not final_lecture_id:
             fail_reason.append("no_final_id")
         if no_match:
             fail_reason.append("is_no_match")
-        if confidence < auto_apply_min:
+        if not force_apply and confidence < auto_apply_min:
             fail_reason.append(f"low_conf({confidence:.2f}<{auto_apply_min:.2f})")
 
         logger.info(
-            "AUTOCONFIRM_DEBUG_DECISION: qid=%s, model=%s, conf=%.2f, threshold=%.2f, pass=%s, reason=%s",
+            "AUTOCONFIRM_DEBUG_DECISION: qid=%s, model=%s, conf=%.2f, threshold=%.2f, pass=%s, reason=%s, mode=%s",
             qid,
             result.get("model_name"),
             confidence,
             auto_apply_min,
             is_pass,
             ",".join(fail_reason) or "none",
+            apply_mode,
         )
 
         # --- Apply to question only when all conditions satisfied ---

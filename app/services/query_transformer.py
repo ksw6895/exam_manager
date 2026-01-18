@@ -5,8 +5,14 @@ import re
 from dataclasses import dataclass
 from typing import List, Optional
 
-from flask import current_app
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+from config import get_config
+import logging
+from tenacity import (
+    retry,
+    stop_after_attempt,
+    wait_exponential,
+    retry_if_exception_type,
+)
 
 from app import db
 from app.models import QuestionQuery
@@ -14,6 +20,7 @@ from app.models import QuestionQuery
 try:
     from google import genai
     from google.genai import types
+
     GENAI_AVAILABLE = True
 except ImportError:
     GENAI_AVAILABLE = False
@@ -108,21 +115,22 @@ def _limit_items(items: List[str], max_items: int) -> List[str]:
 
 
 def _prompt_version() -> str:
-    return current_app.config.get("HYDE_PROMPT_VERSION", "hyde_v1")
+    return get_config().experiment.hyde_prompt_version
 
 
 def _model_name() -> str:
-    return current_app.config.get("HYDE_MODEL_NAME") or current_app.config.get(
-        "GEMINI_MODEL_NAME", "gemini-2.0-flash-lite"
+    return (
+        get_config().experiment.hyde_model_name
+        or get_config().runtime.gemini_model_name
     )
 
 
 def _max_keywords() -> int:
-    return int(current_app.config.get("HYDE_MAX_KEYWORDS", 7))
+    return get_config().experiment.hyde_max_keywords
 
 
 def _max_negative() -> int:
-    return int(current_app.config.get("HYDE_MAX_NEGATIVE", 6))
+    return get_config().experiment.hyde_max_negative
 
 
 @retry(
@@ -134,7 +142,7 @@ def _call_gemini(question_text: str) -> QueryTransformation:
     if not GENAI_AVAILABLE:
         raise RuntimeError("google-genai package is not installed.")
 
-    api_key = current_app.config.get("GEMINI_API_KEY")
+    api_key = get_config().runtime.gemini_api_key
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY is not configured.")
 
@@ -160,7 +168,9 @@ def _call_gemini(question_text: str) -> QueryTransformation:
     return parsed
 
 
-def _fetch_cached(question_id: int, prompt_version: str) -> Optional[QueryTransformation]:
+def _fetch_cached(
+    question_id: int, prompt_version: str
+) -> Optional[QueryTransformation]:
     try:
         row = QuestionQuery.query.filter_by(
             question_id=question_id, prompt_version=prompt_version
@@ -205,7 +215,7 @@ def get_query_payload(
     try:
         generated = _call_gemini(question_text)
     except Exception as exc:
-        current_app.logger.warning("HyDE query generation failed: %s", exc)
+        logging.warning("HyDE query generation failed: %s", exc)
         return None
 
     row = QuestionQuery(
@@ -213,14 +223,16 @@ def get_query_payload(
         prompt_version=prompt_version,
         lecture_style_query=generated.lecture_style_query,
         keywords_json=json.dumps(generated.keywords, ensure_ascii=False),
-        negative_keywords_json=json.dumps(generated.negative_keywords, ensure_ascii=False),
+        negative_keywords_json=json.dumps(
+            generated.negative_keywords, ensure_ascii=False
+        ),
     )
     try:
         db.session.add(row)
         db.session.commit()
     except Exception as exc:
         db.session.rollback()
-        current_app.logger.warning("HyDE query cache save failed: %s", exc)
+        logging.warning("HyDE query cache save failed: %s", exc)
         return generated
 
     return generated

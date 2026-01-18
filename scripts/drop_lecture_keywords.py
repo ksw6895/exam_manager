@@ -1,8 +1,23 @@
+"""
+Drop lectures.keywords column from database.
+
+SAFETY: DESTRUCTIVE (modifies database schema)
+
+Usage:
+  python scripts/drop_lecture_keywords.py --db data/exam.db
+  python scripts/drop_lecture_keywords.py --db data/exam.db --no-backup
+"""
+
 import argparse
 import shutil
 import sqlite3
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
+try:
+    from scripts._safety import SafetyLevel, require_confirmation, print_script_header
+except ModuleNotFoundError:
+    from _safety import SafetyLevel, require_confirmation, print_script_header
 
 
 def _default_db_paths():
@@ -22,7 +37,7 @@ def _backup_db(path):
     return backup_path
 
 
-def _drop_keywords(path, no_backup):
+def _drop_keywords(path, no_backup, dry_run=False):
     if not path.exists():
         print(f"{path}: missing")
         return
@@ -36,17 +51,37 @@ def _drop_keywords(path, no_backup):
             backup_path = _backup_db(path)
             print(f"{path}: backup -> {backup_path}")
 
+        if dry_run:
+            print(f"[DRY-RUN] Would drop keywords column from {path}")
+            return
+
         conn.execute("ALTER TABLE lectures DROP COLUMN keywords")
+        conn.commit()
         print(f"{path}: dropped keywords column")
 
 
 def main():
+    try:
+        from scripts._safety import SafetyLevel
+    except ModuleNotFoundError:
+        from _safety import SafetyLevel
+
     parser = argparse.ArgumentParser(description="Drop lectures.keywords column.")
     parser.add_argument("--db", action="append", help="Path to sqlite db file.")
     parser.add_argument(
         "--no-backup",
         action="store_true",
-        help="Do not create a backup before altering the database.",
+        help="Do not create a backup before altering database.",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be done without writing.",
+    )
+    parser.add_argument(
+        "--yes-i-really-mean-it",
+        action="store_true",
+        help="Confirm destructive operation.",
     )
     args = parser.parse_args()
 
@@ -58,8 +93,19 @@ def main():
         print("No database files found.")
         return
 
+    print_script_header("drop_lecture_keywords.py")
+
+    if not require_confirmation(
+        SafetyLevel.DESTRUCTIVE,
+        "drop keywords column from databases",
+        env_flag="ALLOW_DESTRUCTIVE",
+        cli_flag="--yes-i-really-mean-it" in sys.argv,
+        dry_run=args.dry_run,
+    ):
+        return
+
     for path in targets:
-        _drop_keywords(path, args.no_backup)
+        _drop_keywords(path, args.no_backup, args.dry_run)
 
 
 if __name__ == "__main__":

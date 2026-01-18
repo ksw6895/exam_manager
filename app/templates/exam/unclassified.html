@@ -650,7 +650,7 @@
                         <div class="card-body">
                             {% if question.image_path %}
                             <img src="{{ url_for('static', filename='uploads/' + question.image_path) }}"
-                                class="question-image" alt="문제 이미지">
+                                class="question-image" alt="문제 이미지" loading="lazy">
                             {% endif %}
                             <div class="question-content">{{ question.content[:200] if question.content else '(이미지 문제)'
                                 }}{% if question.content and question.content|length > 200 %}...{% endif %}</div>
@@ -691,6 +691,33 @@
                     </div>
                     {% endif %}
                 </div>
+            
+                <!-- Pagination -->
+                {% if pagination and pagination.pages > 1 %}
+                <nav class="pagination-nav" style="margin-top: 2rem; display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap;">
+                    {% if pagination.has_prev %}
+                    <a href="{{ url_for('exam.unclassified_questions', page=1) }}" 
+                       style="padding: 0.5rem 1rem; border-radius: 8px; background: rgba(255,255,255,0.1); color: #ccc; text-decoration: none;">« 처음</a>
+                    <a href="{{ url_for('exam.unclassified_questions', page=pagination.prev_num) }}"
+                       style="padding: 0.5rem 1rem; border-radius: 8px; background: rgba(255,255,255,0.1); color: #ccc; text-decoration: none;">‹ 이전</a>
+                    {% endif %}
+                    
+                    <span style="padding: 0.5rem 1rem; color: #667eea; font-weight: bold;">
+                        {{ pagination.page }} / {{ pagination.pages }} 페이지
+                    </span>
+                    
+                    {% if pagination.has_next %}
+                    <a href="{{ url_for('exam.unclassified_questions', page=pagination.next_num) }}"
+                       style="padding: 0.5rem 1rem; border-radius: 8px; background: rgba(255,255,255,0.1); color: #ccc; text-decoration: none;">다음 ›</a>
+                    <a href="{{ url_for('exam.unclassified_questions', page=pagination.pages) }}"
+                       style="padding: 0.5rem 1rem; border-radius: 8px; background: rgba(255,255,255,0.1); color: #ccc; text-decoration: none;">마지막 »</a>
+                    {% endif %}
+                </nav>
+                <p style="text-align: center; color: #888; margin-top: 0.5rem; font-size: 0.85rem;">
+                    총 {{ pagination.total }}개 항목
+                </p>
+                {% endif %}
+
             </main>
         </div>
     </div>

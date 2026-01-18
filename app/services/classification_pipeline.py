@@ -15,7 +15,7 @@ This module provides a unified interface for classification operations.
 from typing import List, Dict, Optional, Any
 from dataclasses import dataclass
 
-from flask import current_app
+from config import get_config
 
 from app.services import retrieval
 from app.services import context_expander
@@ -163,7 +163,7 @@ def _expand_stage(
     Returns:
         ExpansionResult with (potentially expanded) candidates list
     """
-    if not current_app.config.get("PARENT_ENABLED", False):
+    if not get_config().experiment.parent_enabled:
         return ExpansionResult(candidates=candidates)
 
     from app.services import retrieval_features
@@ -175,21 +175,17 @@ def _expand_stage(
     features = artifacts.features
 
     auto_confirm = False
-    if current_app.config.get("AUTO_CONFIRM_V2_ENABLED", True):
+    if get_config().experiment.auto_confirm_v2_enabled:
         auto_confirm = retrieval_features.auto_confirm_v2(
             features,
-            delta=float(current_app.config.get("AUTO_CONFIRM_V2_DELTA", 0.05)),
-            max_bm25_rank=int(
-                current_app.config.get("AUTO_CONFIRM_V2_MAX_BM25_RANK", 5)
-            ),
+            delta=get_config().experiment.auto_confirm_v2_delta,
+            max_bm25_rank=get_config().experiment.auto_confirm_v2_max_bm25_rank,
         )
 
     uncertain = retrieval_features.is_uncertain(
         features,
-        delta_uncertain=float(
-            current_app.config.get("AUTO_CONFIRM_V2_DELTA_UNCERTAIN", 0.03)
-        ),
-        min_chunk_len=int(current_app.config.get("AUTO_CONFIRM_V2_MIN_CHUNK_LEN", 200)),
+        delta_uncertain=get_config().experiment.auto_confirm_v2_delta_uncertain,
+        min_chunk_len=get_config().experiment.auto_confirm_v2_min_chunk_len,
         auto_confirm=auto_confirm,
     )
 

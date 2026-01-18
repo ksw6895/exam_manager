@@ -1,9 +1,12 @@
 """
 Build embeddings for lecture chunks.
 
+SAFETY: DESTRUCTIVE (if --rebuild specified)
+
 Usage:
   python scripts/build_embeddings.py --db data/dev.db --rebuild
 """
+
 from __future__ import annotations
 
 import argparse
@@ -41,17 +44,23 @@ def build_embeddings(
     batch_size: int,
     rebuild: bool,
 ) -> None:
-    app = create_app('default', db_uri_override=db_uri, skip_migration_check=True)
+    app = create_app("default", db_uri_override=db_uri, skip_migration_check=True)
     with app.app_context():
         if rebuild:
-            # Table uses chunk_id as PK, so multiple models cannot coexist.
-            # Clear all rows on rebuild to avoid UNIQUE constraint errors.
-            LectureChunkEmbedding.query.delete(synchronize_session=False)
-            db.session.commit()
+            print("Deleting existing embeddings (REBUILD mode)")
+            if not dry_run:
+                # Table uses chunk_id as PK, so multiple models cannot coexist.
+                # Clear all rows on rebuild to avoid UNIQUE constraint errors.
+                LectureChunkEmbedding.query.delete(synchronize_session=False)
+                db.session.commit()
+            else:
+                print("[DRY-RUN] Skipping database write")
 
         existing_ids = {
             row.chunk_id
-            for row in LectureChunkEmbedding.query.filter_by(model_name=model_name).all()
+            for row in LectureChunkEmbedding.query.filter_by(
+                model_name=model_name
+            ).all()
         }
 
         chunks = LectureChunk.query.order_by(LectureChunk.id).all()
@@ -77,14 +86,22 @@ def build_embeddings(
                 )
 
             if inserts:
-                db.session.add_all(inserts)
-                db.session.commit()
+                if not dry_run:
+                    db.session.add_all(inserts)
+                    db.session.commit()
+                else:
+                    print(f"[DRY-RUN] Would insert {len(inserts)} embedding rows")
 
             processed = min(i + batch_size, total)
             print(f"Processed {processed}/{total}")
 
 
 def main() -> None:
+    try:
+        from scripts._safety import print_script_header
+    except ModuleNotFoundError:
+        from _safety import print_script_header
+
     parser = argparse.ArgumentParser(description="Build lecture chunk embeddings.")
     parser.add_argument("--db", default="data/dev.db", help="SQLite db path.")
     parser.add_argument(
@@ -95,7 +112,19 @@ def main() -> None:
     )
     parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--rebuild", action="store_true")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be done without writing.",
+    )
+    parser.add_argument(
+        "--yes-i-really-mean-it",
+        action="store_true",
+        help="Confirm destructive operation.",
+    )
     args = parser.parse_args()
+
+    print_script_header("build_embeddings.py", args.db)
 
     db_uri = _normalize_db_uri(args.db)
     if not db_uri:
@@ -107,6 +136,7 @@ def main() -> None:
         dim=args.dim,
         batch_size=args.batch_size,
         rebuild=args.rebuild,
+        dry_run=args.dry_run,
     )
 
 
